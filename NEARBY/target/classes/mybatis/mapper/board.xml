@@ -4,7 +4,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <mapper namespace="com.koreait.nearby.repository.BoardRepository">
- 	
+ 	<resultMap type="Profile" id="ProfileMap">
+		<result column="ID" property="id" />
+		<result column="P_CONTENT" property="pContent" />
+		<result column="P_ORIGIN" property="pOrigin" />
+		<result column="P_SAVED" property="pSaved" />
+		<result column="P_PATH" property="pPath" />
+	</resultMap>
+	
  	<resultMap type="Board" id="BoardMap">
  		<result column="B_NO" property="bNo" />
  		<result column="ID" property="id" />
@@ -18,20 +25,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result column="CREATED" property="created" />
  		<result column="MODIFIED" property="modified" />
  		<result column="STATE" property="state" />
+ 		<collection property="profile" resultMap="ProfileMap" />
  	</resultMap>
  
  	<!-- 메인 보드 리스트 뿌리기  -->
    <select id="selectListBoard" resultMap="BoardMap">
-   	SELECT B_NO, ID, CONTENT, IP, LOCATION, ORIGIN, SAVED, LIKES, CREATED, PATH, MODIFIED, STATE
-   	  FROM BOARD
+   	SELECT B.B_NO, B.ID, B.CONTENT, B.IP, B.LOCATION, B.ORIGIN, B.SAVED, B.LIKES, B.CREATED, B.PATH, B.MODIFIED, B.STATE, P.ID, P.P_ORIGIN, P.P_SAVED, P.P_PATH
+   	  FROM BOARD B, PROFILE P
+   	 WHERE B.ID = P.ID(+) 
    	 ORDER BY B_NO desc
    </select>
 	
   <!-- 게시판 하나 상세보기 -->
 	<select id="selectBoardByNo" parameterType="Long" resultMap="BoardMap">
-		SELECT B_NO, ID, CONTENT, IP, LOCATION, ORIGIN, SAVED, LIKES, CREATED, PATH,MODIFIED, STATE
-		  FROM BOARD
-	   	 WHERE B_NO =#{bNo}
+		SELECT  B.B_NO, B.ID, B.CONTENT, B.IP, B.LOCATION, B.ORIGIN, B.SAVED, B.LIKES, B.CREATED, B.PATH, B.MODIFIED, B.STATE, P.ID, P.P_ORIGIN, P.P_SAVED, P.P_PATH
+		  FROM BOARD B, PROFILE P
+		 WHERE B.ID = P.ID(+)
+	   	   AND B_NO =#{bNo}
 	</select>
 	
   <!-- 글 업로드 -->	
@@ -59,6 +69,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 WHERE B_NO = #{bNo}
 	</delete>
 	
+	<!--  조하요 -->
+	<update id="boardLike" parameterType="Board">
+		UPDATE BOARD 
+		  SET LIKES = LIKES + 1
+		WHERE B_NO=#{bNo}
+	</update>
+	
+	<!--  좋아요 취소 -->
+	<update id="boardLikeCancel" parameterType="Board">
+		UPDATE BOARD 
+		  SET LIKES = LIKES - 1
+		WHERE B_NO=#{bNo}
+	</update>
+	
+	<!--  좋아요 카운트  -->
+	<select id="boardLikesCount" parameterType="Board" resultType="Board">
+		SELECT LIKES 
+		  FROM BOARD
+		 WHERE B_NO= #{bNo}
+	</select>
 	
 	
 </mapper>
