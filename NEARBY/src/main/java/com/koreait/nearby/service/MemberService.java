@@ -1,6 +1,7 @@
 package com.koreait.nearby.service;
 
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,9 +39,22 @@ public interface MemberService {
 	public Map<String, Object> checkPassword(HttpServletRequest request);
 	
 	// 비밀번호 변경
-	public void changePassword(HttpServletRequest request, Member member);
+	public void changePassword(HttpServletRequest request);
 	
+	//  관리자 제외 총 유저
+	public List<Member> selectMemberList();
 	
+	// 남자 유저
+	public List<Member> selectMemberMen();
+	 
+	// 여자 유저
+	public List<Member> selectMemberWomen();
+	
+	// 성별없음 유저
+	public List<Member> selectMemberNoGender();
+	
+	// 오늘 가입한 유저
+	public List<Member> selectMemberCreatedDay();
 	
 	
 	// default method

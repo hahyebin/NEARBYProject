@@ -60,12 +60,12 @@ public class ProfileServiceImpl implements ProfileService {
 				Profile originProfile = profileRepository.selectProfile(id);
 					if (file == null && originProfile.getpSaved() == null) { // 첨부된 파일과 DB에 저장된 정보 모두 없을 경우 null값 전달.
 						System.out.println("if로 떨어지는지 확인해보기 ");
-						profile.setPath(path);
+						profile.setpPath(path);
 						profile.setpOrigin("");
 						profile.setpSaved("");
 						profile.setId(id);
 					} else if(file == null) { // 첨부된 파일이 없을 경우, 이전 정보를 업데이트할 DTO에 실어준다.
-						profile.setPath(originProfile.getPath());
+						profile.setpPath(originProfile.getpPath());
 						profile.setpOrigin(originProfile.getpOrigin());
 						profile.setpSaved(originProfile.getpSaved());
 						profile.setId(id);
@@ -79,7 +79,7 @@ public class ProfileServiceImpl implements ProfileService {
 					
 						profile.setpOrigin(pOrigin);
 						profile.setpSaved(pSaved);
-						profile.setPath(path);
+						profile.setpPath(path);
 						profile.setId(id);
 					} // End if
 				
@@ -116,7 +116,7 @@ public class ProfileServiceImpl implements ProfileService {
 			Member loginUser = (Member)request.getSession().getAttribute("loginUser");
 			Profile profile = new Profile();
 			profile.setId(loginUser.getId());
-			profile.setPath("");
+			profile.setpPath("");
 			profile.setpOrigin("");
 			profile.setpSaved("");
 			ProfileRepository profileRepository = sqlSession.getMapper(ProfileRepository.class);

@@ -1,5 +1,7 @@
 package com.koreait.nearby.repository;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import com.koreait.nearby.domain.Member;
@@ -22,7 +24,7 @@ public interface MemberRepository {
 	public Member selectMemberById(Member member);
 	
 	// 비밀번호 일치여부 (조회 성공 : 1 / 조회 실패 : 0)
-	public int selectPwById(String id);
+	public int selectPassword(String password);
 	
 	// 비밀번호수정 
 	public int updatePw(Member member);
@@ -33,7 +35,18 @@ public interface MemberRepository {
 	// 회원탈퇴(DB삭제x)
 	public int leaveMember(Long mNo);
 
+	// 총멤버
+	public List<Member> memberCount();
 	
+    // 남자 유저
+	public List<Member> memberCountMen();
 	
+	// 여자 유저
+	public List<Member> memberCountWomen();
+	
+	// 성별 없음 유저
+	public List<Member> memberCountNoGender();
 
+	//오늘 가입한 유저
+	public List<Member> memberCreatedDay();
 }

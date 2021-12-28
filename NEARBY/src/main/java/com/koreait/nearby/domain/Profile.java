@@ -2,19 +2,19 @@ package com.koreait.nearby.domain;
 
 public class Profile {
 
-	private String id, content, pOrigin, pSaved, path;
+	private String id, pContent, pOrigin, pSaved, pPath;
 	
 	public Profile() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Profile(String id, String content, String pOrigin, String pSaved, String path) {
+	public Profile(String id, String pContent, String pOrigin, String pSaved, String pPath) {
 		super();
 		this.id = id;
-		this.content = content;
+		this.pContent = pContent;
 		this.pOrigin = pOrigin;
 		this.pSaved = pSaved;
-		this.path = path;
+		this.pPath = pPath;
 	}
 
 	public String getId() {
@@ -25,12 +25,12 @@ public class Profile {
 		this.id = id;
 	}
 
-	public String getContent() {
-		return content;
+	public String getpContent() {
+		return pContent;
 	}
 
-	public void setContent(String content) {
-		this.content = content;
+	public void setpContent(String pContent) {
+		this.pContent = pContent;
 	}
 
 	public String getpOrigin() {
@@ -49,18 +49,18 @@ public class Profile {
 		this.pSaved = pSaved;
 	}
 
-	public String getPath() {
-		return path;
+	public String getpPath() {
+		return pPath;
 	}
 
-	public void setPath(String path) {
-		this.path = path;
+	public void setpPath(String pPath) {
+		this.pPath = pPath;
 	}
 
 	@Override
 	public String toString() {
-		return "Profile [id=" + id + ", content=" + content + ", pOrigin=" + pOrigin + ", pSaved=" + pSaved + ", path="
-				+ path + "]";
+		return "Profile [id=" + id + ", pContent=" + pContent + ", pOrigin=" + pOrigin + ", pSaved=" + pSaved
+				+ ", pPath=" + pPath + "]";
 	}
 	
 	

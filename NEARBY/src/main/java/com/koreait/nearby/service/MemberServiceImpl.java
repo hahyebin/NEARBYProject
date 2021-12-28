@@ -2,6 +2,7 @@ package com.koreait.nearby.service;
 
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.mail.Message;
@@ -54,8 +55,8 @@ public class MemberServiceImpl implements MemberService {
 		Profile profile = new Profile(); //DTO
 		// DB에 전달 할 data 담기
 		profile.setId(id);
-		profile.setContent("");
-		profile.setPath("");
+		profile.setpContent("");
+		profile.setpPath("");
 		profile.setpOrigin("");
 		profile.setpSaved("");
 		ProfileRepository profileRepository = sqlSession.getMapper(ProfileRepository.class);
@@ -65,6 +66,8 @@ public class MemberServiceImpl implements MemberService {
 		message(result, response, "회원가입성공", "회원가입실패", "/nearby");
 		
 	}
+	
+
 
     // 아이디 중복 확인 
 	@Override
@@ -132,7 +135,12 @@ public class MemberServiceImpl implements MemberService {
 		 			if (loginUser != null) {
 		 				out.println("<script>");
 		 				out.println("alert('로그인 성공')");
-		 				out.println("location.href='/nearby/board/boardList'");
+		 				// 관리자 일때는 관리자 페이지로 이동하기 
+		 					if( "admin".equals(loginUser.getId()) == false) {
+		 					out.println("location.href='/nearby/board/boardList'");
+		 				} else {
+		 					out.println("location.href='/nearby/admin/admin'");
+		 				}
 		 				out.println("</script>");
 		 				out.close();
 		 			} else {
@@ -192,7 +200,7 @@ public class MemberServiceImpl implements MemberService {
 			String name = m.getName();
 			String phone = m.getPhone();
 			String gender = m.getGender();
-			String content = m.getProfile().getContent();
+			String content = m.getProfile().getpContent();
 			if (birthday.length() != 8) throw new NullPointerException("생일 정보가 없습니다");
 			if (name.isEmpty()) throw new NullPointerException("입력된 이름이 없습니다");
 			if (phone.isEmpty()) throw new NullPointerException("입력된 핸드폰 번호가 없습니다");
@@ -200,7 +208,7 @@ public class MemberServiceImpl implements MemberService {
 			
 			// Profile DB로 보낼 Bean 
 			Profile profile = new Profile();
-			profile.setContent(content);
+			profile.setpContent(content);
 			profile.setId(loginUser.getId());
 			ProfileRepository profileRepository = sqlSession.getMapper(ProfileRepository.class);
 			profileRepository.updateContent(profile);
@@ -250,25 +258,92 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public Map<String, Object> checkPassword(HttpServletRequest request) {
 		// 가입당시 비밀번호는 ajax 처리하여 pass true - false 매김 -- DB 에서 비밀번호 일치하는지 확인 필요.
+		// 비밀번호가 일치하면 1 아니면 0
+		//javax.mail.internet.AddressException: Illegal address in string ``''
 		Map<String, Object> map = new HashMap<String, Object>();	
-		Member loginUser = (Member)request.getSession().getAttribute("loginUser");
-		MemberRepository memberRepository = sqlSession.getMapper(MemberRepository.class);
-		int selectResult = memberRepository.selectPwById(loginUser.getId());
-		map.put("selectResult", selectResult);
+		try {
+			String password = SecurityUtils.sha256(request.getParameter("pw"));
+			MemberRepository memberRepository = sqlSession.getMapper(MemberRepository.class);
+			int selectResult = memberRepository.selectPassword(password);
+			map.put("selectResult", selectResult);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return map;
 	}
 	
 	
 	// 회원비밀번호 변경
 	@Override
-	public void changePassword(HttpServletRequest request, Member member) {
+	public void changePassword(HttpServletRequest request) {
 		// 비밀번호 찾기 process 
 		// 변경할 비밀번호와 비밀번호 재확인을 통해 비밀번호를 확인하고 -- pass true / false
 		// 이후 통과되면 가입당시 입력한 이메일을 작성 -> 인증번호받고 인증하기 -- pass true / false
 		// 다 끝난 뒤에 수정완료 버튼을 누르면 page이동 : 페이지는 내 정보 변경 mypage
 		// 보낼 파라미터 새로운 pw / email
-		
+		Member member = new Member();
+		member.setPw(SecurityUtils.sha256(request.getParameter("newPw")));
+		System.out.println(request.getParameter("newPw"));
+		member.setEmail(request.getParameter("email"));
+		MemberRepository memberRepository = sqlSession.getMapper(MemberRepository.class);
+		memberRepository.updatePw(member);
+		System.out.println("결과 : " + memberRepository.updatePw(member));
 		return;
 	}
+
+	
+	
+	
+	// 관리자를 위한 페이지
+	// 총 멤버 
+	@Override
+	public List<Member> selectMemberList() {
+		MemberRepository memberRepository = sqlSession.getMapper(MemberRepository.class);
+		List<Member> member = memberRepository.memberCount();
+		return member;
+	}
+	
+	// 남자 회원
+	@Override
+	public List<Member> selectMemberMen() {
+		MemberRepository memberRepository = sqlSession.getMapper(MemberRepository.class);
+		return memberRepository.memberCountMen();
+	}
+	
+	
+	// 여자 회원
+	@Override
+	public List<Member> selectMemberWomen() {
+		MemberRepository memberRepository = sqlSession.getMapper(MemberRepository.class);
+		return memberRepository.memberCountWomen();
+	}
+	
+	// 성별없음 회원 
+	@Override
+	public List<Member> selectMemberNoGender() {
+		MemberRepository memberRepository = sqlSession.getMapper(MemberRepository.class);
+		return memberRepository.memberCountNoGender();
+	}
+	
+	@Override
+	public List<Member> selectMemberCreatedDay() {
+		MemberRepository memberRepository = sqlSession.getMapper(MemberRepository.class);
+		return memberRepository.memberCreatedDay();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }
