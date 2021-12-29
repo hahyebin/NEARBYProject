@@ -12,6 +12,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="P_PATH" property="pPath" />
 	</resultMap>
 	
+	<resultMap type="Likes" id="LikesMap">
+		<result column="LIKE_NO" property="likeNo" />
+		<result column="B_NO" property="bNo" />
+		<result column="ID" property="id" />
+		<result column="LIKE_CHECK" property="likeCheck" />
+		<result column="LIKE_DATE" property="likeDate" />
+	</resultMap>
+	
  	<resultMap type="Board" id="BoardMap">
  		<result column="B_NO" property="bNo" />
  		<result column="ID" property="id" />
@@ -25,29 +33,41 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result column="CREATED" property="created" />
  		<result column="MODIFIED" property="modified" />
  		<result column="STATE" property="state" />
+ 		<result column="DEPTH" property="depth" />
+ 		<result column="GROUPNO" property="groupNo" />
+ 		<result column="GROUPORD" property="groupOrd" />
  		<collection property="profile" resultMap="ProfileMap" />
+ 		<collection property="like" resultMap="LikesMap" />
  	</resultMap>
  
  	<!-- 메인 보드 리스트 뿌리기  -->
    <select id="selectListBoard" resultMap="BoardMap">
-   	SELECT B.B_NO, B.ID, B.CONTENT, B.IP, B.LOCATION, B.ORIGIN, B.SAVED, B.LIKES, B.CREATED, B.PATH, B.MODIFIED, B.STATE, P.ID, P.P_ORIGIN, P.P_SAVED, P.P_PATH
-   	  FROM BOARD B, PROFILE P
-   	 WHERE B.ID = P.ID(+) 
-   	 ORDER BY B_NO desc
+   	SELECT B.B_NO, B.ID, B.CONTENT, B.IP, B.LOCATION, B.ORIGIN, B.SAVED, B.LIKES, B.CREATED, B.PATH, B.MODIFIED, B.STATE,
+   	       P.ID, P.P_ORIGIN, P.P_SAVED, P.P_PATH,
+   	       L.LIKE_NO, L.LIKE_CHECK, L.LIKE_DATE
+   	 FROM BOARD B LEFT JOIN  PROFILE P
+       ON  B.ID = P.ID
+     LEFT JOIN  LIKES L
+   	   ON B.ID = L.ID
+    WHERE STATE = 0
+    ORDER BY b.B_NO desc
    </select>
 	
   <!-- 게시판 하나 상세보기 -->
 	<select id="selectBoardByNo" parameterType="Long" resultMap="BoardMap">
-		SELECT  B.B_NO, B.ID, B.CONTENT, B.IP, B.LOCATION, B.ORIGIN, B.SAVED, B.LIKES, B.CREATED, B.PATH, B.MODIFIED, B.STATE, P.ID, P.P_ORIGIN, P.P_SAVED, P.P_PATH
-		  FROM BOARD B, PROFILE P
-		 WHERE B.ID = P.ID(+)
-	   	   AND B_NO =#{bNo}
+		SELECT  B.B_NO, B.ID, B.CONTENT, B.IP, B.LOCATION, B.ORIGIN, B.SAVED, B.LIKES, B.CREATED, B.PATH, B.MODIFIED, B.STATE, P.ID, P.P_ORIGIN, P.P_SAVED, P.P_PATH, L.LIKE_NO, L.LIKE_CHECK, L.LIKE_DATE
+		 FROM BOARD B LEFT JOIN  PROFILE P
+           ON  B.ID = P.ID
+         right join  LIKES L
+   	       ON B.ID = L.ID
+	    WHERE B.B_NO = #{bNo}
+	       AND STATE = 0
 	</select>
 	
   <!-- 글 업로드 -->	
 	<insert id="insertBoard" parameterType="Board">
 		INSERT INTO BOARD
-		VALUES ( BOARD_SEQ.NEXTVAL, #{id}, #{content}, #{ip}, #{location}, #{origin}, #{saved}, #{path}, 0, SYSDATE, SYSDATE, 0)
+		VALUES ( BOARD_SEQ.NEXTVAL, #{id}, #{content}, #{ip}, #{location}, #{origin}, #{saved}, #{path}, 0, SYSDATE, SYSDATE, 0, 0, 0, 0)
 	</insert>
 	
   <!-- 글 수정- login id=글 id와 번호 같을 때 수정가능 -->
@@ -64,10 +84,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	
 	<!--  글삭제 -->
-	<delete id="deleteBoard" parameterType="Long">
-	DELETE FROM BOARD
-	 WHERE B_NO = #{bNo}
-	</delete>
+	<update id="deleteBoard" parameterType="Map">
+		UPDATE BOARD
+		   SET STATE = -1
+		 WHERE B_NO = #{bNo} and ID = #{id}
+	</update>
 	
 	<!--  조하요 -->
 	<update id="boardLike" parameterType="Board">
@@ -89,6 +110,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		  FROM BOARD
 		 WHERE B_NO= #{bNo}
 	</select>
+	   
+	   
+	   <!-- 지역  -->
+	<select id="adminBoardList" resultMap="BoardMap">
+        SELECT B.B_NO, B.ID, b.CONTENT, B.IP, B.LOCATION, B.ORIGIN, B.SAVED, B.LIKES, B.CREATED, B.PATH, B.MODIFIED, B.STATE
+          FROM BOARD B 
+         WHERE B.STATE = 0
+    </select>
+	
+	
+	
+	
 	
 	
 </mapper>

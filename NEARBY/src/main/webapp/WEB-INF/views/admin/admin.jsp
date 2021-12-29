@@ -9,158 +9,81 @@
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/adminHeader.css">
 <title>Insert title here</title>
 <style>
-	*{
-	    margin: 0;  padding: 0;
-	    box-sizing: border-box;
-	}
-	a {	text-decoration: none;	}
-	ul li {	list-style-type: none;   }
-	.container {
-		z-index: 4000;
-		position: fixed;
-		width: 100%;
-		height: 106px;
-		display: flex;
-		background-color: white;
-		border-bottom: 0.5px solid rgba(160, 160, 160, 0.5);
-		box-shadow: 5px 5px 8px rgba(160, 160, 160, 0.3);
-	}
-	.left_box {
-		width: 25%;
-		height: 100%;
-	}
+h3{
+	display: inline-block;
+}
 	.header {
 		width: 100%;
 		height: 106px;
 		background-color: white;
 	}
-	#admin_icon{  color: #fe4662;  }
-	.mid_box {
-		width: 50%;
-		height: 100%;
-		display: flex;
-	}
-	.right_box {
-		position: relative;
-		width: 25%;
-		height: 100%;
-		display: flex;
-	}
-	#logo_img {
-		width:  200px;
-		margin-top: 12px;
-		margin-left: 50px;
-	}
-	.btn_box li {
-	    float: left;
-		width: 25%;
-		height: 100%;
-	}
-	.boxes {
-	    margin: 4px auto;
-		width: 110px;
-		height: 89px;
-	}
-	li  a  i {
-		color: #6f7070;
+	#home_btn { border-bottom: 8px solid #fe4662; }
+	#admin_icon { color: #fe4662; }
+	
+/* 	 총 정보*/
+	.nearbyInfo {
+		display: inline-block;
+		width: 100%;
+		height: 50px;
 		text-align: center;
-		margin-top: 20px;
-		font-size: 40px;
 	}
-	a:link { color:black; text-decoration:none}
-	a:visited { color:black; text-decoration: none;}
-    li > a:hover {	color: #fe4662;  }
-    .boxes:hover {
-    	background-color: rgba(240,242,245,0.7);
-    	border-radius: 4px;
-    }
-	.search_box {
-	    display: flex;
-	    border-radius: 10px;
-        margin-lfet: 40px;
-        margin-bottom: 30px;
-        margin-top: 26px;
-        margin-left: 40px;
-        border: none;
-        width: 280px;
-        height: 46px;
-        line-height: 20px;
-        background-color: #e8f0fe;
+	.totalInfoWrap {
+		display: inline-block;
+		margin: 0 auto;
+		
+	}
+	.totalInfo {
+		display: inline-block;
+		margin-right: 50px;
+		font-size: 30px;
+		font-weight: bold;
+	}
+	.search_input {
+		height: 30px;
+		
+	}
+	#query {
+		padding-left: 10px;
+		outline: none;
+	}
+	.search_btn {
+		width: 50px;
+		height: 30px;
+		color : white;
+		border : none;
+		outline: none;
+		border-radius: 5%;
+		background-color: #fe4662;
+		cursor: pointer;
+	}
+	
+	
+	
+/* 	<!-- 차트관련 -->	 */
+  .chartjs {
+ 	width: 100%;
+ 	margin: 5px auto;
    }
-    .search_box > input {
-		border: none;
-        outline: none;
-        width: 220px;
-        height: 30px;
-        line-height: 30px;
-        margin-top: 8px;
-        margin-left: 18px;
-        background-color: #e8f0fe;        
+   .chartjs div {
+   	padding: 10px 80px;
    }
-    #search_icon {
-    	width: 40px;
-    	height: 40px;
-    	text-align: center;
-    	margin-top: 4px;
-    	margin-right: 16px;
-    }
-    #search_icon > i {
-    	color: #6f7070;
-    	width: 36px;
-    	height: 36px;
-    	margin-top: 10px;
-    }
- 	#profile_box {
-         position: absolute;
-         left : 360px;
-         top: 20px;
-         width: 60px;
-         height: 60px;
-         border-radius: 100%;
-   }
-   #profile_img {
-         width: 60px;
-         height: 60px;
-         border-radius: 100%;
-   }
-   #profile_box {
-   		position: absolute;
-   		left : 360px;
-   		top: 20px;
-   		width: 60px;
-   		height: 60px;
-   }
-   .profile_menu {
-        display: none;
-        z-index: 6000;
-   		display: inline-block;
-   		position: absolute;
-   		top: 300px;
-   		left: 100px;
-   	    width: 80px;
-   	    height: 100px;
-   	    border: 1px solid black;
-   }
-   .profile_menu li {
-        display: block;
-		border: 1px solid black;   
-   }
-   .profile_no { 	display: none;  }
-   .profile_see {	display: block; }
-   table {	border-collapse: collapse;  }
-   table tr td { border: 1px solid black; padding-left: 5px; }
-   table thead tr:nth-child(1) { font-weight: bold; }
-   table thead tr:nth-child(2){ border-bottom: none; }
-   table tr td:nth-child(1) { width: 130px;  }   
-   table tr td:nth-child(2) { width: 150px;  }
-   table tr td:nth-child(3) { width: 150px;  }
-   table tr td:nth-child(4) { width: 250px;  }
-   table tr td:nth-child(5) { width: 150px;  }
-   table tr td:nth-child(6) { width: 150px;  }
-   table tr td:nth-child(7) { width: 50px;  }
-   table tr td:nth-child(8) { width: 150px;  }
+ .donutchart1{
+ 	margin-left: 30px;
+ }
+  .barchart2{
+ 	width: 100%;
+ 	margin: 10px auto;
+ }
+ #barchart2 { margin: 0 auto }
+ .genderAndAge {
+ 	width: 100%;
+ 	margin: 80px auto;
+ 	display: flex;
+ 	justify-content: center;
+ }
  
 </style>
 <script type="text/javascript">
@@ -171,117 +94,157 @@
 	 let day = today.getDate();
 	 
 	 $('.today').text(year+"년 "+month +"월 "+ day+"일");
+	 
+	 fnMemberSearch();
+	 
   });
 
 // fnProfileBtn();
 function fnShowBtnBox() {
 	$('#profile_menu').toggleClass('profile_see profile_no');
 }
+
+// 검색 클릭하면 
+function fnMemberSearch(){
+	$('#search_btn').click(function(){
+		// 검색하는 것에 따라 이동경로 다르게 설정함
+		if ( $('#column').val() == 'ID' || $('#column').val() == 'NAME' || $('#column').val() == 'M_NO'  ||  $('#column').val() == 'EMAIL'  || $('#column').val() == 'BIRTHDAY' || $('#column').val() == 'GENDER' ) {
+			location.href='/nearby/admin/findMember?column=' + $('#column').val() + '&query=' + $('#query').val();				
+		}
+		else {
+			alert('잘못입력!!');
+		}
+	})
+}
+
 </script>
 
 </head>
 <body>
-<header  class="header">
-	 <div class="container">
-   
-       <div class="left_box">
-       		<a href="/nearby/board/boardList"><img src="${pageContext.request.contextPath}/resources/image/logo_color.png" id="logo_img"></a>
-       </div> 
-       <div class="mid_box">
-            <ul class="btn_box">
-			    <li id="home_btn" ><div class="boxes"><a href="/nearby/admin/admin"><i id="admin_icon" class="fas fa-user-shield"></i></a></div></li>
-			    <li id="home_btn" ><div class="boxes"><a href="/nearby/board/boardList"><i id="home_icon" class="fas fa-home"></i></a></div></li>
-	   			<li id="myhome_btn"><div class="boxes"><a href="/nearby/admin/memberList"><i id="myhome_icon" class="fas fa-users"></i></a></div></li>
-    	    </ul>			
-       </div>
-   	   <div class="right_box">
-   	   		<form class="main_search">
-   	   			<div class="search_box">
-   	   				<input type=text id="search" name="search">
-   	   				<div id="search_icon"><i class="fas fa-search"></i></div>   	   				
-   	   			</div>	   	   				
-   	   		</form>
-   	   	  <div id="profile_box">
-   	   	 	<c:if test="${empty loginUser.profile.pSaved}">
-					<img id="profile_img" src="${pageContext.request.contextPath}/resources/image/profile_default.png" onclick="fnShowBtnBox()" class="pointer defaultImg">
-			</c:if>
-			<c:if test="${not empty loginUser.profile.pSaved}">
-					<img id="profile_img" src="/nearby/${loginUser.profile.pPath}/${loginUser.profile.pSaved}" onclick="fnShowBtnBox()" class="pointer">
-			</c:if>
-          </div>
-   	   		<div id="profile_menu">
-   	   			<ul>
-   	   				<li><a href="/nearby/member/logout">로그아웃</a></li>   	   					
-   	   			</ul>
-   	   		</div>	
-   	   	</div> 
- 	</div>
-</header>
 
-<h1>관리자 페이지입니다.</h1>
-
-<h3><a href="/nearby/admin/memberList">총 유저 :  ${fn:length(member) } </a></h3>
+	 <header class="header">
+		<jsp:include page="/WEB-INF/views/layout/adminHeader.jsp" flush="true" />
+	</header>
 
 
-<br><br><br>
-<h4>남자 유저 :  ${fn:length(memberMen) }  </h4>
+<h2>관리자</h2>
 
-	
-<br><br><br>
-<h4>여자 유저 :  ${fn:length(memberWomen) }  </h4>
-
-
-<br><br><br>
-<h4>성별없음 유저 :  ${fn:length(memberNoGender) }  </h4>
-
-	
-<hr><br>
-
-<h4>오늘 날짜 : <span class="today"></span></h4>
-<h4>오늘가입 유저 :  ${fn:length(memberCreatedDay) }  </h4>
+<div class="nearbyInfo">
+	<div class="totalInfoWrap">
+		<div class="totalInfo"><a href="/nearby/admin/memberList">총 회원 수 :  ${fn:length(member) } </a></div>
+		<div class="totalInfo"> <span class="today"></span> 가입자:  ${fn:length(memberCreatedDay) }</div>
+		<div class="totalInfo">총 게시글 :  ${fn:length(board) }</div>
+		<div class="totalInfo userSearch">
+			<form id="f" method="get">
+				<select name="column" id="column" class="search_input">
+					<option value="M_NO" data-column-name="mNo">회원번호</option>
+					<option value="ID" data-column-name="id">아이디</option>
+					<option value="NAME" data-column-name="name">이름</option>
+					<option value="EMAIL" data-column-name="email">이메일</option>
+					<option value="BIRTHDAY" data-column-name="birthday">생년월일</option>
+					<option value="GENDER" data-column-name="gender">성별</option>
+				</select>
+				<span id="equal_area" >
+					<input list="auto_complete" type="text" name="query" id="query"  class="search_input" placeholder="조회할 회원정보입력">
+					<datalist id="auto_complete"></datalist>                                <!--  검색한거 나옴 -->
+				</span>
+				<input type="button" value="검색" id="search_btn" class="search_btn">
+				<input type="button" value="초기화" id="init_btn"  class="search_btn">
+			</form>
+		</div>
+	</div>
+</div>
 
 
 
 
 
-<br><br>
-총 게시글 :  ${fn:length(board) }
+<c:forEach var="entry" items="${adminBoardMap}" varStatus="status"> 
+<tr> 
+	<td><input type="hidden" value="${entry.key}"  ></td> 
+	<td><input type="hidden" value="${entry.value}"  id="${entry.key}"></td> 
+</tr> 
+</c:forEach>
 
 
 <input type="hidden" id="men" value="${fn:length(memberMen) } ">
 <input type="hidden" id="women" value="${fn:length(memberWomen) } ">
 <input type="hidden" id="noGender" value="${fn:length(memberNoGender) } ">
+<input type="hidden" id="age10" value="${fn:length(memberAge10)} ">
+<input type="hidden" id="age20" value="${fn:length(memberAge20)} ">
+<input type="hidden" id="age30" value="${fn:length(memberAge30)} ">
+<input type="hidden" id="age40" value="${fn:length(memberAge40)} ">
+<input type="hidden" id="age50" value="${fn:length(memberAge50)} ">
 
-<br><br>
- <a href='/nearby/board/boardList'>  NEARBY로 이동  </a>
- 
- 
  
 <div class ="chartjs">
-<%-- 	<div class ="linechart"><canvas id="linechart" height="250" width="250"></canvas></div> --%>
-<%-- 	<div class ="barchart"><canvas id="barchart" height="250" width="250"></canvas></div> --%>
-	<div class ="donutchart"><canvas id="donutchart" height="250" width="250"></canvas></div>
+ <div class="genderAndAge">
+	<div class ="donutchart"><canvas id="donutchart" height="400" width="600"></canvas></div>
+	<div class ="barchart1"><canvas id="barchart1" height="400" width="600"></canvas></div>
+ </div>
+	<div class ="barchart2"><canvas id="barchart2" height="400" width="1200"></canvas></div>
 </div>
-<!-- <!-- <script> -->
-<!-- var donutchart = new Chart(document.getElementById("donutchart"), { -->
-<!-- 	  type: 'doughnut', -->
-<!-- 	    data: { -->
-<!-- 	      datasets: [{ -->
-<!-- 	        data: [40, 60],      // 섭취량, 총급여량 - 섭취량 -->
-<!-- 	        backgroundColor: [ -->
-<!-- 	          '#9DCEFF', -->
-<!-- 	          '#F2F3F6' -->
-<!-- 	        ], -->
-<!-- 	        borderWidth: 0, -->
-<!-- 	        scaleBeginAtZero: true, -->
-<!-- 	      } -->
-<!-- 	    ] -->
-<!-- 	  }, -->
-<!-- 	}); -->
 
-<!-- </script> -->
 
 <script type="text/javascript">
+let age10 = $('#age10').val()
+let age20 = $('#age20').val()
+let age30 = $('#age30').val()
+let age40 = $('#age40').val()
+let age50 = $('#age50').val()
+new Chart(document.getElementById("barchart1"), {
+    type: 'bar',
+    data: {
+      labels: ["10대", "20대", "30대", "40대", "50대이상"],
+      datasets: [
+        {
+          label: "AGE",
+          backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+          data: [age10, age20, age30, age40, age50  ]
+        }
+      ]
+    },
+    options: {
+      legend: { display: false },
+      title: {
+        display: true,
+        text: '연령별 유저',
+        fontSize: 17
+      },
+      responsive: false     
+    }
+});
+console.log($('#seoul').val())
+new Chart(document.getElementById("barchart2"), {
+    type: 'bar',
+    data: {
+      labels: ["서울특별시", "인천광역시", "부산광역시", "대구광역시", "대전광역시","울산광역시","광주광역시","세종특별자치시", "강원도", "경기도", "충청북도",
+    	        "충청남도","경상북도","경상남도", "전라남도","전라북도","제주특별자치도"],
+      datasets: [
+        {
+          label: "Location",
+          backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850","red","blue","orange","yellow","purple","navy","pink","green","lime","crimson"],
+          data: [ $("#seoul").val() , $("#incheon").val(),  $("#busan").val(), $("#daegu").val(), $("#daejun").val(),
+        	      $("#ulsan").val(), $("#gwangju").val(), $("#sejong").val(), $("#gangwon").val(),$("#gyeonggi").val(), 
+        	      $("#chungcheongbuk").val(), $("#chungcheongnam").val(), $("#gyeongsangbuk").val(), $("#gyeongsangnam").val(), 
+        	      $("#jeollanam").val(), $("#jeollabuk").val(),  $("#jeju").val() ]
+        }
+      ]
+    },
+    options: {
+      legend: { display: false },
+      title: {
+        display: true,
+        text: '각 지역별 게시글',
+        fontSize: 17
+      },
+      responsive: false
+      
+    }
+    
+});
+
+
  let men = $('#men').val()
  let women = $('#women').val()
  let noGender = $('#noGender').val()
@@ -314,7 +277,7 @@ var donutoptions = {
 			fontSize: 17, 
 			fontColor: 'rgba(46, 49, 49, 1)' 
 		},
-		animation: false,
+
 		tooltips: {
             displayColors: false, // 툴팁 바 컬러 표시 여부
        },

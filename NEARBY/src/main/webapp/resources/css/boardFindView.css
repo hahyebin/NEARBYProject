@@ -1,0 +1,144 @@
+@charset "UTF-8";
+	*{
+		padding: 0;
+		margin: 0;
+		box-sizing: border-box;	
+		width: 100%;
+	}
+	a {
+		text-decoration: none;
+		color: black;
+		font-weight: bold;
+	}
+
+/* header css */
+	.header {
+		width: 100%;
+		height: 106px;
+		background-color: white;
+	}
+	#home_btn { border-bottom: 8px solid  #fe4662; }
+	#home_icon { color: #fe4662; }
+/* End header Css */		
+	.mainBoardWrap {
+		width: 560px; 
+		border: 4px solid #fab1bc; 
+		padding: 15px;
+		border-radius: 15px;
+		margin: 30px auto;
+		background-color: rgba(255, 250, 250, 0.8);
+		box-shadow: 10px 10px 20px rgba(30, 30, 30, 0.5);
+	}
+	.boardIntro{
+		display: flex;	
+		width: 500px;
+	}
+   #p_img{
+	   	width: 80px;
+		height: 80px;
+	    display: inline-block;
+	    border-radius: 100%;
+		margin-right: 10px;
+		position: relative;
+   }
+     #p_img #user_img {
+		width: 80px;
+		height: 80px;
+		border-radius: 100%;
+	}
+   .id {
+   		width: 430px;
+   		height: 80px;
+   }
+   .setting_wrap{
+  	   position: relative; 
+  	   width: 10px;
+  	   text-align: right;
+   }
+   .setting { 
+	 	color: #696969	;
+	 	font-size:20px;
+	 	width:20px;
+	 	cursor: pointer;
+   }
+   .see {
+      display: block;
+      width: 90px;
+      height: 25px;
+   }
+   .no {   display: none; }
+   .fas {  display: inline-block;  }
+   .fa-map-marker-alt, .fa-cog { font-size: 12px; }
+   #board_writer {
+   	   font-weight: bold;
+   	   font-size: 18px;
+	   display: inline-block;
+	   margin-left: 10px;
+	   width: 250px;
+   }
+   .addrAndMap {
+	   text-align: right;
+	   padding-right: 10px;
+	   margin-top: 10px;
+	   margin-bottom: 10px;
+   }
+   .addressAndImage {
+   	   width:500px;
+       margin: 5px auto 10px;
+       position: relative;
+   }
+    .imgSize {
+    	margin: 0 auto;
+ 		width: 480px;
+ 		overflow: hidden;
+   }
+   #image, #video {
+   	 	width: 480px;
+  	  	overflow: hidden;
+  	  	margin: 0 auto;
+   }
+   .content {
+	   margin: 15px auto;
+	   padding-left: 5px;
+	   width : 520px;
+   }
+   .content textarea {
+   		border: none;
+   		background-color : rgba(255, 250, 250, 0.8);
+   		outline: none;
+   		overflow:visible;
+   		resize: none;
+    }
+   .likesAndReplyCount  {
+	   	border-top : 1px solid gray;
+	   	border-bottom : 1px solid gray;
+	   	height: 35px;
+	   	line-height: 35px;
+	   	display: flex;
+    }
+   .likesCount .replyCount { color :#fe4662;  }
+   .delete_update_form {
+       position:absolute;
+       top: 5px;
+       left: 5px;
+       border-radius: 10px;
+       border : 1px solid rgba(50,50,50,0.3);
+       margin: 0 auto;
+       margin-top: 20px;
+       padding: 5px;
+       text-align: center;
+       background-color: white;
+   }
+   .delete_update_form li:first-child {
+   	   padding-top: 5px;
+       padding-bottom: 4px;
+       border-bottom: 1px solid rgba(50,50,50,0.3);
+   }
+    .delete_update_form li {
+    	font-size: 10px;
+        font-weight: 400;
+    }
+    .delete_update_form li:hover {	
+    	font-weight: bold; 
+    	cursor: pointer;
+   	 }

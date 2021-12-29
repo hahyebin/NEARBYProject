@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Matcher;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -46,10 +47,8 @@ public class BoardServiceImpl implements BoardService {
 	// 게시글 등록하기
 	@Override
 	public void insertBoard(MultipartHttpServletRequest multipartRequest, HttpServletResponse response) {
-		
 //		Member member = (Member)multipartRequest.getSession().getAttribute("loginUser");
 //		String id = member.getId();
-
 		
 		String id =multipartRequest.getParameter("id");
 	
@@ -104,7 +103,6 @@ public class BoardServiceImpl implements BoardService {
 					}
 				}
 				file.transferTo(uploadFile);
-
 			}
 			else {
 				board.setPath("");
@@ -112,16 +110,9 @@ public class BoardServiceImpl implements BoardService {
 				board.setSaved("");
 			} 
 			logger.info(board.toString());
-			
-
- 
-		      
-		
 	} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		
 		
 		// 삽입확인용
 		//logger.info(board.toString());
@@ -132,7 +123,6 @@ public class BoardServiceImpl implements BoardService {
 		try {
 			   response.setContentType("text/html; charset=UTF-8");
 			   PrintWriter out = response.getWriter();
- 			
  			
  			if (result > 0) {
  				out.println("<script>");
@@ -150,13 +140,8 @@ public class BoardServiceImpl implements BoardService {
  		} catch (Exception e) {
  			e.printStackTrace();
  		}
-		
-		
-		
 //	  	message(result, response, "게시글을 등록하겠습니다.", "게시글 등록에 실패했습니다.", "/nearby/board/boardList");
-		
 	}
-	
 	
 	
 	// 게시글 상세보기
@@ -255,126 +240,161 @@ try {
 	}
 	
 	
-	
-	
-	
-	
 	// 게시글 삭제하기
 	@Override
-	public void deleteBoard(Long bNo, HttpServletResponse response) {
+	public void deleteBoard(HttpServletRequest request, HttpServletResponse response) {
 		BoardRepository boardRepository = sqlSession.getMapper(BoardRepository.class);
+	    Long bNo = Long.parseLong(request.getParameter("bNo"));
+	    Member member = (Member)request.getSession().getAttribute("loginUser");
+	    String id = member.getId();
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("bNo", bNo);
+        map.put("id", id);
+		int result = boardRepository.deleteBoard(map);
 		
-		int result = boardRepository.deleteBoard(bNo);
-		message(result, response, "삭제성공.", "삭제실패", "/nearby/board/boardList");
+		
+		try {
+			   response.setContentType("text/html; charset=UTF-8");
+			   PrintWriter out = response.getWriter();
+			
+			if (result > 0) {
+				out.println("<script>");
+				out.println("alert('삭제하겠습니다')");
+				out.println("location.replace('/nearby/board/boardList')");
+				out.println("</script>");
+				out.close();
+			} else {
+				out.println("<script>");
+				out.println("alert('게시글 삭제에 실패했습니다.')");
+				out.println("history.back()");
+				out.println("</script>");
+				out.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	//	message(result, response, "삭제성공.", "삭제실패", "/nearby/board/boardList");
 	}
-	
 	
 	
 	
 	// 좋아요
 	@Override
-	public Map<String, Object> likes(Long bNo, HttpSession session) {
-		Map<String,Object> map = new HashMap<String, Object>();
-		try {
-			  Board board = new Board();
-			  board.setbNo(bNo);
-			  Likes like = new Likes();
-			  System.out.println("------좋아요 -------");
-			  // board의 좋아요 +1 
-			  BoardRepository boardRepository = sqlSession.getMapper(BoardRepository.class);
-			  int reult = boardRepository.boardLike(board);
-			  Board b = boardRepository.selectBoardByNo(bNo);
-				System.out.println("보드의 좋아요 업뎃 : " + reult);
-				Member member = (Member)session.getAttribute("loginUser");
-				
-				if (member == null) throw new NullPointerException("다시 로그인을 진행해주세요.");
-				System.out.println("좋아요 번호" + bNo);
-				String id = member.getId();
-				System.out.println("좋아요 아이디" + id);
+	public Board likes(Likes likes, HttpSession session) {
+		BoardRepository boardRepository = sqlSession.getMapper(BoardRepository.class);	 // board db연결
+		System.out.println("-----------board 좋아요------------");
+		Board board = new Board();
+		board.setbNo(likes.getbNo());
 		
-				
-				Map<String, Object> m = new HashMap<>();
-				LikesRepository likesRepository = sqlSession.getMapper(LikesRepository.class);
-				like.setbNo(bNo);
-				like.setId(id);
-				int insertResult = likesRepository.likeInsert(like);
-				
-				System.out.println("삽입 성공?  : " +insertResult);		
-				m.put("bNo", bNo);
-				m.put("id", id);
-				// like 테이블에도 체크 +1
-				Board dd = boardRepository.boardLikesCount(board);
-				System.out.println(dd.getLikes());
-				int result = likesRepository.likeCheck(m);    // likes 테이블의 like_check의 증가
-				
-				
-				if(result > 0 ) {
-					map.put("result", result);
-				    map.put("board", b);
-				    map.put("count", dd.getLikes());
-				    System.out.println(b);
-				    System.out.println("좋아요 " +b.getLikes());
-				} else {
-					
-				}
-				}catch(NullPointerException e) {
-				   map.put("msg", e.getMessage());
-				}
-				return map;
+		int likeCheackBoard = boardRepository.boardLike(board);  //  게시판 좋아요 + 1
+		System.out.println(" 게시판 좋아요 + 1 : "+likeCheackBoard);
+		
+		LikesRepository likesRepository = sqlSession.getMapper(LikesRepository.class); // 좋아요 db연결
+		int likeTBLinsert = likesRepository.likeInsert(likes);
+		System.out.println("라이크테이블 0으로 초기화 하는 인서트 결과 : " + likeTBLinsert);
+		
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("bNo",likes.getbNo() );
+		map.put("id", likes.getId());
+		if( likeTBLinsert == 1 ) {  // 만약 인서트 성공하면 likeCheck = 1로 update하기  +  업뎃된 총 보드의 하트 수 갖고오기
+			
+			int likeTBLUpdate = likesRepository.likeCheck(map);
+			System.out.println("인서트후 LikeCheck 1? " + likeTBLUpdate);
+			  if( likeTBLUpdate == 1 ) {
+				  board = boardRepository.boardLikesCount(board);
+				  System.out.println("board의 좋아요 + 1 한 결과 갖고오기 " + board.getLikes());
+			  }
+		}
+				return board;
 	}
 	
 	
 	// 좋아요 취소하기
 	@Override
-	public Map<String, Object> likesCancel(Long bNo, HttpSession session) {
-		Map<String,Object> map = new HashMap<String, Object>();
-		try {
-			  Board board = new Board();
-			  Likes like = new Likes();
-			  board.setbNo(bNo);
-			  System.out.println("---------------------------");
-			  // board의 좋아요취소 -1 
-			  BoardRepository boardRepository = sqlSession.getMapper(BoardRepository.class);
-			  int reult = boardRepository.boardLikeCancel(board);
-			  Board b = boardRepository.selectBoardByNo(bNo);
-			  
-				
-				Member member = (Member)session.getAttribute("loginUser");
-				if (member == null) throw new NullPointerException("다시 로그인을 진행해주세요.");
-				System.out.println("좋아요취소 번호" + bNo);
-				String id = member.getId();
-				System.out.println("좋아요취소 아이디" + id);
-				
-				
-				Map<String, Object> m = new HashMap<>();
-				LikesRepository likesRepository = sqlSession.getMapper(LikesRepository.class);
-				like.setbNo(bNo);
-				like.setId(id);
-				
-				m.put("bNo", bNo);
-				m.put("id", id);
-				
-				int updateResult = likesRepository.likeCheckCancel(m);
-				System.out.println("추ㅣ소 없데이트 " + updateResult);
-				
-				Board dd = boardRepository.boardLikesCount(board);
-				System.out.println(dd.getLikes());
-				
-				
-				if(updateResult > 0 ) {
-					map.put("result", updateResult);
-				    map.put("board", b);
-				    map.put("count", b.getLikes());
-				    System.out.println(b);
-				    System.out.println("좋아요 " +b.getLikes());
-				} else {
-					
-				}
-				
+	public Board likesCancel(Likes likes, HttpSession session) {
+		System.out.println("-----------board 좋아요 취소------------");
+        BoardRepository boardRepository = sqlSession.getMapper(BoardRepository.class);	 // board db연결
 		
-		}catch (NullPointerException e) {
-			map.put("msg", e.getMessage());
-		}
+		Board board = new Board();
+		board.setbNo(likes.getbNo());
+		
+		int likeCancelBoard = boardRepository.boardLikeCancel(board);  //  게시판 좋아요 - 1
+		System.out.println(" 게시판 좋아요 취소 - 1 : "+likeCancelBoard);
+		
+		LikesRepository likesRepository = sqlSession.getMapper(LikesRepository.class); // 좋아요 db연결
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("bNo",likes.getbNo() );
+		map.put("id", likes.getId());
+		
+			int likeCancelTBLUpdate = likesRepository.likeCheckCancel(map);
+			System.out.println("likeCheck 0? " +likeCancelTBLUpdate );
+			  if( likeCancelTBLUpdate == 1 ) {
+				  board = boardRepository.boardLikesCount(board);
+				  System.out.println("board 취소 한 결과   " + board.getLikes());
+			  }
+			
+				return board;
+	}
+	
+	
+	
+	// 관리자 지역별 게시글 수 보기 
+	@Override
+	public Map<String, Object> adminBoardList() {
+		 BoardRepository boardRepository = sqlSession.getMapper(BoardRepository.class);
+		 List<Board> list = boardRepository.adminBoardList();
+		 System.out.println(list.toString());
+	    System.out.println(list.get(0).getLocation());
+	    String fullLocation = "";
+	    int seoul =0; int incheon=0; int gyeonggi = 0; int busan=0; int daegu=0; int daejun=0; int ulsan=0; int gwangju=0;
+	    int sejong=0; int gangwon=0; int chungcheongbuk=0; int chungcheongnam=0; int gyeongsangbuk=0; int gyeongsangnam=0; int jeollanam=0; int jeollabuk=0; int jeju = 0;
+	    for(int i=0; i<list.size(); i++) {
+	    	System.out.println(list.get(i).getLocation());   // 서울특별시 마포구 대흥동   서울특별시 마포구 대흥동   
+	    	fullLocation = list.get(i).getLocation();          // "서울특별시", "인천광역시", "부산광역시", "대구광역시", "대전광역시","울산광역시","광주광역시","세종특별자치시", "강원도", "경기도", "충청북도",
+	                                                          //   "충청남도","경상북도","경상남도", "전라남도","전라북도","제주특별자치도"
+	    	if ( fullLocation.contains("서울특별시")){
+	    		seoul++;  
+	    	} else if ( fullLocation.contains("인천광역시")){
+	    		incheon++;
+	    	} else if ( fullLocation.contains("부산광역시")){
+	    		busan++;
+	    	} else if ( fullLocation.contains("대구광역시")){
+	    		daegu++;
+	    	}else if ( fullLocation.contains("대전광역시")){
+	    		daejun++;
+	    	}else if ( fullLocation.contains("울산광역시")){
+	    		ulsan++;
+	    	}else if ( fullLocation.contains("광주광역시")){
+	    		gwangju++;
+	    	}else if ( fullLocation.contains("세종특별자치시")){
+	    		sejong++;
+	    	}else if ( fullLocation.contains("강원도")){
+	    		gangwon++;
+	    	}else if ( fullLocation.contains("경기도")){
+	    		gyeonggi++;
+	    	}else if ( fullLocation.contains("충청북도")){
+	    		chungcheongbuk++;
+	    	}else if ( fullLocation.contains("충청남도")){
+	    		chungcheongnam++;
+	    	}else if ( fullLocation.contains("경상북도")){
+	    		gyeongsangbuk++;
+	    	}else if ( fullLocation.contains("경상남도")){
+	    		gyeongsangnam++;
+	    	}else if ( fullLocation.contains("전라남도")){
+	    		jeollanam++;
+	    	}else if ( fullLocation.contains("전라북도")){
+	    		jeollabuk++;
+	    	}else if ( fullLocation.contains("제주특별자치도")){
+	    		jeju++;
+	    	}    
+	    }
+	     Map<String, Object> map = new HashMap<String, Object>();
+	     map.put("seoul",seoul);   map.put("incheon",incheon);   map.put("gyeonggi",gyeonggi);  map.put("busan",busan);  map.put("daegu",daegu);
+	     map.put("daejun",daejun);  map.put("ulsan",ulsan);   map.put("gwangju",gwangju);    map.put("sejong",sejong);   map.put("gangwon",gangwon);  
+	     map.put("chungcheongbuk",chungcheongbuk); map.put("chungcheongnam",chungcheongnam); map.put("gyeongsangbuk",gyeongsangbuk); map.put("gyeongsangnam",gyeongsangnam);
+	     map.put("jeollanam",jeollanam);   map.put("jeollabuk",jeollabuk);   map.put("jeju",jeju);
 		return map;
 	}
 	

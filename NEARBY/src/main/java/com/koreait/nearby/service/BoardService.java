@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.koreait.nearby.domain.Board;
+import com.koreait.nearby.domain.Likes;
 
 @Service
 public interface BoardService {
@@ -19,15 +21,18 @@ public interface BoardService {
 	public Board selectBoardByNo(Long no);
     public void insertBoard(MultipartHttpServletRequest multipartRequest, HttpServletResponse response);
     public void updateBoard(MultipartHttpServletRequest multipartRequest, HttpServletResponse response);
-    public void deleteBoard(Long bNo, HttpServletResponse response);
+    public void deleteBoard(HttpServletRequest request, HttpServletResponse response);
     
     
     // 좋아요
-    public Map<String, Object> likes(Long bNo, HttpSession session);
+    public Board likes( Likes likes, HttpSession session);
     
-    // 취소
-    public Map<String, Object> likesCancel(Long bNo, HttpSession session);
+    // 좋아요취소
+    public Board likesCancel(Likes likes, HttpSession session);
     
+    
+    // 관리자 지역별게시글 구분 메서드
+    public  Map<String, Object> adminBoardList();
     
  // default method
  	public default void message(int result, HttpServletResponse response, 
