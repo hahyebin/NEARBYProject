@@ -1,6 +1,5 @@
 package com.koreait.nearby.controller;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,6 +43,22 @@ public class MemberController {
 	public void insertMember(HttpServletRequest request, HttpServletResponse response) {
 	      service.joinMember(request, response);
 	}
+	
+	// 아이디 비번 찾으러 가기 
+	@GetMapping("findIdPw")
+	public String findIdPw() {
+		return "member/findIdPw";
+	}
+	
+	/* 비밀번호 찾기 / 임시 비밀번호 전송 */
+	@PostMapping(value = "findPw", produces = "application/json; charset=UTF-8")
+	@ResponseBody
+	public Map<String, Object> findPw(@RequestParam("email") String email) {
+		System.out.println(email.toString());
+		Map<String, Object> map = service.findPw(email);
+		return map;
+	}	
+	
 	
     // 아이디 중복확인하기 
 	@ResponseBody
@@ -116,14 +132,23 @@ public class MemberController {
 	
 	// 비밀번호 확인
 	@PostMapping(value="checkPassword", produces="application/json; charset=UTF-8")
+	@ResponseBody
 	public Map<String, Object> checkPassword(HttpServletRequest request){
 		return service.checkPassword(request);
 	}
 	
 	// 찐 비밀번호 변경
 	@PostMapping(value="changePassword")
-	public String changePassword(HttpServletRequest request, Member member) {
-		return "member/mypage";
+	public String changePassword(HttpServletRequest request) {
+		service.changePassword(request);
+		return "redirect:/";
+	}
+	
+	// follow페이지로  이동
+	@GetMapping(value="followList")
+	public String followList(Model model, HttpSession session) {
+		model.addAttribute("list", service);
+		return "member/follow";
 	}
 	
 }

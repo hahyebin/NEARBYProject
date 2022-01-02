@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.mail.Message;
 import javax.mail.internet.InternetAddress;
@@ -17,12 +18,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.ui.Model;
 
 import com.koreait.nearby.domain.Member;
 import com.koreait.nearby.domain.Profile;
 import com.koreait.nearby.repository.MemberRepository;
 import com.koreait.nearby.repository.ProfileRepository;
 import com.koreait.nearby.util.SecurityUtils;
+import com.koreait.nearby.util.adminPage;
 
 public class MemberServiceImpl implements MemberService {
 	
@@ -33,7 +36,6 @@ public class MemberServiceImpl implements MemberService {
 	@Autowired
 	private JavaMailSender javaMailSender;
 	
-
 	// birthday 파라미터 세개 더해야 돼서 request로 받음.. 
 	@Override
 	public void joinMember(HttpServletRequest request, HttpServletResponse response) {
@@ -64,7 +66,6 @@ public class MemberServiceImpl implements MemberService {
 		System.out.println("profileResult 결과 : " + profileResult );
 		
 		message(result, response, "회원가입성공", "회원가입실패", "/nearby");
-		
 	}
 	
 
@@ -86,6 +87,47 @@ public class MemberServiceImpl implements MemberService {
 		map.put("result", memberRepository.selectByEmail(email));
 		return map;
 	}
+	
+	/* 비밀번호 찾기 */
+	@Override
+	public Map<String, Object> findPw(String email) {
+
+		// 임시 비밀번호 생성
+		String pw = "";
+		for (int i = 0; i < 12; i++) {
+			pw += (char) ((Math.random() * 26) + 97);
+		}
+
+		// 이메일로 임시 비밀번호 보내기
+		try {
+			MimeMessage findPwMessage = javaMailSender.createMimeMessage();
+			findPwMessage.setHeader("Content-Type", "text/plain; charset=UTF-8");
+			findPwMessage.setFrom(new InternetAddress("nearby.corp@gmail.com", "NearBy"));
+			findPwMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(email));
+			findPwMessage.setSubject("NearBy 임시 비밀번호 발급");
+			findPwMessage.setText("임시 비밀번호는 " + pw + "입니다.");
+			javaMailSender.send(findPwMessage);
+			System.out.println("MemberServiceImple 이메일로 보낸 임시 비밀번호 : " + pw + "입니다.");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		// 임시 비밀번호를 담을 Member 호출
+		Member member = new Member();
+		// 임시 비밀번호를 담음
+		member.setEmail(email);
+		member.setPw(SecurityUtils.sha256((pw)));
+		System.out.println("SecurityUtils 암호화가된 임시 비밀번호 : " + pw + "입니다.");
+
+		MemberRepository memberRepository = sqlSession.getMapper(MemberRepository.class);
+		int result = memberRepository.findPw(member);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("result", result);
+		return map;
+	}
+	
+	
 	
 	// 이메일 인증
 	@Override
@@ -124,6 +166,8 @@ public class MemberServiceImpl implements MemberService {
 			MemberRepository repository = sqlSession.getMapper(MemberRepository.class);
 			Member loginUser = repository.login(member);
 			System.out.println("loginUser information : " + loginUser);
+			
+			// 로그인한 유저 보드에 좋아요한 유무 DB에서 갖고와서 세션에 저장하기 
 			if (loginUser != null) {
 				request.getSession().setAttribute("loginUser", loginUser);
 				logger.info(loginUser.toString());
@@ -247,13 +291,17 @@ public class MemberServiceImpl implements MemberService {
 	}
 	
 	// 회원 탈퇴 // 받아올 파라미터 mNo
-	public void leaveMember(Long mNo) {
+	public Map<String,Object> leaveMember(Long mNo) {
 		// 파라미터 받기
 		Map<String, Object> map = new HashMap<String, Object>();
 		MemberRepository memberRepository = sqlSession.getMapper(MemberRepository.class);
 		int result = memberRepository.leaveMember(mNo);
 		map.put("result", result);
+		
+		return map;
 	}
+	
+	
 	
 	@Override
 	public Map<String, Object> checkPassword(HttpServletRequest request) {
@@ -310,21 +358,19 @@ public class MemberServiceImpl implements MemberService {
 		return memberRepository.memberCountMen();
 	}
 	
-	
 	// 여자 회원
 	@Override
 	public List<Member> selectMemberWomen() {
 		MemberRepository memberRepository = sqlSession.getMapper(MemberRepository.class);
 		return memberRepository.memberCountWomen();
 	}
-	
 	// 성별없음 회원 
 	@Override
 	public List<Member> selectMemberNoGender() {
 		MemberRepository memberRepository = sqlSession.getMapper(MemberRepository.class);
 		return memberRepository.memberCountNoGender();
 	}
-	
+	// 오늘 가입한 사람 목록
 	@Override
 	public List<Member> selectMemberCreatedDay() {
 		MemberRepository memberRepository = sqlSession.getMapper(MemberRepository.class);
@@ -332,18 +378,87 @@ public class MemberServiceImpl implements MemberService {
 	}
 	
 	
+	@Override
+	public List<Member> memberAge10() {
+		MemberRepository memberRepository = sqlSession.getMapper(MemberRepository.class);
+		return memberRepository.memberAge10();
+	}
 	
+	@Override
+	public List<Member> memberAge20() {
+		MemberRepository memberRepository = sqlSession.getMapper(MemberRepository.class);
+		return memberRepository.memberAge20();
+	}
 	
+	@Override
+	public List<Member> memberAge30() {
+		MemberRepository memberRepository = sqlSession.getMapper(MemberRepository.class);
+		return memberRepository.memberAge30();
+	}
 	
+	@Override
+	public List<Member> memberAge40() {
+		MemberRepository memberRepository = sqlSession.getMapper(MemberRepository.class);
+		return memberRepository.memberAge40();
+	}
 	
+	@Override
+	public List<Member> memberAge50() {
+		MemberRepository memberRepository = sqlSession.getMapper(MemberRepository.class);
+		return memberRepository.memberAge50();
+	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	// 관리자가 회원 검색한 결과 받기
+	@Override
+	public Map<String, Object> findMember(HttpServletRequest request) {
+	    MemberRepository memberRepository = sqlSession.getMapper(MemberRepository.class);
+	      String query = request.getParameter("query");
+	      String column = request.getParameter("column");
+	      logger.info("column + query "+ column+", "+query);
+	      
+	      // 페이징2. 현재 페이지 번호 확인하기
+	      // page가 안 넘어오면 page = 1로 처리함.
+	      Optional<String> opt = Optional.ofNullable(request.getParameter("page"));
+	      int page = Integer.parseInt(opt.orElse("1"));
+	      
+	      Map<String, Object> dbMap = new HashMap<String, Object>();
+	      dbMap.put("query", query);
+	      dbMap.put("column", column);
+
+	      //검색수
+	      int cnt = memberRepository.selectFindRecordCount(dbMap);
+	      
+	      // 페이징3. 페이징에 필요한 모든 계산 처리하기
+	      adminPage p = new adminPage();
+	      p.setPageEntity(cnt, page);
+	  
+	  
+	      dbMap.put("beginRecord", p.getBeginRecord());
+	      dbMap.put("endRecord", p.getEndRecord());
+	      
+	      
+	      // 검색 결과 리스트
+	      List<Member> searchResult = memberRepository.selectFindList(dbMap);
+	      System.out.println("검색 결과 리스트 : "+searchResult);
+	      
+	      int index = searchResult.size();
+	      
+	      
+		// view에서 쓸 resultMap
+	   Map<String, Object> resultMap = new HashMap<String, Object>();
+			
+			
+		//  DB로 보낼 beginRecord, endRecord 작업 
+		   resultMap.put("beginRecord", p.getBeginRecord()+"");
+		   resultMap.put("endRecord", p.getEndRecord()+"");
+		   resultMap.put("searchResult", searchResult); //list
+		   resultMap.put("pageEntity", p.getPageEntity("/nearby/admin/findMember?column="+column+"&query="+query)); 
+	       resultMap.put("startNum", cnt - (page - 1) * p.getRecordPerPage());
+		   resultMap.put("cnt",cnt);
+		   resultMap.put("index",index);
+	       resultMap.put("query", query);
+	       
+	      return resultMap;
+	  		
+	}
 }

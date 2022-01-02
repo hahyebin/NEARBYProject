@@ -122,7 +122,7 @@
 	    width: 450px;
 	    margin: 35px auto;
 	}
-	.btn_wrap input{
+	.btn_wrap input, button{
 		color:white;
 	    width: 220px; height: 50px;
 	    background: linear-gradient(#ff6e56,#ff3268);
@@ -141,6 +141,23 @@
 		padding: 5px;
 	} 
 	
+	/* 현재 비밀번호 */
+	#password_check_btn {
+	    width: 102.5px;
+	    height: 45px;
+	    background-color: pink;
+	    border-radius: 10px;
+	    font-size: 12px;
+	    margin-left: 5px;
+	}
+	#pw {
+		width: 337.5px;
+	}
+	#current_pw_box {
+		display: flex;
+		width:220px;
+	}
+	
 </style>
 
 <script type="text/javascript">
@@ -151,38 +168,42 @@
 		fnCheckSubmit();             // 모든 함수 확인 후 서브밋넘기기
 		fnCurrentPwCheck();
 		fnNewPwCheck(); // 새 비밀번호 정규식
-		fnPwCheck();				   
 		fnPwDoubleCheck();
+		fnCurrentEmailCheck();
 		fnHomeBtn(); // 홈으로 가기
 	}); 
 	
 	// 서브밋
 	 function fnCheckSubmit(){
-	    $('#pw_change_form').on('submit', function(event){
+	  /*   $('#pw_change_form').on('submit', function(event){ */
+	    $('#modify_btn').on('click', function(event){
 	      if( confirm('변경하시겠습니까?') == false){
 				event.preventDefault(); 
 	          return false;
 			} else if ( pw_result == false ) {
                 event.preventDefault(); 
+                console.log('submit result : ' + pw_result);
                 return false;  
             } else if ( new_pw_result == false ) {
                 event.preventDefault();  
+                console.log('submit new_pw_result : ' + new_pw_result);
                 return false;  
             } else if ( pw_double_result == false ) {
                 event.preventDefault();  
+                console.log('submit pw_double_result : ' + pw_double_result);
                 return false;  
             } else if ( email_result == false ) {
 				event.preventDefault();
+                console.log('submit email_result : ' + email_result);
                 return false;  
-            } else if ( authCodePass == false ) { // 12/14 추가
+            } else if ( authCodePass == false ) { 
 				event.preventDefault();
 				alert('이메일 인증을 진행해주세요'); 
+                console.log('submit authCodePass : ' + authCodePass);
             	return false;
-            } else if ( phone_result == false ) {
-				event.preventDefault(); 
-               return false;
-            } else 
+            } else{
             	return true;
+            }
 	        });
 	    } //   function fnCheckSubmit()
 	    
@@ -190,39 +211,20 @@
     // 아이디
 	let regId = /^[a-zA-Z0-9_-]{4,}$/;
     // 비밀번호
-	let regPwd = /^[a-zA-Z0-9!@$%^&*()]{8,20}$/;
+	let regPwd = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,20}$/;
     // 이름
 	let regName = /^[a-zA-Z가-힣]{1,30}$/;
     // 이메일
 	let regEmail = /^[0-9a-zA-Z-_]+@[a-zA-Z0-9]+([.][a-zA-Z]{2,}){1,2}/;
     // 핸드폰 번호
-	let regPhone = /^((01[1|6|7|8|9])[1-9]+[0-9]{6,7})|(010[1-9][0-9]{7})$/;
 	let pw_result = false;
 	let new_pw_result = false;
 	let pw_double_result = false;
+	let email_result = false;
 	let authCodePass = false;
       
 
-/* -------------------------------------------------------------- fnPwCheck() ------------------------------------------------ */
-      // 비밀번호 정규식 
-      function fnPwCheck(){
-         
-         $('#pw').on('blur keyup', function(){
-            if( regPwd.test( $("#pw").val())){    
-                $("#pw_check").text("사용가능한 비밀번호입니다.").addClass("pass_msg").removeClass('error_msg');
-                pw_result = true;
-            } else if (    $('#pw').val() == '' ){
-                $("#pw_check").text('입력은 필수입니다.').addClass('error_msg').removeClass('pass_msg');
-                pw_result = false;
-            }    else {
-                $("#pw_check").text("비밀번호는 8~20자의 영문 대/소문자, 숫자, 특수문자 등 3종류 이상입니다.").addClass('error_msg').removeClass('pass_msg');
-                pw_result = false;
-            }
-         console.log("pw: "+pw_result);
-            return pw_result;
-         }); 
-      
-      } // fnPwCheck
+
 /* -------------------------------------------------------------- fnNewPwCheck() ------------------------------------------------ */
       // 새 비밀번호 정규식 
       function fnNewPwCheck(){
@@ -249,7 +251,7 @@
          function fnPwDoubleCheck(){
           
           $('#pwCheck').on('blur keyup', function(){     
-                if($('#pw').val() !=  $("#pwCheck").val() ){
+                if($('#newPw').val() !=  $("#pwCheck").val() ){
                     $("#pw_doubleCheck").text( '비밀번호가 일치하지 않습니다.').addClass('error_msg').removeClass('pass_msg');
                     pw_double_result = false;
                 } else{
@@ -288,14 +290,13 @@
       			if ( $('#authCode').val() == authCode ) {
       				alert('인증되었습니다.');
       				authCodePass = true;
-      			} else if ( $('#authCode').val() == '' ) { // 12/14 추가
+      			} else if ( $('#authCode').val() == '' ) {
       				alert('인증번호를 입력하세요');
       				authCodePass = false;
       			} else {
       				alert('인증에 실패했습니다.');
       				authCodePass = false;
       			}
-      			
       		}); // end click
       	}         
  /* ************************************************************************************ */
@@ -303,52 +304,124 @@
 </script>
 
 <script>
-// 비밀번호 찾기 process 
-// 가입당시 비밀번호는 ajax 처리하여 pass true - false 매김 -- DB 에서 비밀번호 일치하는지 확인 필요.
-// 변경할 비밀번호와 비밀번호 재확인을 통해 비밀번호를 확인하고 -- pass true / false
-// 이후 통과되면 가입당시 입력한 이메일을 작성 -> 인증번호받고 인증하기 -- pass true / false
-// 다 끝난 뒤에 수정완료 버튼을 누르면 page이동 : 페이지는 내 정보 변경 mypage
-// 보낼 파라미터 새로운 pw / email
-
 
 /* ------------------------------------------------------------- fnCurrentPwCheck() ------------------------------------------------- */	
 	// 현재 비밀번호 확인 함수
 	function fnCurrentPwCheck() {  // checkPassword
-	    $('#pw').on('keyup blur',function(){ // TODO ajax로 select 결과 받아서 처리하기해야함.
-	    	if ( regPwd.test($(this).val()) == false ) {
-				$('#id_check').text("아이디는 소문자/숫자 4자 이상 사용 가능합니다.").addClass('error_msg').removeClass('pass_msg');
-				id_result = false;
-				return;
-			  }
+	    $('#password_check_btn').on('click',function(){ // TODO ajax로 select 결과 받아서 처리하기해야함.
+
 			$.ajax({
-				url : '/nearby/member/idCheck',
+				url : '/nearby/member/checkPassword',
 				type : 'post',
-				data : 'id=' + $('#id').val(),
+				data : 'pw=' + $('#pw').val(),
 				dataType: 'json',               // 받아올 데이터 타입
-				success : function(resData){
-					 if( resData.result == null){
-						 $('#id_check').text('사용 가능한 아이디').addClass("pass_msg").removeClass('error_msg');
-						 id_result = true;
-					 } else if($('#id').val() == '' ){
-						 $('#id_check').text('입력 필수입니다.').addClass('error_msg').removeClass('pass_msg');;
-		                    id_result = false;
-		             } else if(resData.result != null) {
-						 $('#id_check').text('이미 사용중인 아이디').addClass('error_msg').removeClass('pass_msg');;
-						 id_result = false;
+				success : function(map){
+					console.log(map);
+					let name = '${loginUser.name}';
+					 if( map.selectResult > 0){
+						Swal.fire({
+							icon: 'success',
+							title: '비밀번호 확인완료',
+							text: name + '님의 비밀번호가 확인되었습니다.',
+						})
+						 pw_result = true;
+		             } else if(map.selectResult == 0) {
+						Swal.fire({
+							icon: 'error',
+							title: '비밀번호 재확인필요',
+							text: name + '님의 비밀번호가 일치하지 않습니다. 다시시도해 주세요.',
+						})
+						 pw_result = false;
 					 }
-				},
+					 console.log(pw_result);
+				}, // End Seuccess function
+				error : function(xhr, ajaxOptions, thrownError) {
+			       console.log(xhr.responseText);
+				} // End Error function
+				
+			}) // End ajax
+		}); // click event
+	} // End fnCurrentPwCheck
+	
+	
+	
+	
+/* ------------------------------------------------------------- fnCurrentEmailCheck() ------------------------------------------------- */	
+	// 현재 이메일 확인 함수
+	function fnCurrentEmailCheck() {  // checkPassword
+	    $('#authCode_btn').on('click',function(){ 
+
+			$.ajax({
+				url : '/nearby/member/selectByEmail',
+				type : 'post',
+				data : 'email=' + $('#email').val(),
+				dataType: 'json',               // 받아올 데이터 타입
+				success : function(map){
+					console.log(map);
+					let name = '${loginUser.name}';
+					 if( map.result != null){
+						Swal.fire({
+							icon: 'success',
+							title: '이메일 확인완료',
+							text: name + '님의 이메일로 인증번호가 발송되었습니다.',
+						})
+						fnSendAuthCode(map.result.id);
+						 email_result = true;
+		             } else if(map.result == null) {
+						Swal.fire({
+							icon: 'error',
+							title: '이메일 재확인필요',
+							text: name + '님의 이메일이 일치하지 않습니다.',
+						})
+						 email_result = false;
+					 }
+					 console.log(email_result);
+				}, // End Seuccess function
 				error : function(xhr, ajaxOptions, thrownError) {
 			       alert(xhr.responseText);
-			//		console.log(xhr.status);
-			  //      console.log(thrownError);
-				}
+				} // End Error function
 				
-			}) // ajax
-			 console.log("id: "+id_result);
-			  return id_result;	 
-		}); // id
+			}) // End ajax
+		}); // click event
 	} // End fnCurrentPwCheck
+/* ------------------------------------------------------------- fnCurrentEmailCheck() ------------------------------------------------- */	
+    function fnSendAuthCode(id){
+    	
+   /*  	$('#authCode_btn').click(function(){ */
+    		$.ajax({
+    			url : '/nearby/member/sendAuthCode',
+    			type: 'post',
+    			data: 'email='+ $('#email').val(),
+    			dataType: 'json',
+    			success : function(map) {
+    				fnVerifyAuthcode(map.authCode, id); // 12/13추가
+    			},
+    			error: function() {
+					alert('인증코드 전송 실패');
+				}
+    		});	 // ajax
+/*     	}); */
+    	return;
+    }
 
+/* ------------------------------------------------------------- fnCurrentEmailCheck() ------------------------------------------------- */	
+
+   	// 인증코드 검증 변수와 함수
+   	function fnVerifyAuthcode(authCode){
+   		$('#verify_btn').click(function(){
+   			if ( $('#authCode').val() == authCode ) {
+   				alert('인증되었습니다.');
+   				authCodePass = true;
+   			} else if ( $('#authCode').val() == '' ) { // 12/14 추가
+   				alert('인증번호를 입력하세요');
+   				authCodePass = false;
+   			} else {
+   				alert('인증에 실패했습니다.');
+   				authCodePass = false;
+   			}
+   			
+   		}); // end click
+   	}         
 
 
 </script>	
@@ -373,7 +446,7 @@ function fnHomeBtn() {
     <div class="container">
     
         <div class="head">
-            <h1 class="title"><a href="#">NearBy</a></h1>
+            <h1 class="title"><a href="/nearby/">NearBy</a></h1>
         </div>
  
         <div class="pw_change_box">
@@ -383,10 +456,14 @@ function fnHomeBtn() {
                 <!-- 비밀번호 -->
                 <div class="input_box">
                     <label for="pw">현재 비밀번호</label>
-                    <span class="space">
-                  	  <input type="text" id="pw" name="pw">
-                    </span>
-                    <p id="pw_check" class="msg_box"></p>
+                    <div id="current_pw_box">
+	                    <span class="space">
+	                  	  <input type="text" id="pw" name="pw">
+	                    </span>
+	                    <span>
+		                    <input type="button" value="확인하기" id="password_check_btn" class="pointer">
+	                    </span>
+                    </div>
                 </div>
                 
                 <div class="input_box">
@@ -417,7 +494,7 @@ function fnHomeBtn() {
 
                     <!-- 인증코드 발송 -->
                     <span class="space">
-	                    <input type="button" value="인증번호받기" id="authCode_btn" class="btns">
+	                    <input type="button" value="인증번호받기" id="authCode_btn" class="pointer">
                     </span>
                     <span id="email_check"></span>
 
@@ -425,11 +502,11 @@ function fnHomeBtn() {
                     <span class="space">
 	                    <input type="text" name="authCode" id="authCode">
                     </span>
-                    <input type="button" value="인증하기" id="verify_btn" class="btns">
+                    <input type="button" value="인증하기" id="verify_btn" class="pointer">
                 </div>
 
                <div class="btn_wrap">
-                   <input type="button" id="modify_btn" class="btn btn-primary pointer" value="수정완료">                
+                   <button id="modify_btn" class="btn btn-primary pointer">수정완료</button>             
                    <input type="button" value="홈으로" id="home_btn" class="pointer">                
                </div>                    
             </form>

@@ -9,18 +9,20 @@
 <title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/adminHeader.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/header.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/boardView.css">
 
 <script type="text/javascript">
 	
 	$(document).ready(function(){
+		fnLike();
 		var txtArea = $(".content_height");
 	    if (txtArea) {
 	        txtArea.each(function(){
 	            $(this).height(this.scrollHeight);
 	        });
 	    }
+	    
 	})
 
 
@@ -37,14 +39,8 @@
 						dataType: 'json',
 		 				success: function(map){
 		 					if(map.result > 0){
+		 						//likeBtn.find('.like_count').text(map.count);
 		 						$('#'+i).find('.like_count').text(map.count);
-		 						location.href = '/nearby/admin/adminBoardList';
-		 				      if(map.likeCheck > 0){
-		 				      //  $('#'+i).find('i').css('color', '#fe4662');
-		 				       // .append("<img class='like_color' src='/resources/image/like_color'>")
-		 				      } else if( map.likeCheck == 0 ){
-		 				    //	 $('#'+i).find('i').css('color', 'gray');
-		 				      }
 		 					} else {
 		 						alert(map.msg);
 		 					}
@@ -66,14 +62,13 @@
 	  				success: function(map){
 	  					if(map.result > 0){
 	  						$('#'+i).find('.like_count').text(map.count);
-	  						location.href = '/nearby/admin/adminBoardList';
 	  					} else {	alert(map.msg);	}
 	  				},
 	  				error : function(xhr, error){
 	  					console.log(xhr.status);
 	  					console.log(xhr.error)
 	  				}				
-	  			});  // ajax
+	  			});  // ajax		
 	 	      }
  }	// fnLike
 </script>
@@ -83,23 +78,33 @@
   cursor: pointer;
   }
    .like {
-   		color: #fe4662; cursor: pointer;
+   		color: pink; cursor: pointer;
    }
+  .header {
+  	margin-top: 130px;
+  }
  
 </style>
 </head>
 <body>
 	<header class="header">
-		<jsp:include page="/WEB-INF/views/layout/adminHeader.jsp" flush="true" />
+		<jsp:include page="/WEB-INF/views/layout/header.jsp" flush="true" />
 	</header>
- <h1>${loginUser.id}님 환영합니다.</h1>
+	
+	<div class="search_result_text">
+		<c:if test="${empty list[0]}">
+			<div class="search_result_wrap"><h3>" ${query} " </h3> 에 대한 검색 결과가 없습니다.</div>
+		</c:if>
+		<c:if test="${not empty list[0]}">
+			<div class="search_result_wrap"><h3>" ${query} " </h3> 에 대한 검색 결과</div>
+		</c:if>
+	</div>
 
-	<a href="/nearby/board/insertPage">새 갤러리 작성</a> <!-- header로빠질예정 -->
-	<a href="/nearby/member/logout">로그아웃</a>
-
-<div class="board_container">
+	<div class="board_container">
+	 	 
+	 
 	 <c:if test="${not empty list[0]}"> 
-	  <c:forEach items="${list}" var="board">
+	  	<c:forEach items="${list}" var="board">
 
 	    <%-- 	보드 값 확인 용 ${board} --%>
 		<div id="mainBoardWrap" >
@@ -157,28 +162,20 @@
 		            			 	<textarea readonly="readonly"  class="content_height"> ${board.content}</textarea> 
 		     				 </div>
 		  		</div>
+		  		
 		  </c:if>		
+		  
 		  		<!--------------  댓글 + 좋아요 수 ----------------------->
-		  		<div class="likesAndReplyCount">"${board.like.likeCheck}"
-			  		
-			  		<!------  좋아요 wrap ------>
+		  		<div class="likesAndReplyCount">
 			  		<div class="countIcon likesCount"> 
-	
-						<c:if test="${board.like.likeCheck == 0 || board.like.likeCheck == null}">
-				  				<span class="like_btn" id="${board.bNo}"  data-bno="${board.bNo}" onclick="fnLike(${board.bNo})">
-				  			 	    <i class="fas board_icon fa-thumbs-up"></i>
-					  				<span class="like_count">${board.likes}</span> 
-				  				</span>
-					  	</c:if>
-					  		
-					  			
-					  	<c:if test="${board.like.likeCheck > 0}">	
-					  		   <span class="like_btn" id="${board.bNo}"  data-bno="${board.bNo}" onclick="fnLike(${board.bNo})">
-				  			 	    <i class="fas board_icon fa-thumbs-up like"></i>
-					  				<span class="like_count">${board.likes}</span> 
-				  				</span>
-				  		</c:if>
-		            </div>
+			  			${board.bNo }
+			  		
+		  				<span class="like_btn" id="${board.bNo}"  data-bno="${board.bNo}" onclick="fnLike(${board.bNo})">
+		  					<i class="fas board_icon fa-thumbs-up"></i>
+			  				<span class="like_count">${board.likes}</span>
+		  				</span>
+		  			
+			  		</div>
 			  		<div class="countIcon replyCount">
 			  			<i class="fas board_icon fa-comments countIcon replyCount" ></i>
 			  			<span class=""></span>

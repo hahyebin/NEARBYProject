@@ -61,8 +61,51 @@
 	    width: 600px;
 	    margin: 0 auto;
 	}
-	/* 탈퇴버튼 */
-	#leave_btn {
+	/* 회원 탈퇴 구역 */
+	.leave_user_wrap {
+		position: relative;
+		margin: 0 auto;
+	}
+	.current_pw_check_box{
+		background-color: white;
+		z-index: -5;
+		width: 500px;
+		height: 300px;
+		position: absolute;
+	    border-radius: 10px;
+		margin-left: 50px;
+		margin-top: 100px;
+	    border: 2px solid lightgray;
+	}
+	.current_pw_check_box label {
+		margin: 20px 300px 0 28px;
+		width: 120px;
+	}
+	
+		/* 현재 비밀번호 */
+	.current_pw_check_box #password_check_btn {
+	    width: 102.5px;
+	    height: 45px;
+	    background-color: pink;
+	    border-radius: 10px;
+	    font-size: 12px;
+	    margin-left: 5px;
+	}
+	.current_pw_check_box #pw {
+		width: 337.5px;
+		height: 45px;
+	    border-radius: 10px;
+	    margin-bottom: 5px;
+		background-color: aliceblue;
+	}
+	#current_pw_box {
+		display: flex;
+		width: 440px;
+		margin: 20px auto 0 auto;
+	}
+	
+	/* 탈퇴 박스 띄우는 버튼 */
+	#show_leave_btn_box {
 		float: right;
 		margin: 20px 20px 0 0;
 		background-color: white;
@@ -70,9 +113,36 @@
 		color: lightgray;
 		font-size: 10px;
 	}
-	#leave_btn:hover {
+	#show_leave_btn_box:hover {
 		text-decoration: underline;
 	}
+	/* 찐 탈퇴 버튼 */
+	#leave_btn {
+		color:white;
+	    width: 220px; height: 50px;
+	    background: linear-gradient(#ff6e56,#ff3268);
+	    border-radius: 10px;
+		border: none;
+		margin: 30px 140px 20px 140px;
+	}
+	.close_leave_btn_box{
+		display: none;
+	}
+	#close_leave_btn_area{
+		display: block;
+	}
+	#close_leave_area_icon {
+	    margin-left: 460px;
+	    font-size: 20px;
+	    padding: 5px;
+	    margin-top: 8px;
+	}
+	.opacity_box {
+		opacity: 0.3;
+	}
+/* ---------------------- 탈퇴 구역 끝 ----------------------- */
+	
+	
 	/* profile area */
 	#user_img:hover{
 		visibility: visible;
@@ -97,11 +167,12 @@
 		margin-left: 20px;
 	}
 	#content {
-		border-radius: 10px;
-		border: 1px solid rgba(50,50,50,0.3);
-		padding: 10px;
-		resize: none;
-		outline: none;
+	    border-radius: 10px;
+	    padding: 10px;
+	    resize: none;
+	    outline: none;
+	    background: aliceblue;
+	    border-style: none;
 	}
 		/* file box */
 	.file_box{
@@ -133,7 +204,7 @@
 		z-index: 3;
 	}
 	#file {
-		margin:32px auto 20px;
+		margin:10px auto 20px;
 		width: 200px;
 		background-color: white;
 		border-radius: 10px;
@@ -164,6 +235,16 @@
 		text-align: center;
 		background-color: white;
 		display: flex;
+   }
+   	#close_file_box_icon_area {
+		display: block;
+   		width: 16px;
+    	margin-left: 220px;
+	}
+   		/* 사진박스 닫기 아이콘 */
+   #close_file_box_icon {
+		font-size: 16px;
+		margin: 10px 10px 0 0;
    }
    .delete_update_form li:first-child {
 		border-right: 1px solid rgba(50,50,50,0.3);
@@ -235,12 +316,33 @@
 	    padding-bottom: 5px;
 	}
 	
-	.gender_box > label{
+	.gender_box > input[type=radio]{
+	    width: 0; height: 0;
+	    position: absolute;
+	    left: -9999px;
+	}	 
+	 
+	.gender_box > input[type=radio] + label{
 	    display: inline-block;
-	    padding-bottom: 5px;
-	    margin: 0 40px 0 40px;
-	}
-	
+	    position: relative;
+	    justify-content: center;
+	    width: 92px; height: 55px;
+	    margin: 0 27px 0 27px;
+	    line-height: 55px;
+	    border: none;
+	    border-radius: 10px;
+	    background-color: rgb(232, 240, 254);
+	    text-align: center;
+	    cursor: pointer;
+	  }
+	.gender_box > input[type=radio]:checked + label{
+	    background-color: #91c7fa;
+	    color: #FFF;
+	    border: none;
+	    box-shadow: 0 0 10px rgba(102, 179, 251, 0.5);
+	    z-index: 1;
+	  }
+	  
 	/* input tag 공백 */
 	.space input[type=text] {
 		padding-left:15px;
@@ -287,9 +389,10 @@
 		fnDeleteProfilePic(); // 프로필 사진 초기화
 		fnModifyMemberInfo();
 		fnLeave();	// 회원탈퇴
+		fnCurrentPwCheck(); // 탈퇴시 비밀번호 확인
 		fnChangeBtn(); // 비밀번호 변경페이지 이동
 	}); 
- 
+ 	 	
     // 아이디
 	let regId = /^[a-zA-Z0-9_-]{4,}$/;
     // 이름
@@ -298,10 +401,15 @@
 	let regPhone = /^((01[1|6|7|8|9])[1-9]+[0-9]{6,7})|(010[1-9][0-9]{7})$/;
 	let id_result = false;
 	let name_result = false;
-	let phone_result = false; 
+	let phone_result = false;
+	let pw_result = false;
    
  /* ************************************************************************************ */
- 
+/* ------------------------------------------------------------ fnFindMemberInfo() ------------------------------------------------------------ */
+	// 서브밋 방지 함수
+	function fnPreventSubmit() {
+
+ 	}
 	
 /* ------------------------------------------------------------ fnFindMemberInfo() ------------------------------------------------------------ */
 	// 회원 조회 함수
@@ -327,13 +435,13 @@
 					$('#user_name_area').text(map.result.name + '님 환영합니다.');
 					$('#mNo').val(map.result.mNo); 
 					$('#phone').val(map.result.phone);
-					$('#content').val(map.result.profile.content);
+					$('#content').val(map.result.profile.pContent);
 					$('#name').val(map.result.name);
 					$('#birthday').val(year);
 					$('#month').val(month);
 					$('#day').val(day);
 					if (map.result.profile.pOrigin != null) {
-						$('#user_img').attr('src', '/nearby/' + map.result.profile.path + '/' + map.result.profile.pSaved);
+						$('#user_img').attr('src', '/nearby/' + map.result.profile.pPath + '/' + map.result.profile.pSaved);
 					} else {
 						$('#user_img').attr('src', '${pageContext.request.contextPath}/resources/image/profile_default.png');
 					}
@@ -349,6 +457,7 @@
 		}) // End ajax
  	} // End fnFindMemberInfo
 
+
 /* ------------------------------------------------------------ fnFileCheck() ------------------------------------------------------------ */
 	// 첨부파일 점검 함수 (확장자 + 크기)
 	function fnFileCheck(){
@@ -357,11 +466,11 @@
 			/* 확장자 점검 */
 			let origin = $(this).val(); // 첨부된 파일명
 			let extName = origin.substring(origin.lastIndexOf(".") + 1).toUpperCase(); // 확장자를 대문자로 저장 aaa.aaa.aaa.ccc 일 때, 마지막 마침표 다음 자리부터 끝까지 substring으로 가지고오고 
-			if ( $.inArray(extName, ['JPG', 'JPEG', 'GIF', 'PNG']) == -1 ) {	// 첨부된 파일이 ['JPG', 'JPEG', 'GIF', 'PNG'] 중 하나가 아니면 (-1) :: 확장자 제한 두기
+			if ( $.inArray(extName, ['JPG', 'JPEG', 'GIF', 'PNG', 'JFIF']) == -1 ) {	// 첨부된 파일이 ['JPG', 'JPEG', 'GIF', 'PNG'] 중 하나가 아니면 (-1) :: 확장자 제한 두기
 				Swal.fire({
 					icon: 'warning',
 					title: '확장자를 확인해주세요',
-					text: '첨부 가능한 이미지의 확장자는 jpg, jpeg, gif, png 입니다.'
+					text: '첨부 가능한 이미지의 확장자는 jpg, jpeg, gif, png, jfif 입니다.'
 				});
 				$(this).val(''); // 첨부 초기화
 				return;
@@ -474,7 +583,7 @@
 		$('#profile_result').empty();
 	
 		$('#profile_result')
-		.append( $('<div id="p_img" style="width:100%;height:100%;">').html( $('<img>').attr('src', '/nearby/' + map.profile.path + '/' + map.profile.pSaved) ) );
+		.append( $('<div id="p_img" style="width:100%;height:100%;">').html( $('<img>').attr('src', '/nearby/' + map.profile.pPath + '/' + map.profile.pSaved) ) );
 	} 
  */
 
@@ -485,7 +594,7 @@
 	// /nearby/member/modifyMember'
  			let member = JSON.stringify({
 				mNo: $('#mNo').val(),
-				profile : {content : $('#content').val()},
+				profile : {pContent : $('#content').val()},
 				name: $('#name').val(),
 				phone: $('#phone').val(),
 				birthday: $('#birthday').val() + $('#month').val() + $('#day').val(),
@@ -529,30 +638,113 @@
 			}) // End ajax
 		}) // End modify_btn click event
 	} // End fnModifyMemberInfo
+
 	
 /* ---------------------------------------------------------- fnLeave() ------------------------------ */
 	// 회원 탈퇴
 	function fnLeave() {
 		$('#leave_btn').on('click', function(){
-			if(confirm('정말 탈퇴하시겠습니까?') == false) {
+					
+			if(confirm('정말 탈퇴하시겠습니까?') == false) { // confirm이 false이면 return
 				return;
-			} else {
-				Swal.fire({
-		            icon: 'error',
-		            title: '탈퇴되었습니다.',
-		            text: 'NearBy를 이용해주셔서 감사합니다.',
-		        });
-				$('#form').attr('action', '/nearby/member/leaveMember/');
-				$('#form').submit();
+			} else { // confirm이 true이면 pw_result check
+				if(pw_result == true) { // if pw_result == true이면 submit
+					Swal.fire({
+			            icon: 'error',
+			            title: '탈퇴되었습니다.',
+			            text: 'NearBy를 이용해주셔서 감사합니다.',
+			        });
+					$('#form').attr('action', '/nearby/member/leaveMember/');
+					$('#form').submit();
+				} else if (pw_result == false || $('#pw').val()=='') { // pw_result == false 이면 return;
+					Swal.fire({
+			            icon: 'error',
+			            title: '비밀번호 확인필요',
+			            text: '비밀번호 확인 후 진행해 주세요',
+			        });
+					return;
+				}
 			}
 
 		}) // End click event
 	} // End fnLeave
 	
+/* ------------------------------------------------------------ fnCurrentPwCheck() ------------------------------------------------------------ */
+	// 현재 비밀번호 확인 함수
+	function fnCurrentPwCheck() {  // checkPassword
+	    $('#password_check_btn').on('click',function(){ // TODO ajax로 select 결과 받아서 처리하기해야함.
+
+			$.ajax({
+				url : '/nearby/member/checkPassword',
+				type : 'post',
+				data : 'pw=' + $('#pw').val(),
+				dataType: 'json',               // 받아올 데이터 타입
+				success : function(map){
+					let name = '${loginUser.name}';
+					fnPwCheck(map);
+					 if( map.selectResult > 0){
+						Swal.fire({
+							icon: 'success',
+							title: '비밀번호 확인완료',
+							text: name + '님의 비밀번호가 확인되었습니다.',
+						})
+						 pw_result = true;
+		             } else if(map.selectResult == 0) {
+						Swal.fire({
+							icon: 'error',
+							title: '비밀번호 재확인필요',
+							text: name + '님의 비밀번호가 일치하지 않습니다. 다시시도해 주세요.',
+						})
+						 pw_result = false;
+					 }
+					 console.log(pw_result);
+				}, // End Seuccess function
+				error : function(xhr, ajaxOptions, thrownError) {
+			       alert(xhr.responseText);
+				} // End Error function
+				
+			}) // End ajax
+		}); // click event
+		
+	function fnPwCheck(map){
+	    $('#pw').on('keyup', function(){
+	        if($('#pw').val() == ''){
+	            pw_result = false;
+				return;
+	        }else if(map.selectResult > 0){
+	            pw_result = false;
+				return;
+	        }else{
+	            pw_result = true;
+	        }
+	    });
+	}// end fnPwCheck
+	} // End fnCurrentPwCheck
+
+	
 </script>
 	    
 <script>
 
+
+/* --------------------------------------- fnShowLeaveFormArea() --------------------------------------- */
+	// 회원탈퇴 누르면 비밀번호 확인 area 보이기
+	function fnShowLeaveFormArea() {
+		$('.current_pw_check_box').toggleClass('show');
+		$('#user_name_area').toggleClass('opacity_box');
+		$('.join_form').toggleClass('opacity_box');
+	} // fnShowLeaveFormArea
+	
+/* --------------------------------------- fnCloseBtn() --------------------------------------- */
+	// close btn 누르면 사라지기
+	function fnCloseBtn(){
+		$('.current_pw_check_box').toggleClass('show');
+		$('#user_name_area').toggleClass('opacity_box');
+		$('.join_form').toggleClass('opacity_box');
+	}	
+
+/* --------------------------------------- fnShowBtnBox() --------------------------------------- */
+	// file box 보이기
 	function fnShowBtnBox() {
 		$('.file_box').toggleClass('show');
 	}
@@ -561,13 +753,11 @@
 	// 홈으로 가기
 	function fnHomeBtn() {
 		$('#home_btn').on('click', function(){
-			if(confirm('홈으로 이동하시겠습니까?')) {
-				location.href='/nearby/board/updateProfilePicture';
-			}
+			location.href='/nearby/board/updateProfilePicture';
 		}) // End home_btn click event
 	} // End fnHomeBtn
 	
-/* ---------------------------------------	fnHomeBtn()	------------------------------------------- */
+/* ---------------------------------------	fnChangeBtn()	------------------------------------------- */
 	// 비번 바꾸기
 	function fnChangeBtn() {
 		$('#change_pw_btn').on('click', function(){
@@ -617,7 +807,29 @@
     		<h1>탈퇴된 회원의 페이지 입니다.</h1>
     	</c:if>
     	<c:if test="${loginUser.state == 0}">
-	    	<input type="button" id="leave_btn" class="btn pointer" value="회원탈퇴하기">
+	    	<!-- 회원탈퇴 -->
+	    	<div class="leave_user_wrap">
+	    		<input type="button" id="show_leave_btn_box" class="btn pointer" value="회원탈퇴하기" onclick="fnShowLeaveFormArea()">
+	    			<!-- 탈퇴시, 비밀번호 인증 -->
+                <div class="current_pw_check_box">
+                	<div id="close_leave_btn_area">
+	               		<i id="close_leave_area_icon" class="fas fa-times pointer" onclick="fnCloseBtn()"></i>   
+                	</div>
+                    <label for="pw">현재 비밀번호</label>
+               		
+               		
+                    <div id="current_pw_box">
+	                    <span class="space">
+	                  	  <input type="text" id="pw" name="pw">
+	                    </span>
+	                    <span>
+		                    <input type="button" value="확인하기" id="password_check_btn" class="pointer">
+	                    </span>
+                    </div>
+		    		<input type="button" id="leave_btn" class="btn pointer" value="회원탈퇴하기">
+                </div>
+	    	</div>
+	    	
 	    	<p id='user_name_area'></p>
 	    	<div id="profile_area">
 				<div id="profile_result">
@@ -626,15 +838,18 @@
 							<img id="user_img" src="${pageContext.request.contextPath}/resources/image/profile_default.png" onclick="fnShowBtnBox()" class="pointer defaultImg">
 						</c:if>
 						<c:if test="${not empty loginUser.profile.pSaved}">
-							<img id="user_img" src="/nearby/${loginUser.profile.path}/${loginUser.profile.pSaved}" onclick="fnShowBtnBox()" class="pointer">
+							<img id="user_img" src="/nearby/${loginUser.profile.pPath}/${loginUser.profile.pSaved}" onclick="fnShowBtnBox()" class="pointer">
 						</c:if>
 					</div>
 				</div>
 				<div class="content_box">
-					<textarea rows="5" cols="25" placeholder="자신을 맘껏 표현해보세요" id="content" name="content"></textarea>
+					<textarea rows="5" cols="35" placeholder="자신을 맘껏 표현해보세요" id="content" name="content"></textarea>
 				</div>
 				<!-- 첨부박스 -->
 				<div class="file_box">
+					<div id="close_file_box_icon_area">
+						<i id="close_file_box_icon" class="fas fa-times pointer" onclick="fnShowBtnBox()"></i>   
+					</div>
 					<input type="file" id="file" class="pointer">
 					<ul class="delete_update_form">
 						<li><input type="button" value=' 사진변경 ' id="insert_btn"  class="pointer"></li>
@@ -686,17 +901,18 @@
 	               <!-- 성별 -->
 	               <div class="gender_box">
 	                   <p id="gender_box">성별</p>
-	                   <!-- 여성 -->
-	                   <input type="radio" name="gender" value="f" id="female" checked>
-	                   <label id="f" for="female" class="pointer">여성</label>
+	                   <!-- 선택 안 함 -->
+	                   <input type="radio" name="gender" value="n" id="n" class="btns" checked>
+	                   <label id="n"  for="n" class="pointer">선택안함</label>
 	
 	                   <!-- 남성 -->
 	                   <input type="radio" name="gender" value="m" id="male" class="btns">
 	                   <label id="m"  for="male" class="pointer">남성</label>
+	                   
+	                   <!-- 여성 -->
+	                   <input type="radio" name="gender" value="f" id="female">
+	                   <label id="f" for="female" class="pointer">여성</label>
 	
-	                   <!-- 선택 안 함 -->
-	                   <input type="radio" name="gender" value="n" id="n" class="btns">
-	                   <label id="n"  for="n" class="pointer">선택안함</label>
 	               </div>
 	
 	               <!-- 비밀번호 -->

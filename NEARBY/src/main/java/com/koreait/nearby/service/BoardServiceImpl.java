@@ -39,17 +39,35 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public List<Board> selectBoardList() {
 		BoardRepository boardRepository = sqlSession.getMapper(BoardRepository.class);	
-		logger.info("보드 전체보기 : "+boardRepository.selectListBoard());
+		//logger.info("보드 전체보기 : "+boardRepository.selectListBoard());	
 		return boardRepository.selectListBoard();
 	}
+	
+    // 로그인 유저가 각 게시물 좋아요 표시 확인위한 bNo 전달
+	@Override
+	public Map<String, Object> boardBnoList(Long bNo,  HttpSession session) {
+		BoardRepository boardRepository = sqlSession.getMapper(BoardRepository.class);	
+	    Member loginUser = (Member)session.getAttribute("loginUser");
+	    String id = loginUser.getId();
+	    
+	    Map<String, Object> dbMap = new HashMap<String, Object>();
+	    dbMap.put("id", id);
+	    dbMap.put("bNo", bNo);
+	    
+	    int count =  boardRepository.selectLikePerBoard(dbMap);
+	   
+	    Map<String, Object> map = new HashMap<String, Object>();
+	    map.put("count", count);
+	    
+		return map;
+	}
+	
 
 
 	// 게시글 등록하기
 	@Override
 	public void insertBoard(MultipartHttpServletRequest multipartRequest, HttpServletResponse response) {
-//		Member member = (Member)multipartRequest.getSession().getAttribute("loginUser");
-//		String id = member.getId();
-		
+
 		String id =multipartRequest.getParameter("id");
 	
 		String content = multipartRequest.getParameter("content");
@@ -140,7 +158,6 @@ public class BoardServiceImpl implements BoardService {
  		} catch (Exception e) {
  			e.printStackTrace();
  		}
-//	  	message(result, response, "게시글을 등록하겠습니다.", "게시글 등록에 실패했습니다.", "/nearby/board/boardList");
 	}
 	
 	
@@ -148,7 +165,7 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public Board selectBoardByNo(Long bNo) {
 		BoardRepository boardRepository = sqlSession.getMapper(BoardRepository.class);	
-		logger.info("보드 상세보기 : "+boardRepository.selectBoardByNo(bNo));
+//		logger.info("보드 상세보기 : "+boardRepository.selectBoardByNo(bNo));
 		Board board = boardRepository.selectBoardByNo(bNo);
 		return board;
 	}
@@ -165,80 +182,73 @@ public class BoardServiceImpl implements BoardService {
 		board.setbNo(Long.parseLong(multipartRequest.getParameter("bNo")));
 		board.setContent(multipartRequest.getParameter("content"));
 		board.setLocation(multipartRequest.getParameter("location"));
-		System.out.println("conent 수정 ? "+ multipartRequest.getParameter("content"));
+//		System.out.println("conent 수정 ? "+ multipartRequest.getParameter("content"));
 	
-try {
-	MultipartFile file = multipartRequest.getFile("file");
-		System.out.println(multipartRequest.getFile("file"));
-		
-		if( multipartRequest.getParameter("path").isEmpty() == false ) {   // path가 빈값이 아니라는건 기존에 이미지/비디오가 있었다는 의미다. 때문에 없는 경우엔 새로 만들고, 아니면 원래  path, saved, origin을 board에 다시 넣는다!!!
-			
-			if(file != null && !file.isEmpty() ) {   // file이 있으면 
-					String[] video = {"mp4", "mpeg", "avi", "mov"};
-					String origin = file.getOriginalFilename();
-					System.out.println("origin " + origin);
-					String extName = origin.substring(origin.lastIndexOf("."));
-					String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-					String saved = uuid + extName;
+		try {
+			MultipartFile file = multipartRequest.getFile("file");
+				System.out.println(multipartRequest.getFile("file"));
+				
+				if( multipartRequest.getParameter("path").isEmpty() == false ) {   // path가 빈값이 아니라는건 기존에 이미지/비디오가 있었다는 의미다. 때문에 없는 경우엔 새로 만들고, 아니면 원래  path, saved, origin을 board에 다시 넣는다!!!
 					
-					String sep = Matcher.quoteReplacement(File.separator);
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-					String path = "resources"+sep + "upload" + sep + id+sep + sdf.format(new Date()).replaceAll("-", sep);
-					String realPath = multipartRequest.getServletContext().getRealPath(path);
-					
-					logger.info("path: "+ path);
-					logger.info("realpath: "+realPath);  // 루트 확인용
-					
-					File dir = new File(realPath);
-					if ( !dir.exists() ) dir.mkdirs();
-					
-					File uploadFile = null;
-					
-					board.setPath(path);
-					board.setOrigin(origin);
-					
-					// 비디오 확장자 saved 네임에 "video" 붙이기!
-					for( int i =0; i<video.length; i++) {
-						// System.out.println(saved.contains(video[i]));
-						if(saved.contains(video[i])) {
-							saved = "video" + saved;
-							uploadFile = new File(realPath, saved); 
-							board.setSaved(saved);
+					if(file != null && !file.isEmpty() ) {   // file이 있으면 
+							String[] video = {"mp4", "mpeg", "avi", "mov"};
+							String origin = file.getOriginalFilename();
+							System.out.println("origin " + origin);
+							String extName = origin.substring(origin.lastIndexOf("."));
+							String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+							String saved = uuid + extName;
+							
+							String sep = Matcher.quoteReplacement(File.separator);
+							SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+							String path = "resources"+sep + "upload" + sep + id+sep + sdf.format(new Date()).replaceAll("-", sep);
+							String realPath = multipartRequest.getServletContext().getRealPath(path);
+							
+							logger.info("path: "+ path);
+							logger.info("realpath: "+realPath);  // 루트 확인용
+							
+							File dir = new File(realPath);
+							if ( !dir.exists() ) dir.mkdirs();
+							
+							File uploadFile = null;
+							
+							board.setPath(path);
+							board.setOrigin(origin);
+							
+							// 비디오 확장자 saved 네임에 "video" 붙이기!
+							for( int i =0; i<video.length; i++) {
+								// System.out.println(saved.contains(video[i]));
+								if(saved.contains(video[i])) {
+									saved = "video" + saved;
+									uploadFile = new File(realPath, saved); 
+									board.setSaved(saved);
 						} else {
 							uploadFile = new File(realPath, saved); 
 							board.setSaved(saved);
 						}
-					}
-					file.transferTo(uploadFile);
-			} else {
-			
-				board.setPath("");
-				board.setOrigin("");
-				board.setSaved("");
-			} 
-			
-	} else {		
-//			   System.out.println(multipartRequest.getParameter("path"));
-//			   System.out.println(multipartRequest.getParameter("saved"));
-//			   System.out.println(multipartRequest.getParameter("origin"));
-		
-				board.setPath(multipartRequest.getParameter("path"));
-				board.setSaved(multipartRequest.getParameter("saved"));
-				board.setOrigin(multipartRequest.getParameter("origin"));					
-			
-	}
-			
+							}
+							file.transferTo(uploadFile);
+					} else {
+					
+						board.setPath("");
+						board.setOrigin("");
+						board.setSaved("");
+					} 		
+			} else {		
+						board.setPath(multipartRequest.getParameter("path"));
+						board.setSaved(multipartRequest.getParameter("saved"));
+						board.setOrigin(multipartRequest.getParameter("origin"));					
+			       }
+					
 	    } catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 		// 삽입확인용
 		BoardRepository boardRepository = sqlSession.getMapper(BoardRepository.class);	
 		int result = boardRepository.updateBoard(board);	
-		logger.info("수정되었닝" + board.toString());
+//		logger.info("수정되었닝" + board.toString());
 		message(result, response, "수정성공", "수정실패",  "/nearby/board/boardList");
 	}
-	
+		
 	
 	// 게시글 삭제하기
 	@Override
@@ -251,7 +261,6 @@ try {
         map.put("bNo", bNo);
         map.put("id", id);
 		int result = boardRepository.deleteBoard(map);
-		
 		
 		try {
 			   response.setContentType("text/html; charset=UTF-8");
@@ -273,7 +282,6 @@ try {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	//	message(result, response, "삭제성공.", "삭제실패", "/nearby/board/boardList");
 	}
 	
 	
@@ -281,17 +289,25 @@ try {
 	// 좋아요
 	@Override
 	public Board likes(Likes likes, HttpSession session) {
-		BoardRepository boardRepository = sqlSession.getMapper(BoardRepository.class);	 // board db연결
-		System.out.println("-----------board 좋아요------------");
-		Board board = new Board();
-		board.setbNo(likes.getbNo());
 		
-		int likeCheackBoard = boardRepository.boardLike(board);  //  게시판 좋아요 + 1
-		System.out.println(" 게시판 좋아요 + 1 : "+likeCheackBoard);
+		BoardRepository boardRepository = sqlSession.getMapper(BoardRepository.class);	 // board db연결
+		//System.out.println("-----------board 좋아요------------");
+		//System.out.println("좋아요 누른 보드 번호 : " +likes.getbNo() + "좋아요 누른 아이디: "+likes.getId());
+		
+		Long bNo = likes.getbNo();
+//		System.out.println(bNo);
+		Board oneBoard = boardRepository.selectBoardByNo(bNo);   // 파라미터로 준 bNo를 가지고 그 게시물 갖고오기
+		//oneBoard.setbNo(bNo);  // 보드 번호는 그대로 
+		
+		 Member user = (Member)session.getAttribute("loginUser");
+		 
+		
+		int likeCheackBoard = boardRepository.boardLike(oneBoard);  //  게시판 좋아요 + 1
+	//	System.out.println(" 게시판 좋아요 +1 성공? : "+likeCheackBoard);
 		
 		LikesRepository likesRepository = sqlSession.getMapper(LikesRepository.class); // 좋아요 db연결
 		int likeTBLinsert = likesRepository.likeInsert(likes);
-		System.out.println("라이크테이블 0으로 초기화 하는 인서트 결과 : " + likeTBLinsert);
+	//	System.out.println("라이크테이블 0으로 초기화 하는 인서트 결과 : " + likeTBLinsert);
 		
 		
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -300,27 +316,32 @@ try {
 		if( likeTBLinsert == 1 ) {  // 만약 인서트 성공하면 likeCheck = 1로 update하기  +  업뎃된 총 보드의 하트 수 갖고오기
 			
 			int likeTBLUpdate = likesRepository.likeCheck(map);
-			System.out.println("인서트후 LikeCheck 1? " + likeTBLUpdate);
-			  if( likeTBLUpdate == 1 ) {
-				  board = boardRepository.boardLikesCount(board);
-				  System.out.println("board의 좋아요 + 1 한 결과 갖고오기 " + board.getLikes());
+//			System.out.println("인서트후 LikeCheck 1? " + likeTBLUpdate);
+			  if( likeTBLUpdate >= 1 ) {
+				  oneBoard = boardRepository.boardLikesCount(oneBoard);
+				 // System.out.println("board의 좋아요 + 1 한 결과 갖고오기 " + oneBoard.getLikes());
+				  Likes like = likesRepository.likeSelectByNO(likes);  //  각 보드의 좋아요 누른 테이블 리스트 반환
+				  oneBoard.setLikes(oneBoard.getLikes());
+				  oneBoard.setbNo(bNo);
 			  }
 		}
-				return board;
+		return oneBoard;
 	}
 	
 	
 	// 좋아요 취소하기
 	@Override
 	public Board likesCancel(Likes likes, HttpSession session) {
-		System.out.println("-----------board 좋아요 취소------------");
+	//	System.out.println("-----------board 좋아요 취소------------");
+	//	System.out.println("좋아요취소 누른 보드 번호 : " +likes.getbNo() + "좋아요취소 누른 아이디: "+likes.getId());
         BoardRepository boardRepository = sqlSession.getMapper(BoardRepository.class);	 // board db연결
+    	
+        Long bNo = likes.getbNo();
+		Board oneBoard = boardRepository.selectBoardByNo(bNo);   // 파라미터로 준 bNo를 가지고 그 게시물 갖고오기
+		oneBoard.setbNo(bNo);  // 보드 번호는 그대로 
 		
-		Board board = new Board();
-		board.setbNo(likes.getbNo());
-		
-		int likeCancelBoard = boardRepository.boardLikeCancel(board);  //  게시판 좋아요 - 1
-		System.out.println(" 게시판 좋아요 취소 - 1 : "+likeCancelBoard);
+		int likeCancelBoard = boardRepository.boardLikeCancel(oneBoard);  //  게시판 좋아요 - 1
+	//	System.out.println(" 게시판 좋아요 취소  : "+likeCancelBoard);
 		
 		LikesRepository likesRepository = sqlSession.getMapper(LikesRepository.class); // 좋아요 db연결
 		
@@ -329,31 +350,29 @@ try {
 		map.put("id", likes.getId());
 		
 			int likeCancelTBLUpdate = likesRepository.likeCheckCancel(map);
-			System.out.println("likeCheck 0? " +likeCancelTBLUpdate );
-			  if( likeCancelTBLUpdate == 1 ) {
-				  board = boardRepository.boardLikesCount(board);
-				  System.out.println("board 취소 한 결과   " + board.getLikes());
+			//System.out.println("like 테이블 삭제  : " +likeCancelTBLUpdate );
+			  if( likeCancelTBLUpdate == 1 ) { // 성공하면 보드 다시 세팅 -1로
+				  oneBoard = boardRepository.boardLikesCount(oneBoard);
+			//	  System.out.println("board 취소 한 결과   " + oneBoard.getLikes());
+				  Likes like = likesRepository.likeSelectByNO(likes);  //  각 보드의 좋아요 누른 테이블 리스트 반환
+			//	  System.out.println("dd" + like);
+				  oneBoard.setLikes(oneBoard.getLikes());
+				  oneBoard.setbNo(bNo);
 			  }
-			
-				return board;
+				return oneBoard;
 	}
-	
-	
 	
 	// 관리자 지역별 게시글 수 보기 
 	@Override
 	public Map<String, Object> adminBoardList() {
-		 BoardRepository boardRepository = sqlSession.getMapper(BoardRepository.class);
-		 List<Board> list = boardRepository.adminBoardList();
-		 System.out.println(list.toString());
-	    System.out.println(list.get(0).getLocation());
+		BoardRepository boardRepository = sqlSession.getMapper(BoardRepository.class);
+	    List<Board> list = boardRepository.adminBoardList();
 	    String fullLocation = "";
 	    int seoul =0; int incheon=0; int gyeonggi = 0; int busan=0; int daegu=0; int daejun=0; int ulsan=0; int gwangju=0;
 	    int sejong=0; int gangwon=0; int chungcheongbuk=0; int chungcheongnam=0; int gyeongsangbuk=0; int gyeongsangnam=0; int jeollanam=0; int jeollabuk=0; int jeju = 0;
-	    for(int i=0; i<list.size(); i++) {
-	    	System.out.println(list.get(i).getLocation());   // 서울특별시 마포구 대흥동   서울특별시 마포구 대흥동   
-	    	fullLocation = list.get(i).getLocation();          // "서울특별시", "인천광역시", "부산광역시", "대구광역시", "대전광역시","울산광역시","광주광역시","세종특별자치시", "강원도", "경기도", "충청북도",
-	                                                          //   "충청남도","경상북도","경상남도", "전라남도","전라북도","제주특별자치도"
+	    for(int i=1; i<list.size(); i++) {
+	    	fullLocation = list.get(i).getLocation();       
+	                                                       
 	    	if ( fullLocation.contains("서울특별시")){
 	    		seoul++;  
 	    	} else if ( fullLocation.contains("인천광역시")){
@@ -396,6 +415,42 @@ try {
 	     map.put("chungcheongbuk",chungcheongbuk); map.put("chungcheongnam",chungcheongnam); map.put("gyeongsangbuk",gyeongsangbuk); map.put("gyeongsangnam",gyeongsangnam);
 	     map.put("jeollanam",jeollanam);   map.put("jeollabuk",jeollabuk);   map.put("jeju",jeju);
 		return map;
+	}
+	
+	// 관리자 게시글 삭제
+	@Override
+	public Map<String, Object> adminBoardDelete(Long bNo, HttpServletRequest request) {
+		BoardRepository boardRepository = sqlSession.getMapper(BoardRepository.class);
+        
+		int result = boardRepository.adminBoardDelete(bNo);
+		
+		 Map<String, Object> map = new HashMap<String, Object>();
+		 map.put("result", result);
+		 return map;
+	}
+	
+	
+	// 검색하기
+	@Override
+	public List<Board> searchBoardList(HttpServletRequest request) {
+		BoardRepository boardRepository = sqlSession.getMapper(BoardRepository.class);
+		String query = request.getParameter("query");
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("query", query);
+		
+		List<Board> searchResult = boardRepository.searchListBoard(map);
+
+		return searchResult;
+	}
+	
+	/* myHome 이동 및 유저의 게시물 개수 구하기 */
+	@Override
+	public int selectUserBoardsCount(HttpServletRequest request) {
+		BoardRepository boardRepository = sqlSession.getMapper(BoardRepository.class);
+		Member loginUser = new Member();
+		loginUser = (Member) request.getSession().getAttribute("loginUser");
+		int userBoardCount = boardRepository.selectUserBoardsCount(loginUser.getId());
+		return userBoardCount;
 	}
 	
 }

@@ -24,6 +24,16 @@ public interface BoardService {
     public void deleteBoard(HttpServletRequest request, HttpServletResponse response);
     
     
+    // 로그인 유저가 각 게시물 좋아요 표시 확인위한 bNo 전달
+     public Map<String, Object> boardBnoList(Long bNo,  HttpSession session);
+    
+    
+    // 검색
+    public List<Board> searchBoardList(HttpServletRequest request);
+   
+    /* myHome 이동 및 유저의 게시물 갯수 구하기 */
+	public int selectUserBoardsCount(HttpServletRequest request);
+    
     // 좋아요
     public Board likes( Likes likes, HttpSession session);
     
@@ -34,7 +44,12 @@ public interface BoardService {
     // 관리자 지역별게시글 구분 메서드
     public  Map<String, Object> adminBoardList();
     
- // default method
+    // 관리자 보드 삭제 
+    public Map<String, Object> adminBoardDelete(Long bNo, HttpServletRequest request);
+    
+    
+    
+   // default method
  	public default void message(int result, HttpServletResponse response, 
  			String success, String fail, String path) {
  		try {

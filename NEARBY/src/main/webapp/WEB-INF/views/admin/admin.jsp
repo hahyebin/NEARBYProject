@@ -12,39 +12,36 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/adminHeader.css">
 <title>Insert title here</title>
 <style>
-h3{
-	display: inline-block;
-}
-	.header {
-		width: 100%;
-		height: 106px;
-		background-color: white;
-	}
-	#home_btn { border-bottom: 8px solid #fe4662; }
-	#admin_icon { color: #fe4662; }
+
+	#admin_btn { border-bottom: 8px solid #fe4662; }
+	#admin_icon {  color: #fe4662; border: none; }
+	.nearbyInfWrap{		margin-top: 130px;	}
 	
-/* 	 총 정보*/
+	
+   /* 총 정보*/
 	.nearbyInfo {
 		display: inline-block;
-		width: 100%;
-		height: 50px;
+		text-align:center;
+		width:100%;
+		height: 100px;
+		margin: 15px auto;
 		text-align: center;
+	
 	}
 	.totalInfoWrap {
 		display: inline-block;
-		margin: 0 auto;
-		
+		margin: 7px auto;	
 	}
 	.totalInfo {
 		display: inline-block;
-		margin-right: 50px;
-		font-size: 30px;
-		font-weight: bold;
+		margin: 0 50px;
 	}
-	.search_input {
-		height: 30px;
-		
-	}
+	.total_info_name { font-size: 20px;  color : #787777}
+	.total_info_result { font-size: 30px; color :#454545; }
+	
+	
+	.search_input { height: 30px; }
+	
 	#query {
 		padding-left: 10px;
 		outline: none;
@@ -59,13 +56,15 @@ h3{
 		background-color: #fe4662;
 		cursor: pointer;
 	}
-	
+	#column { outline : none; }
 	
 	
 /* 	<!-- 차트관련 -->	 */
   .chartjs {
- 	width: 100%;
+ 	width: 1950px;
+ 	height: 850px;
  	margin: 5px auto;
+  
    }
    .chartjs div {
    	padding: 10px 80px;
@@ -77,10 +76,10 @@ h3{
  	width: 100%;
  	margin: 10px auto;
  }
- #barchart2 { margin: 0 auto }
+ #barchart2 { margin: 0 auto; padding-left: 30px; }
  .genderAndAge {
  	width: 100%;
- 	margin: 80px auto;
+ 	margin: 15px auto;
  	display: flex;
  	justify-content: center;
  }
@@ -122,39 +121,46 @@ function fnMemberSearch(){
 </head>
 <body>
 
-	 <header class="header">
 		<jsp:include page="/WEB-INF/views/layout/adminHeader.jsp" flush="true" />
-	</header>
 
-
-<h2>관리자</h2>
-
-<div class="nearbyInfo">
+<!--  <span class="today"></span> 날짜 나옴 -->
+<div class="nearbyInfWrap">
+<div class="nearbyInfo" >
 	<div class="totalInfoWrap">
-		<div class="totalInfo"><a href="/nearby/admin/memberList">총 회원 수 :  ${fn:length(member) } </a></div>
-		<div class="totalInfo"> <span class="today"></span> 가입자:  ${fn:length(memberCreatedDay) }</div>
-		<div class="totalInfo">총 게시글 :  ${fn:length(board) }</div>
-		<div class="totalInfo userSearch">
-			<form id="f" method="get">
-				<select name="column" id="column" class="search_input">
-					<option value="M_NO" data-column-name="mNo">회원번호</option>
-					<option value="ID" data-column-name="id">아이디</option>
-					<option value="NAME" data-column-name="name">이름</option>
-					<option value="EMAIL" data-column-name="email">이메일</option>
-					<option value="BIRTHDAY" data-column-name="birthday">생년월일</option>
-					<option value="GENDER" data-column-name="gender">성별</option>
-				</select>
-				<span id="equal_area" >
-					<input list="auto_complete" type="text" name="query" id="query"  class="search_input" placeholder="조회할 회원정보입력">
-					<datalist id="auto_complete"></datalist>                                <!--  검색한거 나옴 -->
-				</span>
-				<input type="button" value="검색" id="search_btn" class="search_btn">
-				<input type="button" value="초기화" id="init_btn"  class="search_btn">
-			</form>
-		</div>
+		<ul class="totalInfo">
+			<li class="total_info_name" >총 회원 수 </li>
+			<li class="total_info_result" >${fn:length(member) }</li>
+		</ul>
+		<ul class="totalInfo">
+			<li class="total_info_name">오늘 가입자</li>
+			<li class="total_info_result" >${fn:length(memberCreatedDay) }</li>
+		</ul>
+		<ul class="totalInfo">
+			<li class="total_info_name">총 게시글</li> 
+			<li class="total_info_result" >${fn:length(board) }</li>
+		</ul>
+	
+		
 	</div>
 </div>
-
+</div>
+<!-- 		<div class="totalInfo userSearch"> -->
+<!-- 			<form id="f" method="get"> -->
+<!-- 				<select name="column" id="column" class="search_input"> -->
+<!-- 					<option value="ID" data-column-name="id">아이디</option> -->
+<!-- 					<option value="NAME" data-column-name="name">이름</option> -->
+<!-- 					<option value="EMAIL" data-column-name="email">이메일</option> -->
+<!-- 					<option value="BIRTHDAY" data-column-name="birthday">생년월일</option> -->
+<!-- 					<option value="GENDER" data-column-name="gender">성별</option> -->
+<!-- 				</select> -->
+<!-- 				<span id="equal_area" > -->
+<!-- 					<input list="auto_complete" type="text" name="query" id="query"  class="search_input" placeholder="조회할 회원정보입력"> -->
+<!-- 					<datalist id="auto_complete"></datalist>                                 검색한거 나옴 -->
+<!-- 				</span> -->
+<!-- 					<i class="fas fa-search" id="search_btn" class="search_btn"></i> -->
+			
+<!-- 			</form> -->
+<!-- 		</div> -->
 
 
 
@@ -179,10 +185,10 @@ function fnMemberSearch(){
  
 <div class ="chartjs">
  <div class="genderAndAge">
-	<div class ="donutchart"><canvas id="donutchart" height="400" width="600"></canvas></div>
-	<div class ="barchart1"><canvas id="barchart1" height="400" width="600"></canvas></div>
+	<div class ="donutchart"><canvas id="donutchart" height="300" width="500"></canvas></div>
+	<div class ="barchart1"><canvas id="barchart1" height="300" width="500"></canvas></div>
  </div>
-	<div class ="barchart2"><canvas id="barchart2" height="400" width="1200"></canvas></div>
+	<div class ="barchart2"><canvas id="barchart2" height="300" width="1250"></canvas></div>
 </div>
 
 
@@ -223,7 +229,7 @@ new Chart(document.getElementById("barchart2"), {
       datasets: [
         {
           label: "Location",
-          backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850","red","blue","orange","yellow","purple","navy","pink","green","lime","crimson"],
+          backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850","#ffafb0","#82a2ed","orange","#bee9b4","#dfd4e4","#fcffb0","pink","green","#e2ffaf","#f2cfa5", "#fcc6f7","#aee4ff"],
           data: [ $("#seoul").val() , $("#incheon").val(),  $("#busan").val(), $("#daegu").val(), $("#daejun").val(),
         	      $("#ulsan").val(), $("#gwangju").val(), $("#sejong").val(), $("#gangwon").val(),$("#gyeonggi").val(), 
         	      $("#chungcheongbuk").val(), $("#chungcheongnam").val(), $("#gyeongsangbuk").val(), $("#gyeongsangnam").val(), 
