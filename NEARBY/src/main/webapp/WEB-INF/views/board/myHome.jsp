@@ -14,12 +14,103 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/header.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/myHome.css">
 <script src="${pageContext.request.contextPath}/resources/js/myHome.js" ></script>
+<script>
+$(document).ready(function(){
+	 fnSendBno(); 
+ });
+	function fnSendBno(){
+		
+		$.each($('.output_reply_table'), function(i, replyTable) {	
+ 		let bNo = $(replyTable).parent().prev().val();
+ 		$.ajax({
+ 			      url: '/nearby/board/boardBnoList',
+			      type: 'get',
+			      data: "bNo=" + bNo,
+			      dataType: 'json',
+ 			      success: function(map) {
+			    	  console.log('성공했을때');
+			    	  console.log(map.count);
+			    	    if( map.count == 1 ){
+			    	    	// 색 있는 하트
+			    	    	 console.log("색 채우기")
+			    	    	 	$("#like"+bNo).addClass('like');
+			    	    	    
+			    	    	 
+			    	    } else if (map.count == 0) {
+			    	    	// 빈 하트
+			    	    	 console.log("색이 없기")
+			    	    	$("#like"+bNo).removeClass('like');
+			    	    }
+			    	  
+			      },
+			      error: function(xhr) {
+			    	  console.log(xhr.responseText);
+ 			      }
+ 			   }) // End ajax			
+		
+ 		}); // each
+ 	} //  fnSendBno()
+ 
+function fnLike(i){
+    let likeBtn = $('.like_btn');
+ 
+       
+       if( $("#"+i).find('i').hasClass('like') == false )  {
+         	$("#"+i).find('i').addClass('like');
+	            $.ajax({
+	 				url : '/nearby/board/likes',
+	 				type: 'post',
+					data: "bNo="+i, 
+					dataType: 'json',
+	 				success: function(board){
+	 					console.log(board);
+	 			//		console.log("좋아요 누른 카운트"+ board.likes);
+		  			   $( '#like_count'+bNo ).text(board.likes);
+		  			   location.href="/nearby/board/selectBoard?bNo="+i;
+	 					
+	 				},
+	 				error : function(xhr, error){
+	 					console.log(xhr.status);
+	 					console.log(error);
+	 				}				
+	 			 }); 
+	            return
+	   }
+		
+	//	  console.log("likehasClass = " + $("#"+i).children('i').hasClass('like') )
+
+
+ if(  $("#"+i).find('i').hasClass('like') ) {
+ 	$("#"+i).find('i').removeClass('like');
+ 	
+		$.ajax({
+				url : '/nearby/board/likesCancel',
+				type: 'post',
+				data: "bNo="+i, 
+				dataType: 'json',
+				success: function(board){
+			//	  console.log("좋아요 취소 카운트" + board.likes);
+				   $( '#like_count'+ bNo ).text(board.likes);
+				 location.href="/nearby/board/selectBoard?bNo="+i;
+				   
+				},
+				error : function(xhr, error){
+					console.log(xhr.status);
+					console.log(xhr.error)
+				}				
+			});  // ajax
+			return;
+   } // if 
+ }	 
+		
+
+</script>
+
 </head>
 
 <body>
 
     <jsp:include page="/WEB-INF/views/layout/header.jsp" flush="true" />
-
      <section class="board">
 
         <!-- 프로필 사진, 이름, 게시물, 팔로워, 팔로잉, 프로필 설정-->
@@ -109,7 +200,7 @@
 	                            </div>
 	                            <!-- 내용 -->
 	                            <div class="content">
-	                                <textarea>${board.content}</textarea>
+	                                <textarea readonly="readonly" class="content_height"> ${board.content}</textarea> 
 	                            </div>
 	                        </div>
 	                    </c:if>
@@ -146,17 +237,19 @@
 	                        </c:if>
 	
 	                        <input type="hidden" name="path" value="${board.path}">
-	                        <div class="content"><span>${board.content}</span></div>
+	                        <div class="content">
+	                                <textarea readonly="readonly" class="content_height"> ${board.content}</textarea> 
+	                            </div>
 	
 	                    </c:if>
 	                    <!-- 댓글 / 좋아요 버튼 -->
 	                    <div class="like_reply_btn">
 	                        <!-- 좋아요 -->
 	                        <div class="like_box box">
-	                            <label for="like_btn"></label>
-	                            <i class="fas fa-thumbs-up"></i>
-	                            <input type="button" id="like_btn" value="">
-	                            <span class="count"></span>
+	                          <span class="like_btn" id="${board.bNo}"  data-bno="${board.bNo}" onclick="fnLike(${board.bNo})">
+  			 	    		    <i class="fas board_icon fa-thumbs-up" id="like${board.bNo}" > </i>
+	  				  			<span class="like_count"  id="like_count${board.bNo}">${board.likes}</span> 
+  					          </span>
 	                        </div>
 	                        <!-- 댓글 수 -->
 	                        <div class="reply_box box">
@@ -167,22 +260,16 @@
 	                        </div>
 	                    </div>
 	                </div>
-	
 	                <!-- 댓글 -->
 	                <div class="reply_wrap" style="margin: 20px; border: 1px solid black; height: 100px; width: 500px; margin: 12px auto 5px;">
 	                    	소정언니댓글구현
 	                </div>
-	
-	
-	
 	            </div>
 	
 	        </div>
 	        </c:if>
 	        </c:forEach>
 		</c:if>
-
-
     </section>
     
     <footer>

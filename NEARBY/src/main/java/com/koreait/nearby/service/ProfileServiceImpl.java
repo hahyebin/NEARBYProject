@@ -44,8 +44,8 @@ public class ProfileServiceImpl implements ProfileService {
 				// 파일 저장 경로 
 				String sep = Matcher.quoteReplacement(File.separator);
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-				String path = "resources" + sep + "upload" + sep + id + sep + "profile" + sep + sdf.format(new Date()).replaceAll("-", sep);
-				String realPath = multipartRequest.getServletContext().getRealPath(path);
+				String pPath = "resources" + sep + "upload" + sep + id + sep + "profile" + sep + sdf.format(new Date()).replaceAll("-", sep);
+				String realPath = multipartRequest.getServletContext().getRealPath(pPath);
 				
 				// 디렉터리 생성 
 				File dir = new File(realPath);
@@ -60,7 +60,7 @@ public class ProfileServiceImpl implements ProfileService {
 				Profile originProfile = profileRepository.selectProfile(id);
 					if (file == null && originProfile.getpSaved() == null) { // 첨부된 파일과 DB에 저장된 정보 모두 없을 경우 null값 전달.
 						System.out.println("if로 떨어지는지 확인해보기 ");
-						profile.setpPath(path);
+						profile.setpPath(pPath);
 						profile.setpOrigin("");
 						profile.setpSaved("");
 						profile.setId(id);
@@ -79,13 +79,13 @@ public class ProfileServiceImpl implements ProfileService {
 					
 						profile.setpOrigin(pOrigin);
 						profile.setpSaved(pSaved);
-						profile.setpPath(path);
+						profile.setpPath(pPath);
 						profile.setId(id);
 					} // End if
 				
 			// inf 문의 결과에 따른 profile DTO의 값을 DB에 저장
 			int insertResult = profileRepository.updateProfile(profile);
-			System.out.println("DB 저장 후 profile 값 : " + profile);
+			System.out.println("DB 저장 후 profile 값 : " + profile.toString());
 			// 결과를 map에 실어준다.
 			map.put("insertResult", insertResult);
 			map.put("profile", profile);

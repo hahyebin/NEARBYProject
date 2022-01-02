@@ -106,17 +106,17 @@
 			      data: "bNo=" + bNo,
 			      dataType: 'json',
  			      success: function(map) {
-			    	  console.log('성공했을때');
-			    	  console.log(map.count);
+			    //	  console.log('성공했을때');
+			    //	  console.log(map.count);
 			    	    if( map.count == 1 ){
 			    	    	// 색 있는 하트
-			    	    	 console.log("색 채우기")
+			   // 	    	 console.log("색 채우기")
 			    	    	 	$("#like"+bNo).addClass('like');
 			    	    	    
 			    	    	 
 			    	    } else if (map.count == 0) {
 			    	    	// 빈 하트
-			    	    	 console.log("색이 없기")
+			   // 	    	 console.log("색이 없기")
 			    	    	$("#like"+bNo).removeClass('like');
 			    	    }
 			    	  
@@ -279,7 +279,6 @@
 					$(".reply_count_per_board[id=\""+bNo+"\"]").text(map.total)
 					
 					 
-	
 					console.log('map.total : ' + map.total);
 						
 					
@@ -395,7 +394,9 @@
 			  <div class="countIcon likesCount"> 
   					<span class="like_btn" id="${board.bNo}"  data-bno="${board.bNo}" onclick="fnLike(${board.bNo})">
   			 	    	<i class="fas board_icon fa-thumbs-up" id="like${board.bNo}" > </i>
-	  					<span class="like_count"  id="like_count${board.bNo}">${board.likes}</span> 
+	  					<span class="like_count"  id="like_count${board.bNo}">
+	  						${board.likes}
+	  					</span> 
   					</span>
 		      </div>
 				  		<div class="countIcon replyCount">

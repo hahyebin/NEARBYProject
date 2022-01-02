@@ -294,7 +294,7 @@
   					   <c:set value="${board.saved}" var="video"></c:set>
 		  				 <c:if test="${not f:contains(video, 'video')}">
 		  						 <div class="imgSize">
-		  						   <img alt="${board.origin}" src="/nearby/${board.path}/${board.saved}" id="image"> 
+		  						   <img alt="${board.origin}" src="/nearby/${board.path}/${board.saved}" id="image" > 
 		  						 </div>
 		  				  </c:if>
 		  				<c:if test ="${f:contains(video, 'video')}">
@@ -305,7 +305,7 @@
 		  					</div>
 		  				</c:if>
 		  					<input type="hidden" name="path" value="${board.path}">
-		  					<input type="text" name="origin"  id="origin" value="${board.origin}">
+		  					<input type="hidden" name="origin"  id="origin" value="${board.origin}">
 		  					<input type="hidden" name="saved" value="${board.saved}">
 		  		</div>
            			    <div class="content_wrap">

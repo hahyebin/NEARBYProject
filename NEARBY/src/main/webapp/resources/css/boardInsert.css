@@ -4,27 +4,23 @@
 		padding: 0;
 		margin: 0;
 		box-sizing: border-box;	
-		width: 100%;
 	}
-	.insert_wrap a {
+	a {
 		text-decoration: none;
 		color: black;
 		font-weight: bold;
 	}
-    body{
-  	    width:100%;
- 	    margin: 0 auto;
-  	 }
   	 
-  	 /* header css */
-	.header {
-		width: 100%;
-		height: 106px;
-		background-color: white;
+	#insert_btn {
+		border-bottom: 8px solid #fe4662;
 	}
-	 #insert_btn {    border-bottom: 8px solid  #fe4662;   }
-     #insert_icon {  color:  #fe4662;  }
-	/* End header Css */	
+	
+	#insert_icon {
+		color: #fe4662;
+	}
+	.header {
+		margin-top: 130px;
+	}
   	 
   	 
   	 /* ----------------  insert box ----------------  */
@@ -134,6 +130,10 @@
    
    
  /* ----------  IMAGE ----------  */
+    img {
+         width:480px; 
+ 		 height: 320px;
+   }
    #img_wrap{
   		 border:1px solid black;
   		 width:480px; 
@@ -167,6 +167,11 @@
    		text-align: center;
    		color: gray;	
    }
+    #upload{ 
+     	color:pink; 
+     	font-size:65px; 
+     	display: block;
+    }
    
    
    /* ----------  사진 및 비디오 미리보기 -> script에서 처리함 ----------  */

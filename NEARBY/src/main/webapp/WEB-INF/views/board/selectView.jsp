@@ -215,17 +215,15 @@
  		}
 	}
 	
-	
 	function fnUpdate(){
 		if(confirm('게시글을 수정하시겠습니까?') )
 			location.href= '/nearby/board/updateBoardPage?bNo='+${board.bNo};
 	}
 	
-	
     function fnSendBno(){
 		
 		$.each($('.output_reply_table'), function(i, replyTable) {	
- 		let bNo = $(replyTable).parent().prev().val();
+ 		let bNo = '${board.bNo}';
  		$.ajax({
  			      url: '/nearby/board/boardBnoList',
 			      type: 'get',
@@ -256,55 +254,59 @@
 	
 	
 	
-	
-	
 	function fnLike(i){
 	       let likeBtn = $('.like_btn');
-		   $('#'+i).find('i').toggleClass('like');
-		   
-		   if( $("#"+i).find('i').hasClass('like') == false )  {
-           	$("#"+i).find('i').addClass('like');
-	            $.ajax({
-	 				url : '/nearby/board/likes',
-	 				type: 'post',
-					data: "bNo="+i, 
-					dataType: 'json',
-	 				success: function(board){
-	 					console.log(board);
-	 					console.log("좋아요 누른 카운트"+ board.likes);
-			  			   $( '#like_count'+bNo ).text(board.likes);
-			  			   location.href="/nearby/board/boardList";
-	 					
-	 				},
-	 				error : function(xhr, error){
-	 					console.log(xhr.status);
-	 					console.log(error);
-	 				}				
-	 			 }); 
-	            return
-	   }
-	 		
-		    if(  $("#"+i).find('i').hasClass('like') ) {
-		    	$("#"+i).find('i').removeClass('like');
-		    	
-		 		$.ajax({
-		  				url : '/nearby/board/likesCancel',
-		  				type: 'post',
-		  				data: "bNo="+i, 
-		 				dataType: 'json',
-		  				success: function(board){
-		  				   $( '#like_count'+ bNo ).text(board.likes);
-		  				  location.href="/nearby/board/boardList";
-		  				   
-		  				},
-		  				error : function(xhr, error){
-		  					console.log(xhr.status);
-		  					console.log(xhr.error)
-		  				}				
-		  			});  // ajax
-		  			return;
-		      } // if 
-		 }// fnLike 
+	       let bNo = '${board.bNo}';
+	          
+	          if( $("#"+i).find('i').hasClass('like') == false )  {
+	            	$("#"+i).find('i').addClass('like');
+		            $.ajax({
+		 				url : '/nearby/board/likes',
+		 				type: 'post',
+						data: "bNo="+i, 
+						dataType: 'json',
+		 				success: function(board){
+		 					console.log(board);
+		 					console.log("좋아요 누른 카운트"+ board.likes);
+  			  			   $( '#like_count'+bNo ).text(board.likes);
+  			  			   location.href="/nearby/board/selectBoard?bNo="+bNo;
+		 					
+		 				},
+		 				error : function(xhr, error){
+		 					console.log(xhr.status);
+		 					console.log(error);
+		 				}				
+		 			 }); 
+		            return
+		   }
+ 			
+	 	//	  console.log("likehasClass = " + $("#"+i).children('i').hasClass('like') )
+  
+  
+	    if(  $("#"+i).find('i').hasClass('like') ) {
+	    	$("#"+i).find('i').removeClass('like');
+	    	
+	 		$.ajax({
+	  				url : '/nearby/board/likesCancel',
+	  				type: 'post',
+	  				data: "bNo="+i, 
+	 				dataType: 'json',
+	  				success: function(board){
+	  			//	  console.log("좋아요 취소 카운트" + board.likes);
+	  				   $( '#like_count'+ bNo ).text(board.likes);
+	  				 location.href="/nearby/board/selectBoard?bNo="+bNo;
+	  				   
+	  				},
+	  				error : function(xhr, error){
+	  					console.log(xhr.status);
+	  					console.log(xhr.error)
+	  				}				
+	  			});  // ajax
+	  			return;
+	      } // if 
+	    }	 
+ 			
+ 	
 
 	
 /* ----------------------------------------- fnReplyList() --------------------------------  */
@@ -318,13 +320,24 @@ function fnReplyList(){
       success: function(map) {
          fnPrintReplyList(map);
          fnPrintPaging(map.pageUtils);
-         $('#reply_count_per_board').text(map.total);
+         fnReplyTotalCount(map);
       },
       error: function(xhr) {
          console.log(xhr.responseText);
       }
    }) // End ajax
 } // End fnReplyList
+
+   function fnReplyTotalCount(map) {
+         $('#reply_count_per_board').text(map.total);
+         console.log('  여기는 함수 내부이다     : '+map.total);
+         if (map.total > 0 ) {
+            $('.replyCount').addClass('like').removeClass('unlike');
+         } else if (map.total == 0) {
+            $('.replyCount').addClass('unlike').removeClass('like');
+         }
+}
+
 
 /* ----------------------------------------- fnPrintReplyList() --------------------------------  */
 
@@ -613,7 +626,7 @@ function fnInsertReply(){
   					</span>
 	            </div>
 			  		<div class="countIcon replyCount">
-			  			<i class="fas fa-comments countIcon replyCount" style="color:#fe4662">
+			  			<i class="fas fa-comments countIcon replyCount">
 			  				<span id="reply_count_per_board"></span>
 			  			</i>
 			  		</div>

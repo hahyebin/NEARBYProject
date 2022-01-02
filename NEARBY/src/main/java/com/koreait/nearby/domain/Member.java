@@ -1,17 +1,21 @@
 package com.koreait.nearby.domain;
 
+import java.sql.Date;
+
 public class Member {
 	private Long mNo;
 	private String id, pw, email, birthday, gender, name, phone;
 	private int state;
+	private Date mCreated;
 	private Profile profile;
-
-	// constructor
-	public Member() {
+    private Likes likes;
+	 
+    public Member() {
+		// TODO Auto-generated constructor stub
 	}
 
 	public Member(Long mNo, String id, String pw, String email, String birthday, String gender, String name,
-			String phone, int state, Profile profile) {
+			String phone, int state, Date mCreated, Profile profile, Likes likes) {
 		super();
 		this.mNo = mNo;
 		this.id = id;
@@ -22,10 +26,11 @@ public class Member {
 		this.name = name;
 		this.phone = phone;
 		this.state = state;
+		this.mCreated = mCreated;
 		this.profile = profile;
+		this.likes = likes;
 	}
 
-	// getter / setter
 	public Long getmNo() {
 		return mNo;
 	}
@@ -98,6 +103,14 @@ public class Member {
 		this.state = state;
 	}
 
+	public Date getmCreated() {
+		return mCreated;
+	}
+
+	public void setmCreated(Date mCreated) {
+		this.mCreated = mCreated;
+	}
+
 	public Profile getProfile() {
 		return profile;
 	}
@@ -106,12 +119,20 @@ public class Member {
 		this.profile = profile;
 	}
 
+	public Likes getLikes() {
+		return likes;
+	}
+
+	public void setLikes(Likes likes) {
+		this.likes = likes;
+	}
+
 	@Override
 	public String toString() {
 		return "Member [mNo=" + mNo + ", id=" + id + ", pw=" + pw + ", email=" + email + ", birthday=" + birthday
-				+ ", gender=" + gender + ", name=" + name + ", phone=" + phone + ", state=" + state + ", profile="
-				+ profile + "]";
+				+ ", gender=" + gender + ", name=" + name + ", phone=" + phone + ", state=" + state + ", mCreated="
+				+ mCreated + ", profile=" + profile + ", likes=" + likes + "]";
 	}
-	
+    
 
 }

@@ -2,6 +2,7 @@ package com.koreait.nearby.controller;
 
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -150,5 +151,43 @@ public class MemberController {
 		model.addAttribute("list", service);
 		return "member/follow";
 	}
+	
+	/* 박종진 */
+	// 이용약관
+	@GetMapping("serviceTerms")
+	public String terms(){
+		return "member/terms";
+	}
+	
+	// 로그인 성공시 게시판으로 이동 (세션 저장)
+//	@PostMapping(value = "login")
+//	public String login(HttpServletRequest request, HttpServletResponse response, String id) {
+//		
+//		// 쿠키 아이디 기억하기
+//		// 체크 안하면 널
+//		String checkId = request.getParameter("checkId");
+//		
+//		// 체크 하면 아이디 를 저장한다.
+//		if (checkId != null) {
+//			Cookie cookie = new Cookie("id", id);
+//			cookie.setMaxAge(5 * 24 * 60 * 60); // 5일동안 아이디 기억 유지
+//			response.addCookie(cookie);
+//		} else {	// 체크 안하면 아이디를 쿠킹 삭제한다.
+//			Cookie[] cookies = request.getCookies();
+//			for (Cookie cookie : cookies) {
+//				if (cookie.getName().equals("id")) {
+//					cookie.setMaxAge(0);	// 아이디 기억 유지 안함!
+//					response.addCookie(cookie);
+//					break;
+//				}
+//			}
+//		}
+//		
+//		
+//		service.login(request, response);
+//		return	null;
+//	}
+	
+	
 	
 }

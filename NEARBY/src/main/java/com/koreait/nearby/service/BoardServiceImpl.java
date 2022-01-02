@@ -96,8 +96,8 @@ public class BoardServiceImpl implements BoardService {
 				String path = "resources"+sep + "upload" + sep + id+sep + sdf.format(new Date()).replaceAll("-", sep);
 				String realPath = multipartRequest.getServletContext().getRealPath(path);
 				
-				logger.info("path: "+ path);
-				logger.info("realpath: "+realPath);  // 루트 확인용
+	//			logger.info("path: "+ path);
+	//			logger.info("realpath: "+realPath);  // 루트 확인용
 				
 				File dir = new File(realPath);
 				if ( !dir.exists() ) dir.mkdirs();
@@ -184,19 +184,18 @@ public class BoardServiceImpl implements BoardService {
 		board.setLocation(multipartRequest.getParameter("location"));
 //		System.out.println("conent 수정 ? "+ multipartRequest.getParameter("content"));
 	
+		MultipartFile file = multipartRequest.getFile("file");
+		String[] video = {"mp4", "mpeg", "avi", "mov"};
+		String origin = file.getOriginalFilename();
+		String extName = origin.substring(origin.lastIndexOf("."));
+		String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+		String saved = uuid + extName;
 		try {
-			MultipartFile file = multipartRequest.getFile("file");
-				System.out.println(multipartRequest.getFile("file"));
 				
 				if( multipartRequest.getParameter("path").isEmpty() == false ) {   // path가 빈값이 아니라는건 기존에 이미지/비디오가 있었다는 의미다. 때문에 없는 경우엔 새로 만들고, 아니면 원래  path, saved, origin을 board에 다시 넣는다!!!
 					
 					if(file != null && !file.isEmpty() ) {   // file이 있으면 
-							String[] video = {"mp4", "mpeg", "avi", "mov"};
-							String origin = file.getOriginalFilename();
-							System.out.println("origin " + origin);
-							String extName = origin.substring(origin.lastIndexOf("."));
-							String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-							String saved = uuid + extName;
+//							System.out.println("origin " + origin);
 							
 							String sep = Matcher.quoteReplacement(File.separator);
 							SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -233,10 +232,43 @@ public class BoardServiceImpl implements BoardService {
 						board.setOrigin("");
 						board.setSaved("");
 					} 		
-			} else {		
-						board.setPath(multipartRequest.getParameter("path"));
-						board.setSaved(multipartRequest.getParameter("saved"));
-						board.setOrigin(multipartRequest.getParameter("origin"));					
+			} else {	
+				origin = file.getOriginalFilename();
+				extName = origin.substring(origin.lastIndexOf("."));
+				uuid = UUID.randomUUID().toString().replaceAll("-", "");
+				saved = uuid + extName;
+				String sep = Matcher.quoteReplacement(File.separator);
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				String path = "resources"+sep + "upload" + sep + id+sep + sdf.format(new Date()).replaceAll("-", sep);
+				String realPath = multipartRequest.getServletContext().getRealPath(path);
+				
+				File dir = new File(realPath);
+				if ( !dir.exists() ) dir.mkdirs();
+				
+				File uploadFile = null;
+				
+				board.setPath(path);
+				board.setOrigin(origin);
+				
+				// 비디오 확장자 saved 네임에 "video" 붙이기!
+				for( int i =0; i<video.length; i++) {
+					// System.out.println(saved.contains(video[i]));
+				 	if(saved.contains(video[i])) {
+						saved = "video" + saved;
+						uploadFile = new File(realPath, saved); 
+						board.setSaved(saved);
+					} else {
+						 uploadFile = new File(realPath, saved); 
+						board.setSaved(saved);
+					}
+				}
+				file.transferTo(uploadFile);
+				System.out.println("Path " + path);
+				System.out.println("saved " + saved);
+				System.out.println("origin "+ origin);
+						board.setPath(path);
+						board.setSaved(saved);
+						board.setOrigin(origin);					
 			       }
 					
 	    } catch (Exception e) {
@@ -323,6 +355,7 @@ public class BoardServiceImpl implements BoardService {
 				  Likes like = likesRepository.likeSelectByNO(likes);  //  각 보드의 좋아요 누른 테이블 리스트 반환
 				  oneBoard.setLikes(oneBoard.getLikes());
 				  oneBoard.setbNo(bNo);
+				  oneBoard.setLike(like);
 			  }
 		}
 		return oneBoard;
@@ -358,6 +391,7 @@ public class BoardServiceImpl implements BoardService {
 			//	  System.out.println("dd" + like);
 				  oneBoard.setLikes(oneBoard.getLikes());
 				  oneBoard.setbNo(bNo);
+				  oneBoard.setLike(like);
 			  }
 				return oneBoard;
 	}
@@ -370,10 +404,15 @@ public class BoardServiceImpl implements BoardService {
 	    String fullLocation = "";
 	    int seoul =0; int incheon=0; int gyeonggi = 0; int busan=0; int daegu=0; int daejun=0; int ulsan=0; int gwangju=0;
 	    int sejong=0; int gangwon=0; int chungcheongbuk=0; int chungcheongnam=0; int gyeongsangbuk=0; int gyeongsangnam=0; int jeollanam=0; int jeollabuk=0; int jeju = 0;
+	    int nothing = 0;
+	  
 	    for(int i=1; i<list.size(); i++) {
 	    	fullLocation = list.get(i).getLocation();       
-	                                                       
-	    	if ( fullLocation.contains("서울특별시")){
+	          System.out.println(fullLocation);
+	    	
+	        if (fullLocation == null || fullLocation.isEmpty()) {
+		      	nothing = 0;
+		    } else if ( fullLocation.contains("서울특별시")){
 	    		seoul++;  
 	    	} else if ( fullLocation.contains("인천광역시")){
 	    		incheon++;
@@ -407,7 +446,7 @@ public class BoardServiceImpl implements BoardService {
 	    		jeollabuk++;
 	    	}else if ( fullLocation.contains("제주특별자치도")){
 	    		jeju++;
-	    	}    
+	    	} 
 	    }
 	     Map<String, Object> map = new HashMap<String, Object>();
 	     map.put("seoul",seoul);   map.put("incheon",incheon);   map.put("gyeonggi",gyeonggi);  map.put("busan",busan);  map.put("daegu",daegu);

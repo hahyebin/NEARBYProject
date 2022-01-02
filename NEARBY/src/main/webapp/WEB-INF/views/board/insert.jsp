@@ -351,7 +351,7 @@
 			  <i class="fas fa-photo-video" id="upload" ></i>
 			       사진 / 동영상을 올려주세요   </label>
 			      <div class="preview">
-			           <img id="previewImg" />
+			           <img id="previewImg" width="320px" />
  				       <video id="previewVideo" controls></video>
  				   </div>
 		</div>

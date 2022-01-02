@@ -127,6 +127,10 @@
    }
    
    /* 이미지 wrap */
+   img {
+         width:480px; 
+ 		 height: 320px;
+   }
    #img_wrap{
  		 border:1px solid black;
  		 width:480px; 
