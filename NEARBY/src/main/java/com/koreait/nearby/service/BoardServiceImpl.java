@@ -182,26 +182,33 @@ public class BoardServiceImpl implements BoardService {
 		board.setbNo(Long.parseLong(multipartRequest.getParameter("bNo")));
 		board.setContent(multipartRequest.getParameter("content"));
 		board.setLocation(multipartRequest.getParameter("location"));
+		board.setPath(multipartRequest.getParameter("path"));
+		board.setOrigin(multipartRequest.getParameter("origin"));
+		board.setSaved(multipartRequest.getParameter("saved"));
 //		System.out.println("conent 수정 ? "+ multipartRequest.getParameter("content"));
 	
 		MultipartFile file = multipartRequest.getFile("file");
 		String[] video = {"mp4", "mpeg", "avi", "mov"};
-		String origin = file.getOriginalFilename();
-		String extName = origin.substring(origin.lastIndexOf("."));
-		String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-		String saved = uuid + extName;
 		try {
-				
+				// 기존에 파일있음  ->  그냥 그 사진 씀 
+			    //                ->  그 사진 변경함
+			    //                ->  그 사진 삭제함-> content만 넣겠다.
+			
+			    // 기존 파일 없음(내용만존재하는경우) -> 새롭게 파일 올림
+			
+			
 				if( multipartRequest.getParameter("path").isEmpty() == false ) {   // path가 빈값이 아니라는건 기존에 이미지/비디오가 있었다는 의미다. 때문에 없는 경우엔 새로 만들고, 아니면 원래  path, saved, origin을 board에 다시 넣는다!!!
+					String sep = Matcher.quoteReplacement(File.separator);
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+					String path = "resources"+sep + "upload" + sep + id+sep + sdf.format(new Date()).replaceAll("-", sep);
+					String realPath = multipartRequest.getServletContext().getRealPath(path);
 					
 					if(file != null && !file.isEmpty() ) {   // file이 있으면 
-//							System.out.println("origin " + origin);
-							
-							String sep = Matcher.quoteReplacement(File.separator);
-							SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-							String path = "resources"+sep + "upload" + sep + id+sep + sdf.format(new Date()).replaceAll("-", sep);
-							String realPath = multipartRequest.getServletContext().getRealPath(path);
-							
+//							
+						String origin = file.getOriginalFilename();
+						String extName = origin.substring(origin.lastIndexOf("."));
+						String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+						String saved = uuid + extName;
 							logger.info("path: "+ path);
 							logger.info("realpath: "+realPath);  // 루트 확인용
 							
@@ -220,23 +227,28 @@ public class BoardServiceImpl implements BoardService {
 									saved = "video" + saved;
 									uploadFile = new File(realPath, saved); 
 									board.setSaved(saved);
-						} else {
-							uploadFile = new File(realPath, saved); 
-							board.setSaved(saved);
-						}
-							}
+								} else {
+									uploadFile = new File(realPath, saved); 
+									board.setSaved(saved);
+							    }
+				        }
 							file.transferTo(uploadFile);
-					} else {
-					
+					} else if (file == null && board.getSaved() == null  ){
 						board.setPath("");
 						board.setOrigin("");
 						board.setSaved("");
-					} 		
+					} else if ( file == null)  {
+						board.setPath(board.getPath());
+						board.setSaved(board.getSaved());
+						board.setOrigin(board.getOrigin());
+					}
+					
+			// 내용게시글에서 ->>> 사진 첨부한 경우		
 			} else {	
-				origin = file.getOriginalFilename();
-				extName = origin.substring(origin.lastIndexOf("."));
-				uuid = UUID.randomUUID().toString().replaceAll("-", "");
-				saved = uuid + extName;
+				String origin = file.getOriginalFilename();
+				String extName = origin.substring(origin.lastIndexOf("."));
+				String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+				String saved = uuid + extName;
 				String sep = Matcher.quoteReplacement(File.separator);
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				String path = "resources"+sep + "upload" + sep + id+sep + sdf.format(new Date()).replaceAll("-", sep);
@@ -408,7 +420,7 @@ public class BoardServiceImpl implements BoardService {
 	  
 	    for(int i=1; i<list.size(); i++) {
 	    	fullLocation = list.get(i).getLocation();       
-	          System.out.println(fullLocation);
+	     //     System.out.println(fullLocation);
 	    	
 	        if (fullLocation == null || fullLocation.isEmpty()) {
 		      	nothing = 0;

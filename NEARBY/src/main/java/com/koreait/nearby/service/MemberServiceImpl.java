@@ -301,7 +301,15 @@ public class MemberServiceImpl implements MemberService {
 		return map;
 	}
 	
-	
+	// 관리자만 가능한 회원 활성화
+    @Override
+    public Map<String, Object> reInsertMember(Long mNo) {
+    	Map<String, Object> map = new HashMap<String, Object>();
+		MemberRepository memberRepository = sqlSession.getMapper(MemberRepository.class);
+		int result = memberRepository.reInsertMember(mNo);
+		map.put("result", result);
+		return map;
+    }
 	
 	@Override
 	public Map<String, Object> checkPassword(HttpServletRequest request) {

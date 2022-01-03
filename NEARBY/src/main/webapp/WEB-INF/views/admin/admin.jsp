@@ -144,25 +144,6 @@ function fnMemberSearch(){
 	</div>
 </div>
 </div>
-<!-- 		<div class="totalInfo userSearch"> -->
-<!-- 			<form id="f" method="get"> -->
-<!-- 				<select name="column" id="column" class="search_input"> -->
-<!-- 					<option value="ID" data-column-name="id">아이디</option> -->
-<!-- 					<option value="NAME" data-column-name="name">이름</option> -->
-<!-- 					<option value="EMAIL" data-column-name="email">이메일</option> -->
-<!-- 					<option value="BIRTHDAY" data-column-name="birthday">생년월일</option> -->
-<!-- 					<option value="GENDER" data-column-name="gender">성별</option> -->
-<!-- 				</select> -->
-<!-- 				<span id="equal_area" > -->
-<!-- 					<input list="auto_complete" type="text" name="query" id="query"  class="search_input" placeholder="조회할 회원정보입력"> -->
-<!-- 					<datalist id="auto_complete"></datalist>                                 검색한거 나옴 -->
-<!-- 				</span> -->
-<!-- 					<i class="fas fa-search" id="search_btn" class="search_btn"></i> -->
-			
-<!-- 			</form> -->
-<!-- 		</div> -->
-
-
 
 
 <c:forEach var="entry" items="${adminBoardMap}" varStatus="status"> 
@@ -229,7 +210,7 @@ new Chart(document.getElementById("barchart2"), {
       datasets: [
         {
           label: "Location",
-          backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850","#ffafb0","#82a2ed","orange","#bee9b4","#dfd4e4","#fcffb0","pink","green","#e2ffaf","#f2cfa5", "#fcc6f7","#aee4ff"],
+          backgroundColor: ["pink", "pink","pink","pink","pink","pink","pink","pink","#3e95cd","#3e95cd","#3e95cd","#3e95cd","3e95cd","#3e95cd","#3e95cd", "#3e95cd","#3e95cd"],
           data: [ $("#seoul").val() , $("#incheon").val(),  $("#busan").val(), $("#daegu").val(), $("#daejun").val(),
         	      $("#ulsan").val(), $("#gwangju").val(), $("#sejong").val(), $("#gangwon").val(),$("#gyeonggi").val(), 
         	      $("#chungcheongbuk").val(), $("#chungcheongnam").val(), $("#gyeongsangbuk").val(), $("#gyeongsangnam").val(), 

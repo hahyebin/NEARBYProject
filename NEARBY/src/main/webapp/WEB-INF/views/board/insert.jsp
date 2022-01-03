@@ -15,6 +15,7 @@
   $(document).ready(function(){
 		fnFileCheck();
 		fnSubmitCheck();
+		fnTextLimit(); // content 2000자 막기
 		// file 클릭시 map 안보이게 처리
 		$("#file").click(function(){
 			$("#map").css('display', 'none');
@@ -27,8 +28,20 @@
 	            $(this).height(this.scrollHeight);
 	        });
 	    }
-	});
+	}); // document 
     
+  
+   function fnTextLimit(){
+	   $('#content').on('keyup', function(){
+	   //console.log(  $('#content').val());
+		   if( $('#content').val().length > 2000) {
+			   alert("글자수는 2000자까지입니다.");
+			   $(this).val( $(this).val().subString() );
+		   }
+	   });
+   }
+  
+  
   // submit 막기
   function fnSubmitCheck(){
       $('#insertBtn').click(function(event){
@@ -347,7 +360,7 @@
 	    
 	    <input type="file" name="file" id="modify_file" style="display:none;" onchange="readURL(this);">
 		<div id="img_wrap" >
-			  <label for="modify_file" id="file_label" class="file_label"> 
+			  <label for="modify_file" id="file_label" class="file_label" style="font-size:20px;"> 
 			  <i class="fas fa-photo-video" id="upload" ></i>
 			       사진 / 동영상을 올려주세요   </label>
 			      <div class="preview">

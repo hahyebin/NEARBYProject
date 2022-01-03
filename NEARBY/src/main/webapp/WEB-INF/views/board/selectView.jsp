@@ -9,6 +9,7 @@
 <title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/header.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/boardFindView.css">
 <style>
@@ -24,6 +25,13 @@
    	.pointer {
    		cursor: pointer;
    	} 
+   	.textarea {
+		border: none;
+		margin: 0 -10px;
+		background-color: rgba(255, 250, 250, 0.8);
+		width: 500px;
+		padding: 10px 6px 20px 10px;
+	}
 /* ------------------- reply 구역 ----------------- */
 
 	#reply_count_per_board {
@@ -34,6 +42,9 @@
 		height: 20px;
 		margin: 5px;
 		border-radius: 100%;
+	}
+	.reply_count_box {
+		margin-left: 100px; 
 	}
 	#input_reply_table td:nth-of-type(1){
 		width:20px;
@@ -51,7 +62,7 @@
 	#input_reply_table input[type=text]{
 		margin: 5px;
 		width: 440px;
-		height: 24px;
+	/* 	height: 24px; */
 		font-size: 12px;
 		outline-style: none;
 		padding:14px;
@@ -64,6 +75,9 @@
 	}
 	
 	/* 댓글 보여주는 구역 CSS */
+	.replyCount {
+		margin-left: 100px; 
+	}
 	.output_reply_area {
 		width: 500px; 
 		margin:10px auto 5px;
@@ -73,7 +87,7 @@
 	}
 	.reply_user_image_area .reply_user_img{
 		width:25px;
-		height: 25px;
+	 	height: 25px;
 		margin: 5px;
 	}
 	.output_reply_area .reply_user_name_area{
@@ -109,13 +123,16 @@
 	.output_reply_table input[type=text]{
 		margin: 5px;
 		width: 490px;
-		height: 24px;
+		height: 24px; 
 		font-size: 12px;
 		outline-style: none;
 		padding:18px;
 		border-style: none;
 		background-color: #f0f2f5;
 		border-radius: 20px;
+	}
+	.reply_content {
+		word-break: break-all;
 	}
 	.btn_area {
 		width: auto;
@@ -349,7 +366,7 @@ function fnReplyList(){
 		 
 		 if (p.totalRecord == 0) {
 		    $('<tr>')
-		    .append( $('<td colspan="5">').text('등록된 댓글이 없습니다.') )
+		    .append( $('<td colspan="5">').text('첫 번째 댓글의 주인공이 되어보세요!') )
 		    .appendTo( '.output_reply_table' );
 		 } else {
 		    
@@ -370,7 +387,7 @@ function fnReplyList(){
 				.append( $('<td class="btn_area">').html( $('<input type="button" class="show_reply_btn pointer disapear reply_btns" data-upno="'+reply.rNo+'" value="수정" data-login="'+id+'" data-writer="'+reply.id+'"></td>') ) )
 				.append( $('<td class="btn_area">').html( $('<input type="button" class="delete_reply_btn pointer disapear reply_btns" data-no="'+ reply.rNo +'" value="삭제" data-login="'+id+'" data-writer="'+reply.id+'" ></td>') ) )
 				.appendTo( '.output_reply_table' );
-				$('.output_reply_table').append( $('<tr class="input_row">').html( $('<td colspan="4"><input type="text" id="updateContent" value="'+reply.rContent+'" readonly></td><td class="btn_area"><input type="button" class="update_reply_btn pointer reply_btns disapear reply_insert_btns" data-updateno="'+reply.rNo+'" value="등록"></td>') ) );
+				$('.output_reply_table').append( $('<tr class="input_row">').html( $('<td colspan="4"><input type="text" class="reply_content" id="updateContent" value="'+reply.rContent+'" readonly></td><td class="btn_area"><input type="button" class="update_reply_btn pointer reply_btns disapear reply_insert_btns" data-updateno="'+reply.rNo+'" value="등록"></td>') ) );
 
 		    }) // End each
 		    
@@ -393,6 +410,23 @@ function fnReplyList(){
 /* ----------------------------------------- fnInsertReply() ----------------------------------------- */
 function fnInsertReply(){
    $('#insert_reply_btn').on('click', function(){
+	   if ( $('#rContent').val().length > 38) {
+				Swal.fire({
+					icon: 'warning',
+					text: '댓글은 공백포함 38자 이내로 작성해주세요'
+				});
+		   return;
+	   } 
+	   
+	   if( $('#rContent').val() == '' ) {
+				Swal.fire({
+					icon: 'warning',
+					text: '작성된 내용이 없습니다.'
+				});
+		   $('#rContent').focus();
+		   return;
+	   }
+	   
        let reply = JSON.stringify({
          id: '${loginUser.id}',
          bNo : '${board.bNo}',
@@ -409,7 +443,15 @@ function fnInsertReply(){
          dataType: 'json',
          success: function(map) {
                fnReplyList();
-               $('#rContent').val(''); // 나중에 주석 지워야 할 부분
+               if (map.errorMsg != null) {
+	   				Swal.fire({
+						icon: 'warning',
+						text: map.errorMsg
+					});
+               } else {
+	               $('#rContent').val(''); // 나중에 주석 지워야 할 부분
+               }
+
          },
          error: function(xhr) {
             console.log(xhr.responseText);
@@ -457,6 +499,13 @@ function fnInsertReply(){
 		$('body').on('click', '.update_reply_btn', function(){
 			let updateNo = $(this).data('updateno');
 			let updateContent = $(this).parent().prev().find('input').val();
+			if ( updateContent == '') {
+				Swal.fire({
+					icon: 'warning',
+					text: '작성된 내용이 없습니다'
+				});
+				return;
+			}
 	          let reply = JSON.stringify({
 	              rNo : updateNo,
 	              rContent: updateContent
@@ -469,6 +518,12 @@ function fnInsertReply(){
 					dataType: 'json',
 					success: function(map){
 						fnReplyList();
+			               if (map.errorMsg != null) {
+				   				Swal.fire({
+									icon: 'warning',
+									text: map.errorMsg
+								});
+			               }
 					},
 					error: function(){
 						alert('응답 실패');
@@ -585,8 +640,8 @@ function fnInsertReply(){
 						       		  <i class="fas fa-map-marker-alt" style="color:#fe4662; font-size:15px; width:30px"></i>
 						              <span class="address"> ${board.location} </span>
 				      </div>
-		  		       <div class="content onlyContent">
-		           			<textarea readonly="readonly" class="content_height"> ${board.content}</textarea> 
+		       		   <div class="content">
+		       		         <pre style='white-space:pre-wrap; word_wrap:break-word; word-break: break-all; width:505px;'>${board.content}</pre>
 		       		   </div>
 	  		    </div>
 		  </c:if>
@@ -611,9 +666,8 @@ function fnInsertReply(){
 		  					</div>
 		  				</c:if>
 		  					<input type="hidden" name="path" value="${board.path}">
-		  					
 		  		      <div class="content">
-		           			<textarea readonly="readonly"  class="content_height"> ${board.content}</textarea> 
+		       		         <pre style='white-space:pre-wrap; word_wrap:break-word; word-break: break-all; width:499px;'>${board.content}</pre>
 		       		   </div>
 		  		</div>
 		  </c:if>		
@@ -625,10 +679,9 @@ function fnInsertReply(){
 	  					<span class="like_count"  id="like_count${board.bNo}">${board.likes}</span> 
   					</span>
 	            </div>
-			  		<div class="countIcon replyCount">
-			  			<i class="fas fa-comments countIcon replyCount">
-			  				<span id="reply_count_per_board"></span>
-			  			</i>
+			  		<div class="countIcon reply_count_box">
+			  			<i class="fas fa-comments countIcon replyCount"></i>
+		  				<span id="reply_count_per_board">0</span>
 			  		</div>
 		  		</div>
 	 
@@ -654,7 +707,7 @@ function fnInsertReply(){
 			</tr>
 		</table>
 	</div>
-	<div class="reply_wrap">
+		<div class="reply_wrap">
 		<!-- 댓글 뿌리기 -->
   			<div class="output_reply_area">
 	  			<table>

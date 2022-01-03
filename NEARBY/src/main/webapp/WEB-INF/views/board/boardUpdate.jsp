@@ -17,8 +17,19 @@
 <script>
 	$(document).ready(function(){
 		map();
-	
+		fnTextLimit(); // 글자수제한
 	})
+	
+	 function fnTextLimit(){
+	   $('#content').on('keyup', function(){
+	   //console.log(  $('#content').val());
+		   if( $('#content').val().length > 2000) {
+			   alert("글자수는 2000자까지입니다.");
+			   $(this).val( $(this).val().subString() );
+		   }
+	   });
+   }
+	
 	function fnSetting(){
 		$('.delete_update_form').toggleClass('see no');
 	}

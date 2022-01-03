@@ -113,12 +113,10 @@ function fnMemberDelete(i){
 			dataType: 'json',
 			contentType:'application/json',
 			success : function(map){
-				console.log(map.result);
-				console.log(map.result.result);
-			 if(map.result.result > 0){
-				alert('삭제성공');
-				 $('#mNo'+i).addClass('member_delete');
+				 if(map.result.result > 0){
+				  $('#mNoReInsert'+i).addClass('member_delete');
 				  $('#mNo'+i).removeAttr('onclick');
+				  location.href="/nearby/admin/findMember";
 			 } else {
 				 alert('삭제실패');
 			 }
@@ -129,6 +127,31 @@ function fnMemberDelete(i){
 			}
 		})
 	}	 
+ }
+ 
+ // 회원 비활->활성
+ function fnReInsert(i){
+	 if (confirm( '유저 번호'+ i+'번을 활성화 시키겠습니다.' )) {
+		 $.ajax({
+				url : "/nearby/admin/reInsertMember",
+				type: "get",
+				data : "mNo="+i,
+				dataType: 'json',
+				contentType:'application/json',
+				success : function(map){
+				 if(map.result.result > 0){
+					 $('#mNo'+i).addClass('member_delete');
+					 location.href="/nearby/admin/findMember";
+				 } else {
+					 alert('삭제실패');
+				 }
+				}, 
+				error: function(xhr){
+					alert('삭제서버 실패');
+					console.log(xhr.responseText);
+				}
+			})
+	 }
  }
 </script>
 
@@ -183,7 +206,7 @@ function fnMemberDelete(i){
 					<td><i class="fas fa-user user_cursor" id="mNo${memberSearch.mNo}" onclick="fnMemberDelete(${memberSearch.mNo})" ></i></td>
 				</c:if>
 				<c:if test="${memberSearch.state == -1 }">
-					<td><i class="fas fa-user member_delete" id="mNo${memberSearch.mNo}" onclick="fnMemberDelete(${memberSearch.mNo})" ></i></td>
+					<td><i class="fas fa-user member_delete" id="mNoReInsert${memberSearch.mNo}" onclick="fnReInsert(${memberSearch.mNo})" ></i></td>
 				</c:if>
 			</tr>
 		 </c:forEach>

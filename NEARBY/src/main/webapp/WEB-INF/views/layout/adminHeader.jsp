@@ -22,17 +22,13 @@
 		$('#search_btn').click(function(){
 			// 검색하는 것에 따라 이동경로 다르게 설정함
 			if ( $('#column').val() == 'ID' || $('#column').val() == 'NAME' || $('#column').val() == 'M_NO'  ||  $('#column').val() == 'EMAIL'  || $('#column').val() == 'BIRTHDAY' || $('#column').val() == 'GENDER' ) {
-				location.href='/nearby/admin/findMember?column=' + $('#column').val() + '&query=' + $('#query').val();				
+				location.href='/nearby/admin/findMember?column=' + $('#column').val() + '&query=' + $('#m_query').val();				
 			}
 			else {
 				alert('잘못입력!!');
 			}
 		})
 	}
-	
-	
-	
-	
 	
 </script>
 <div class="container">
@@ -68,12 +64,10 @@
 					<option value="BIRTHDAY" data-column-name="birthday">생년월일</option>
 					<option value="GENDER" data-column-name="gender">성별</option>
 				</select>
-					<input  type="text" name="query" id="query"  class="search_input"  placeholder="조회할 회원 정보 입력" >
+					<input  type="text" name="query" id="m_query"  class="search_input"  placeholder="조회할 회원 정보 입력" >
 					<div id="search_icon"><i class="fas fa-search" id="search_btn" class="search_btn"></i></div>   	
 			</div>	
 		</form>
-
-		
 		<a href="/nearby/member/logout" style="font-size: 12px; color:gray;" >로그아웃</a>
 	
 	</div>

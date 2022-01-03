@@ -41,6 +41,9 @@ public interface MemberRepository {
 
 	
 	// 관리자 관련 /////////
+	// 관리자만 가능한 회원 활성화
+	public int reInsertMember(Long mNo);
+	
 	// 이용하는 총멤버
 	public List<Member> memberCount();
 	

@@ -1,5 +1,6 @@
 package com.koreait.nearby.service;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,7 +69,8 @@ public class ReplyServiceImpl implements ReplyService {
 		ReplyRepository replyRepository = sqlSession.getMapper(ReplyRepository.class);
 		try {
 			
-			if (r.getrContent().isEmpty() || r.getrContent() == null ) throw new NullPointerException();
+			if (r.getrContent().isEmpty() || r.getrContent() == null ) throw new NullPointerException("작성된 내용이 없습니다");
+			if (r.getrContent().length() > 38) throw new SQLException("댓글은 공백포함 38자 이내입니다");
 			Reply reply = new Reply();
 			reply.setId(r.getId());
 			reply.setbNo(r.getbNo());
@@ -82,6 +84,8 @@ public class ReplyServiceImpl implements ReplyService {
 			map.put("insertResult", insertResult);
 		} catch (NullPointerException e) {
 			map.put("errorMsg", e.getMessage());
+		} catch (SQLException e) {
+			map.put("errorMsg", e.getMessage());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -93,9 +97,19 @@ public class ReplyServiceImpl implements ReplyService {
 	@Override
 	public Map<String, Object> updateReply(Reply reply) {
 		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			
+		if (reply.getrContent().length() > 38) throw new SQLException("댓글은 공백포함 38자 이내입니다");
+		if (reply.getrContent().isEmpty() || reply.getrContent() == null) throw new NullPointerException("작성된 내용이 없습니다.");
 		ReplyRepository replyRepository = sqlSession.getMapper(ReplyRepository.class);
 		int updateResult = replyRepository.updateReply(reply);
 		map.put("updateResult", updateResult);
+		System.out.println("반환될 댓글의 map : " +  map);
+		} catch (NullPointerException e) {
+			map.put("errorMsg", e.getMessage());
+		} catch (SQLException e) {
+			map.put("errorMsg", e.getMessage());
+		}
 		return map;
 	}
 	

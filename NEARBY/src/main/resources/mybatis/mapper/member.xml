@@ -118,6 +118,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		 WHERE M_NO = #{mNo}
 	</update>
 	
+    <!-- 관리자만 가능한 회원 활성화 기능 -->
+    <update id="reInsertMember" parameterType="Long">
+      UPDATE MEMBER
+  	     SET STATE = 0
+  	   WHERE M_NO = #{mNo} 
+    </update>
 	
 	<!-- 총 멤버 관리자 제외 -->
 	<select id="memberCount" resultType="Member">

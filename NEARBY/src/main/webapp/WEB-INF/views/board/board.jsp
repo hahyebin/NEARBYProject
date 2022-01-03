@@ -12,6 +12,15 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/header.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/boardView.css">
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+
+
+/* 폰트 size / spacing */
+	.re_content_area {
+		letter-spacing: 0.4px;
+		font-size: 14px;
+	}
+
   .board_icon{
   color: gray;
   cursor: pointer;
@@ -24,6 +33,9 @@
 		height: 20px;
 		margin: 5px;
 		border-radius: 100%;
+	}
+	.replyCount {
+      margin-left: 100px;
 	}
 	#input_reply_table td:nth-of-type(1){
 		width:20px;
@@ -85,8 +97,7 @@
 	
 	$(document).ready(function(){
 		fnSendBno();
-	
-		aa();
+		fnReply();
 		
 		var txtArea = $(".content_height");
 	    if (txtArea) {
@@ -186,42 +197,11 @@
  			
  	
  	
-	function fnSetting(){
-		$('.delete_form').toggleClass('b_see');
-	}
- 	
- 	// 관리자일 때만 게시글 삭제하기
- 	function fnAdminDelete(i){
- 		if( confirm('게시글 번호 '+i+'를 삭제하시겠습니까?') ){
- 			$.ajax({
- 				url : '/nearby/admin/adminBoardDelete',
- 				type: "get",
- 				data : "bNo="+i,
- 				dataType: 'json',
- 				contentType:'application/json',
- 				success: function(map){
- 					 if(map.result.result > 0){
- 						alert('삭제성공');
- 						location.href= "/nearby/board/boardList";
- 					 } else {
- 						 alert('삭제실패');
- 					 }
- 					}, 
- 				error: function(){
- 					alert("ajax에러입니다")
- 				}
- 			})
- 		}
- 	}
- 	
 
  	
  	 /* ----------------------------------------- fnPrintReplyList() --------------------------------  */
 
-
-	function aa(){
-
-			
+	function fnReply(){
 		$.each($('.output_reply_table'), function(i, replyTable) {
 			let bNo = $(replyTable).parent().prev().val();
 			var page = 1;
@@ -241,7 +221,6 @@
 			function fnPrintReplyList(map){
 	
 						$(replyTable).empty();
-
 										
 				 var p = map.pageUtils;
 				 let id = '${loginUser.id}';
@@ -263,27 +242,29 @@
 					
 				         let strContent = reply.rContent;
 				         let reply_content = ''; 
-						if (strContent.length > 20) {
-							reply_content = strContent.substring(0, 20) + '...';
+						if (strContent.length > 30) {
+							reply_content = strContent.substring(0, 30) + '...';
 						} else {
 							reply_content = strContent;
 						}
 						$('<tr class="reply_show">')
-						.append( $('<td class="reply_user_name_area">').html( $('<a href="#">'+reply.id+'</a>') ) )
-						.append( $('<td class="like_icon_area">').html( $('<td colspan="4" class="pointer" onclick="fnShowViewPage('+reply.bNo+')">'+reply_content+'</td><td></td>') ) )
+						.append( $('<td class="reply_user_name_area">').html( $('<a href="#" class="nexon">'+reply.id+'</a>') ) )
+						.append( $('<td class="like_icon_area">').html( $('<td colspan="4" class="pointer re_content_area" onclick="fnShowViewPage('+reply.bNo+')">'+reply_content+'</td><td></td>') ) )
 						.appendTo( replyTable );
-					
-						
 						
 					}) // End inner each
-					$(".reply_count_per_board[id=\""+bNo+"\"]").text(map.total)
 					
-					 
-					console.log('map.total : ' + map.total);
-						
+					// 게시글당 댓글 수 삽입부
+					$(".reply_count_per_board[id=\""+bNo+"\"]").text(map.total);
 					
+					
+					// 게시글당 댓글 수에 따른 아이콘 색상변경부
+			 		if (map.total > 0 ) {
+						$('.countIcon[id=icon_'+bNo+']').addClass('like').removeClass('unlike');
+					} else if (map.total < 0 ) {
+						$('.countIcon[id=icon_'+bNo+']').addClass('unlike').removeClass('like');
+					}
 				 } // End if 
-
 			} // End fnPrintReplyList
 		}); // End outer each
 	} // End aa 
@@ -294,13 +275,9 @@
 		location.href='/nearby/board/selectBoard?bNo='+bNo;
 	}
  
-	 	
- 	
 </script>
-
 </head>
 <body>
-	
 	 <c:if test="${loginUser.id != 'admin'}"> 
 		<header class="header">
 			<jsp:include page="/WEB-INF/views/layout/header.jsp" flush="true" />
@@ -342,15 +319,7 @@
 			    	   <a href="/nearby/board/selectBoard" id="board_writer">${board.id}</a>
 			    	</div>
 			    
-			    	<!-- 관리자일때만 삭제가능  아이콘 표시 -->
-			    		<c:if test="${ 'admin' == loginUser.id}">   
-			    		 <div class="setting_wrap">	
-	    					<i class="fas fa-cog setting" onclick="fnSetting()" ></i>
-	    					 <ul class="delete_form b_no">
-	    	 			   		<li class="delete_link" onclick="fnAdminDelete(${board.bNo}); return false;">게시글삭제</li>
-	     			  		 </ul>
-	     			  	</div>
-	     			   </c:if>
+			    	
 			    </div>
 	  		<!--------------------- 내용만 삽입할 때 ------------------------------->
 	 			 <c:if test="${ null == board.origin }">
@@ -360,7 +329,9 @@
 				              <span class="address"> ${board.location} </span>
 					      </div>
 			  		      <div class="content onlyContent">
-			           			<textarea readonly="readonly" class="content_height">${board.content}</textarea>  
+			  		     	 <div class="content textarea">
+		       		            <pre style='white-space:pre-wrap; word_wrap:break-word; word-break: break-all; width:505px;'>${board.content}</pre>
+		       		   		</div>
 			       		  </div>
 		  		    </div>
 			    </c:if>
@@ -385,14 +356,14 @@
 			  					</div>
 			  				</c:if>
 			  					<input type="hidden" name="path" value="${board.path}">
-			  					  <div class="content">  
-			            			 	<textarea readonly="readonly"  class="content_height"> ${board.content}</textarea> 
-			     				  </div>
+			  				    <div class="content textarea">
+		       		            	<pre style='white-space:pre-wrap; word_wrap:break-word; word-break: break-all; width:491px; padding-left:8px;'>${board.content}</pre>
+		       		   			</div>
 			  		</div>
 			  </c:if>		
 		  <div class="likesAndReplyCount">
-			  <div class="countIcon likesCount"> 
-  					<span class="like_btn" id="${board.bNo}"  data-bno="${board.bNo}" onclick="fnLike(${board.bNo})">
+			  <div class="countIcon likesCount" style="margin-left: 15px; "> 
+  					<span class="like_btn" id="${board.bNo}"  data-bno="${board.bNo}" onclick="fnLike(${board.bNo})" style="width: 30px;">
   			 	    	<i class="fas board_icon fa-thumbs-up" id="like${board.bNo}" > </i>
 	  					<span class="like_count"  id="like_count${board.bNo}">
 	  						${board.likes}
@@ -400,7 +371,7 @@
   					</span>
 		      </div>
 				  		<div class="countIcon replyCount">
-			  				<i class="fas board_icon fa-comments countIcon replyCount" onclick="location.href='/nearby/board/selectBoard?bNo=${board.bNo}';"></i>
+			  				<i class="fas board_icon fa-comments countIcon replyCount"  id="icon_${board.bNo}" onclick="location.href='/nearby/board/selectBoard?bNo=${board.bNo}';"></i>
 			  				<span class="reply_count_per_board" id="${board.bNo}">0</span>
 				  		</div>
 			  </div> <!-- End Class likesAndReplyCount DIV tag -->

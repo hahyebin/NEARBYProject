@@ -87,9 +87,15 @@
 </style>
 </head>
 <body>
-	<header class="header">
-		<jsp:include page="/WEB-INF/views/layout/header.jsp" flush="true" />
-	</header>
+	 <c:if test="${loginUser.id != 'admin'}"> 
+		<header class="header">
+			<jsp:include page="/WEB-INF/views/layout/header.jsp" flush="true" />
+		</header>
+	</c:if>
+	
+	 <c:if test="${loginUser.id == 'admin'}"> 
+			<jsp:include page="/WEB-INF/views/layout/adminHeader.jsp" flush="true" />
+	</c:if>	
 	
 	<div class="search_result_text">
 		<c:if test="${empty list[0]}">
@@ -132,9 +138,9 @@
 						       		  <i class="fas board_icon fa-map-marker-alt" style="color:#fe4662; font-size:15px; width:30px"></i>
 						              <span class="address"> ${board.location} </span>
 				      </div>
-		  		       <div class="content onlyContent">
-		           			<textarea readonly="readonly" class="content_height">${board.content}</textarea>  
-		       		   </div>
+		  		      <div class="content">  
+							<div class="textarea">${board.content}</div>
+			     	  </div>
 	  		    </div>
 		  </c:if>
   		<!-------------------- 이미지/비디오 삽입할 때---------------->		  
@@ -158,9 +164,9 @@
 		  					</div>
 		  				</c:if>
 		  					<input type="hidden" name="path" value="${board.path}">
-		  					  <div class="content">  
-		            			 	<textarea readonly="readonly"  class="content_height"> ${board.content}</textarea> 
-		     				 </div>
+		  					    <div class="content">  
+										<div class="textarea">${board.content}</div>
+			     				</div>
 		  		</div>
 		  		
 		  </c:if>		
