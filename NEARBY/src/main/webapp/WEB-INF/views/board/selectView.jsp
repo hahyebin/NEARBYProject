@@ -32,22 +32,22 @@
 		width: 500px;
 		padding: 10px 6px 20px 10px;
 	}
+
 /* ------------------- reply 구역 ----------------- */
 
 	#reply_count_per_board {
 		margin: 10px;
 	}
 	.reply_user_img {
-		width:20px;
-		height: 20px;
-		margin: 5px;
+		width:25px;
+		height: 25px;
 		border-radius: 100%;
 	}
 	.reply_count_box {
 		margin-left: 100px; 
 	}
 	#input_reply_table td:nth-of-type(1){
-		width:20px;
+		width:25px;
 	}
 	#input_reply_table #reply_user_name_area input[type=text]{
 		width: auto;
@@ -61,11 +61,11 @@
 	}
 	#input_reply_table input[type=text]{
 		margin: 5px;
-		width: 440px;
-	/* 	height: 24px; */
+		width: 450px;
+	 	height: 24px; 
 		font-size: 12px;
 		outline-style: none;
-		padding:14px;
+		padding:18px;
 		border-style: none;
 		background-color: #f0f2f5;
 		border-radius: 20px;
@@ -157,6 +157,7 @@
 	.reply_btns:hover{
 		text-decoration: underline;
 	}
+	
 
 /* 페이징용 CSS */
    #paging {
@@ -177,6 +178,20 @@
    .now_page {
       color: red;
    }
+
+
+
+  /* sweet alert */
+  .swal2-popup { padding: 0.5em; }
+  .swal2-icon {
+  	width: 4.5em;
+  	height: 4.5em;
+  }
+   .swal2-styled { margin:  0.5em; }
+   .swal2-styled.swal2-confirm { width: 100px; background-color: #d4d4d4;  }
+   .swal2-styled.swal2-cancel {width: 100px;}
+   .swal2-icon.swal2-warning { color: pink; border-color: pink;}
+   .swal2-header{ height: 100px; }
 
 
 </style>
@@ -204,9 +219,27 @@
 	}
 	
 	function fnDelete(){
-		if ( confirm('게시글을 삭제하시겠습니까?') ){
-			location.href= '/nearby/board/deleteBoard?bNo='+${board.bNo};
-		}
+	//	if ( confirm('게시글을 삭제하시겠습니까?') ){
+		//	location.href= '/nearby/board/deleteBoard?bNo='+${board.bNo};
+	//	}
+		 Swal.fire({
+				text: '게시글을 삭제하시겠습니까?',
+		        icon: 'warning',
+		        showCancelButton: true,
+		        closeOnClickOutside: false,
+		        confirmButtonColor: '#D4D4D4',  // confirm
+		        cancelButtonColor: '#D4D4D4',   // cancel
+		        confirmButtonText: '삭제',
+		        cancelButtonText: '취소'	
+		     }).then((result) => {
+	             if (result.isConfirmed) {
+	            		location.href= '/nearby/board/deleteBoard?bNo='+${board.bNo};
+	             }
+		     })    
+	
+	
+	
+	
 	}
 	
 	function fnAdminDelete(i){
@@ -219,22 +252,38 @@
  				contentType:'application/json',
  				success: function(map){
  					 if(map.result.result > 0){
- 						alert('삭제성공');
+ 					//	alert('삭제성공');
  						location.href= "/nearby/board/boardList";
  					 } else {
- 						 alert('삭제실패');
+ 					//	 alert('삭제실패');
  					 }
  					}, 
  				error: function(){
- 					alert("ajax에러입니다")
+ 				//	alert("ajax에러입니다")
  				}
  			})
  		}
 	}
 	
 	function fnUpdate(){
-		if(confirm('게시글을 수정하시겠습니까?') )
-			location.href= '/nearby/board/updateBoardPage?bNo='+${board.bNo};
+	/* 	if(confirm('게시글을 수정하시겠습니까?') )
+			location.href= '/nearby/board/updateBoardPage?bNo='+${board.bNo}; */
+		 Swal.fire({
+			text: '게시글을 수정하시겠습니까?',
+	        icon: 'warning',
+	        showCancelButton: true,
+	        closeOnClickOutside: false,
+	        confirmButtonColor: '#D4D4D4',  // confirm
+	        cancelButtonColor: '#D4D4D4',   // cancel
+	        confirmButtonText: '수정',
+	        cancelButtonText: '취소'	
+	     }).then((result) => {
+             if (result.isConfirmed) {
+            	 location.href= '/nearby/board/updateBoardPage?bNo='+${board.bNo}; 
+             }
+	     })    
+			
+			
 	}
 	
     function fnSendBno(){
@@ -247,8 +296,8 @@
 			      data: "bNo=" + bNo,
 			      dataType: 'json',
  			      success: function(map) {
-			    	  console.log('성공했을때');
-			    	  console.log(map.count);
+	//		    	  console.log('성공했을때');
+	//		    	  console.log(map.count);
 			    	    if( map.count == 1 ){
 			    	    	// 색 있는 하트
 			    	    	 console.log("색 채우기")
@@ -257,7 +306,7 @@
 			    	    	 
 			    	    } else if (map.count == 0) {
 			    	    	// 빈 하트
-			    	    	 console.log("색이 없기")
+	//		    	    	 console.log("색이 없기")
 			    	    	$("#like"+bNo).removeClass('like');
 			    	    }
 			    	  
@@ -283,8 +332,8 @@
 						data: "bNo="+i, 
 						dataType: 'json',
 		 				success: function(board){
-		 					console.log(board);
-		 					console.log("좋아요 누른 카운트"+ board.likes);
+	//	 					console.log(board);
+	//	 					console.log("좋아요 누른 카운트"+ board.likes);
   			  			   $( '#like_count'+bNo ).text(board.likes);
   			  			   location.href="/nearby/board/selectBoard?bNo="+bNo;
 		 					
@@ -315,8 +364,8 @@
 	  				   
 	  				},
 	  				error : function(xhr, error){
-	  					console.log(xhr.status);
-	  					console.log(xhr.error)
+	  //					console.log(xhr.status);
+	  //					console.log(xhr.error)
 	  				}				
 	  			});  // ajax
 	  			return;
@@ -326,34 +375,41 @@
  	
 
 	
-/* ----------------------------------------- fnReplyList() --------------------------------  */
-var page = 1; // 시작은 무조건 1page이니까. 1로 초기화
-function fnReplyList(){
-   $.ajax({
-      url: '/nearby/reply/replyList',
-      type: 'get',
-      data: "bNo=" + '${board.bNo}' + "&page=" + page,
-      dataType: 'json',
-      success: function(map) {
-         fnPrintReplyList(map);
-         fnPrintPaging(map.pageUtils);
-         fnReplyTotalCount(map);
-      },
-      error: function(xhr) {
-         console.log(xhr.responseText);
-      }
-   }) // End ajax
-} // End fnReplyList
+	/* ----------------------------------------- fnReplyList() --------------------------------  */
+	var page = 1; // 시작은 무조건 1page이니까. 1로 초기화
+	function fnReplyList(){
+	   $.ajax({
+	      url: '/nearby/reply/replyList',
+	      type: 'get',
+	      data: "bNo=" + '${board.bNo}' + "&page=" + page,
+	      dataType: 'json',
+	      success: function(map) {
+	         fnReplyTotalCount(map);
+	         if (map.total != 0 ) {
+		         fnPrintPaging(map.pageUtils);
+	         } else if (map.total == 0) {
+	        	 $('#paging').empty();
+	         }
+	         fnPrintReplyList(map);
+	      },
+	      error: function(xhr) {
+	         console.log(xhr.responseText);
+	      }
+	   }) // End ajax
+	} // End fnReplyList
 
-   function fnReplyTotalCount(map) {
-         $('#reply_count_per_board').text(map.total);
-         console.log('  여기는 함수 내부이다     : '+map.total);
-         if (map.total > 0 ) {
-            $('.replyCount').addClass('like').removeClass('unlike');
-         } else if (map.total == 0) {
-            $('.replyCount').addClass('unlike').removeClass('like');
-         }
-}
+	   function fnReplyTotalCount(map) {
+	         $('#reply_count_per_board').text(map.total);
+	         console.log('  여기는 함수 내부이다     : '+map.total);
+	         if (map.total > 0 ) {
+	            $('.replyCount').addClass('like').removeClass('unlike');
+	         } else if (map.total == 0) {
+	            $('.replyCount').addClass('unlike').removeClass('like');
+	         }
+	}
+
+
+
 
 
 /* ----------------------------------------- fnPrintReplyList() --------------------------------  */
@@ -407,58 +463,59 @@ function fnReplyList(){
 		 } // End if 
 	} // End fnPringReplyList
    
-/* ----------------------------------------- fnInsertReply() ----------------------------------------- */
-function fnInsertReply(){
-   $('#insert_reply_btn').on('click', function(){
-	   if ( $('#rContent').val().length > 38) {
-				Swal.fire({
-					icon: 'warning',
-					text: '댓글은 공백포함 38자 이내로 작성해주세요'
-				});
-		   return;
-	   } 
-	   
-	   if( $('#rContent').val() == '' ) {
-				Swal.fire({
-					icon: 'warning',
-					text: '작성된 내용이 없습니다.'
-				});
-		   $('#rContent').focus();
-		   return;
-	   }
-	   
-       let reply = JSON.stringify({
-         id: '${loginUser.id}',
-         bNo : '${board.bNo}',
-         rContent: $('#rContent').val(),
-         depth: 0,
-         groupNo: 0,
-         groupOrd: 0
-      }); 
-      $.ajax({
-         url: '/nearby/reply/insertReply',
-         type: 'post',
-         data: reply,
-         contentType: 'application/json',
-         dataType: 'json',
-         success: function(map) {
-               fnReplyList();
-               if (map.errorMsg != null) {
-	   				Swal.fire({
-						icon: 'warning',
-						text: map.errorMsg
-					});
-               } else {
-	               $('#rContent').val(''); // 나중에 주석 지워야 할 부분
-               }
 
-         },
-         error: function(xhr) {
-            console.log(xhr.responseText);
-         }
-      }) // End ajax
-   }) // End click event
-}  // End fnInsertReply
+	/* ----------------------------------------- fnInsertReply() ----------------------------------------- */
+	function fnInsertReply(){
+	   $('#insert_reply_btn').on('click', function(){
+		   if ( $('#rContent').val().length > 40) {
+					Swal.fire({
+						icon: 'warning',
+						text: '댓글은 공백포함 40자 이내로 작성해주세요'
+					});
+			   return;
+		   } 
+		   
+		   if( $('#rContent').val().trim() == '' ) {
+					Swal.fire({
+						icon: 'warning',
+						text: '작성된 내용이 없습니다.'
+					});
+			   $('#rContent').focus();
+			   return;
+		   }
+		   
+	       let reply = JSON.stringify({
+	         id: '${loginUser.id}',
+	         bNo : '${board.bNo}',
+	         rContent: $('#rContent').val(),
+	         depth: 0,
+	         groupNo: 0,
+	         groupOrd: 0
+	      }); 
+	      $.ajax({
+	         url: '/nearby/reply/insertReply',
+	         type: 'post',
+	         data: reply,
+	         contentType: 'application/json',
+	         dataType: 'json',
+	         success: function(map) {
+	               fnReplyList();
+	               if (map.errorMsg != null) {
+		   				Swal.fire({
+							icon: 'warning',
+							text: map.errorMsg
+						});
+	               } else {
+		               $('#rContent').val(''); // 나중에 주석 지워야 할 부분
+	               }
+
+	         },
+	         error: function(xhr) {
+	            console.log(xhr.responseText);
+	         }
+	      }) // End ajax
+	   }) // End click event
+	}  // End fnInsertReply
 
 /* ----------------------------------------- fnDeleteReply() ----------------------------------------- */
 
@@ -493,16 +550,22 @@ function fnInsertReply(){
 		}) // fnShowUpdateBtn
 	}
 
-/* ----------------------------------------- fnUpdateReply() ----------------------------------------- */
-		
+	/* ----------------------------------------- fnUpdateReply() ----------------------------------------- */
+	
 	function fnUpdateReply(){
 		$('body').on('click', '.update_reply_btn', function(){
 			let updateNo = $(this).data('updateno');
 			let updateContent = $(this).parent().prev().find('input').val();
-			if ( updateContent == '') {
+			if ( updateContent.trim() == '') {
 				Swal.fire({
 					icon: 'warning',
 					text: '작성된 내용이 없습니다'
+				});
+				return;
+			} else if (updateContent.length > 40) {
+				Swal.fire({
+					icon: 'warning',
+					text: '댓글은 공백포함 40자 이내로 작성해주세요'
 				});
 				return;
 			}
@@ -531,6 +594,7 @@ function fnInsertReply(){
 				})// end ajax 
 		})
 	} // end fnDeleteMember
+
 
 
 /* ----------------------------------------- fnPrintPaging() ----------------------------------------- */

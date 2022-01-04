@@ -34,7 +34,6 @@ public class BoardServiceImpl implements BoardService {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 	
-	
 	// 게시글 전체 목록
 	@Override
 	public List<Board> selectBoardList() {
@@ -106,7 +105,6 @@ public class BoardServiceImpl implements BoardService {
 				
 				board.setPath(path);
 				board.setOrigin(origin);
-			
 				
 				// 비디오 확장자 saved 네임에 "video" 붙이기!
 				for( int i =0; i<video.length; i++) {
@@ -144,13 +142,11 @@ public class BoardServiceImpl implements BoardService {
  			
  			if (result > 0) {
  				out.println("<script>");
- 				out.println("alert('등록하겠습니다')");
  				out.println("location.href='/nearby/board/boardList'");
  				out.println("</script>");
  				out.close();
  			} else {
- 				out.println("<script>");
- 				out.println("alert('게시글 등록에 실패했습니다.')");
+ 				out.println("<script>");	
  				out.println("history.back()");
  				out.println("</script>");
  				out.close();
@@ -290,7 +286,7 @@ public class BoardServiceImpl implements BoardService {
 		BoardRepository boardRepository = sqlSession.getMapper(BoardRepository.class);	
 		int result = boardRepository.updateBoard(board);	
 //		logger.info("수정되었닝" + board.toString());
-		message(result, response, "수정성공", "수정실패",  "/nearby/board/boardList");
+		message(result, response, "/nearby/board/boardList");
 	}
 		
 	

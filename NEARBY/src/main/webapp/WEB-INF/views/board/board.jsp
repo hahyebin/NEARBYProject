@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/header.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/boardView.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
 
@@ -118,25 +119,18 @@
 			      dataType: 'json',
  			      success: function(map) {
 			    //	  console.log('성공했을때');
-			    //	  console.log(map.count);
 			    	    if( map.count == 1 ){
-			    	    	// 색 있는 하트
 			   // 	    	 console.log("색 채우기")
 			    	    	 	$("#like"+bNo).addClass('like');
-			    	    	    
-			    	    	 
 			    	    } else if (map.count == 0) {
-			    	    	// 빈 하트
 			   // 	    	 console.log("색이 없기")
 			    	    	$("#like"+bNo).removeClass('like');
 			    	    }
-			    	  
 			      },
 			      error: function(xhr) {
 			    	  console.log(xhr.responseText);
  			      }
  			   }) // End ajax			
-		
  		}); // each
  	} //  fnSendBno()
 	
@@ -155,8 +149,8 @@
 						data: "bNo="+i, 
 						dataType: 'json',
 		 				success: function(board){
-		 					console.log(board);
-		 					console.log("좋아요 누른 카운트"+ board.likes);
+		 	//				console.log(board);
+		 	//				console.log("좋아요 누른 카운트"+ board.likes);
   			  			   $( '#like_count'+bNo ).text(board.likes);
   			  			   location.href="/nearby/board/boardList";
 		 					
@@ -194,10 +188,7 @@
 	  			return;
 	      } // if 
 	    }	 
- 			
- 	
- 	
-
+ 		
  	
  	 /* ----------------------------------------- fnPrintReplyList() --------------------------------  */
 
@@ -290,11 +281,6 @@
 		</header>
 	 </c:if>	
 
-	
- <h1>${loginUser.id}님 환영합니다.</h1>
-
-	<a href="/nearby/board/insertPage">새 갤러리 작성</a> <!-- header로빠질예정 -->
-	<a href="/nearby/member/logout">로그아웃</a>
 
 <div class="board_container">
 	 <c:if test="${not empty list[0]}"> 
@@ -311,15 +297,12 @@
 			    		<img id="user_img" src="/nearby/${board.profile.pPath}/${board.profile.pSaved}"  class="pointer">
 			    </c:if>
 			    	</div>
-			    
 			    	<input type="hidden" id="origin" value="${board.origin}">
 			    	<input type="hidden" id="saved" value="${board.saved}">
 			    	<input type="hidden" id="location" value="${board.location}">
 			    	<div class="id">
 			    	   <a href="/nearby/board/selectBoard" id="board_writer">${board.id}</a>
 			    	</div>
-			    
-			    	
 			    </div>
 	  		<!--------------------- 내용만 삽입할 때 ------------------------------->
 	 			 <c:if test="${ null == board.origin }">
@@ -357,7 +340,7 @@
 			  				</c:if>
 			  					<input type="hidden" name="path" value="${board.path}">
 			  				    <div class="content textarea">
-		       		            	<pre style='white-space:pre-wrap; word_wrap:break-word; word-break: break-all; width:491px; padding-left:8px;'>${board.content}</pre>
+		       		            	<pre style='white-space:pre-wrap; word_wrap:break-word; word-break: break-all; width:485px;'>${board.content}</pre>
 		       		   			</div>
 			  		</div>
 			  </c:if>		

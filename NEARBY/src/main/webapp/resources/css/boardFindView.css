@@ -86,7 +86,7 @@
    }
    .delete_update_form{
     	width: 90px;
-        height: 45px;
+        height: 48px;
    }
    .delete_update_form li:first-child { border-bottom: 1px solid rgba(50,50,50,0.3); }
    .delete_update_form li {
@@ -137,14 +137,13 @@
 	   padding-left: 5px;
 	   width : 520px;
    }
-   .content textarea {
-   		border: none;
-   		background-color : rgba(255, 250, 250, 0.8);
-   		width: 500px;
-   		outline: none;
-   		overflow:visible;
-   		resize: none;
-    }
+  	.textarea {
+		border: none;
+		margin: 0 -10px;
+		background-color: rgba(255, 250, 250, 0.8);
+		width: 500px;
+		padding: 4px 6px 20px 10px;
+	}
     /* 댓글 및 라이크 */
    .likesAndReplyCount  {
 	   	border-top : 1px solid gray;

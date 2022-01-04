@@ -12,10 +12,7 @@
 
 <style>
 
-
-
-
-@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+   @import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
 	
 	.notosanskr * { 
 	 font-family: 'Noto Sans KR', sans-serif;
@@ -477,7 +474,7 @@
 					$('input:radio[name="gender"][value="'+map.result.gender+'"]').prop('checked', true); // prop는 객체에 저장 된 값이므로 true or false가 된다
 				} else {
 					Swal.fire({
-						icon: 'error',
+						icon: 'warning',
 						title: '회원정보를 찾을 수 없음',
 						text: '죄송합니다. 회원님과 일치하는 정보가 없습니다.',
 					})

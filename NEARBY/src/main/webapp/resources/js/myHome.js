@@ -6,3 +6,5 @@ $(document).ready(function(){
     function fnMyPage(){
         location.href='/nearby/member/mypage';        
     }
+    
+    

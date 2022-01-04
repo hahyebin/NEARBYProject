@@ -10,6 +10,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/adminHeader.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <title>Insert title here</title>
 <style>
 
@@ -111,7 +112,11 @@ function fnMemberSearch(){
 			location.href='/nearby/admin/findMember?column=' + $('#column').val() + '&query=' + $('#query').val();				
 		}
 		else {
-			alert('잘못입력!!');
+			Swal.fire({
+                icon: 'error',
+                title: '실패',
+                text: '잘못입력하셨습니다.',
+            });
 		}
 	})
 }
@@ -123,54 +128,52 @@ function fnMemberSearch(){
 
 		<jsp:include page="/WEB-INF/views/layout/adminHeader.jsp" flush="true" />
 
-<!--  <span class="today"></span> 날짜 나옴 -->
-<div class="nearbyInfWrap">
-<div class="nearbyInfo" >
-	<div class="totalInfoWrap">
-		<ul class="totalInfo">
-			<li class="total_info_name" >총 회원 수 </li>
-			<li class="total_info_result" >${fn:length(member) }</li>
-		</ul>
-		<ul class="totalInfo">
-			<li class="total_info_name">오늘 가입자</li>
-			<li class="total_info_result" >${fn:length(memberCreatedDay) }</li>
-		</ul>
-		<ul class="totalInfo">
-			<li class="total_info_name">총 게시글</li> 
-			<li class="total_info_result" >${fn:length(board) }</li>
-		</ul>
-	
-		
-	</div>
-</div>
-</div>
+		<!--  <span class="today"></span> 날짜 나옴 -->
+		<div class="nearbyInfWrap">
+			<div class="nearbyInfo" >
+				<div class="totalInfoWrap">
+					<ul class="totalInfo">
+						<li class="total_info_name" >총 회원 수 </li>
+						<li class="total_info_result" >${fn:length(member) }</li>
+					</ul>
+					<ul class="totalInfo">
+						<li class="total_info_name">오늘 가입자</li>
+						<li class="total_info_result" >${fn:length(memberCreatedDay) }</li>
+					</ul>
+					<ul class="totalInfo">
+						<li class="total_info_name">총 게시글</li> 
+						<li class="total_info_result" >${fn:length(board) }</li>
+					</ul>
+				</div>
+			</div>
+		</div>
 
 
-<c:forEach var="entry" items="${adminBoardMap}" varStatus="status"> 
-<tr> 
-	<td><input type="hidden" value="${entry.key}"  ></td> 
-	<td><input type="hidden" value="${entry.value}"  id="${entry.key}"></td> 
-</tr> 
-</c:forEach>
+		<c:forEach var="entry" items="${adminBoardMap}" varStatus="status"> 
+		<tr> 
+			<td><input type="hidden" value="${entry.key}"  ></td> 
+			<td><input type="hidden" value="${entry.value}"  id="${entry.key}"></td> 
+		</tr> 
+		</c:forEach>
 
 
-<input type="hidden" id="men" value="${fn:length(memberMen) } ">
-<input type="hidden" id="women" value="${fn:length(memberWomen) } ">
-<input type="hidden" id="noGender" value="${fn:length(memberNoGender) } ">
-<input type="hidden" id="age10" value="${fn:length(memberAge10)} ">
-<input type="hidden" id="age20" value="${fn:length(memberAge20)} ">
-<input type="hidden" id="age30" value="${fn:length(memberAge30)} ">
-<input type="hidden" id="age40" value="${fn:length(memberAge40)} ">
-<input type="hidden" id="age50" value="${fn:length(memberAge50)} ">
+		<input type="hidden" id="men" value="${fn:length(memberMen) } ">
+		<input type="hidden" id="women" value="${fn:length(memberWomen) } ">
+		<input type="hidden" id="noGender" value="${fn:length(memberNoGender) } ">
+		<input type="hidden" id="age10" value="${fn:length(memberAge10)} ">
+		<input type="hidden" id="age20" value="${fn:length(memberAge20)} ">
+		<input type="hidden" id="age30" value="${fn:length(memberAge30)} ">
+		<input type="hidden" id="age40" value="${fn:length(memberAge40)} ">
+		<input type="hidden" id="age50" value="${fn:length(memberAge50)} ">
 
  
-<div class ="chartjs">
- <div class="genderAndAge">
-	<div class ="donutchart"><canvas id="donutchart" height="300" width="500"></canvas></div>
-	<div class ="barchart1"><canvas id="barchart1" height="300" width="500"></canvas></div>
- </div>
-	<div class ="barchart2"><canvas id="barchart2" height="300" width="1250"></canvas></div>
-</div>
+		<div class ="chartjs">
+		 <div class="genderAndAge">
+			<div class ="donutchart"><canvas id="donutchart" height="300" width="500"></canvas></div>
+			<div class ="barchart1"><canvas id="barchart1" height="300" width="500"></canvas></div>
+		 </div>
+			<div class ="barchart2"><canvas id="barchart2" height="300" width="1250"></canvas></div>
+		</div>
 
 
 <script type="text/javascript">
@@ -186,7 +189,7 @@ new Chart(document.getElementById("barchart1"), {
       datasets: [
         {
           label: "AGE",
-          backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+          backgroundColor: ["#b5e5e9", "#b5e5e9","#b5e5e9","#b5e5e9","#b5e5e9"],
           data: [age10, age20, age30, age40, age50  ]
         }
       ]
@@ -210,7 +213,7 @@ new Chart(document.getElementById("barchart2"), {
       datasets: [
         {
           label: "Location",
-          backgroundColor: ["pink", "pink","pink","pink","pink","pink","pink","pink","#3e95cd","#3e95cd","#3e95cd","#3e95cd","3e95cd","#3e95cd","#3e95cd", "#3e95cd","#3e95cd"],
+          backgroundColor: ["#ffa358", "#ffa358","#ffa358","#fac0c0","#fc9d9d","#fc9d9d","#fc9d9d","#fc9d9d","#fc8b8b","#fc8b8b","#fc8b8b","pink","pink","#ffa358","#ffa358", "#ffa358","#ffa358"],
           data: [ $("#seoul").val() , $("#incheon").val(),  $("#busan").val(), $("#daegu").val(), $("#daejun").val(),
         	      $("#ulsan").val(), $("#gwangju").val(), $("#sejong").val(), $("#gangwon").val(),$("#gyeonggi").val(), 
         	      $("#chungcheongbuk").val(), $("#chungcheongnam").val(), $("#gyeongsangbuk").val(), $("#gyeongsangnam").val(), 
@@ -231,7 +234,6 @@ new Chart(document.getElementById("barchart2"), {
     
 });
 
-
  let men = $('#men').val()
  let women = $('#women').val()
  let noGender = $('#noGender').val()
@@ -244,9 +246,9 @@ var donutdata =
     datasets:
         [{
             backgroundColor: [
-            	'rgba(255, 99, 132, 1.5)',
-            	'rgba(54, 162, 235, 1.5)',
-            	'rgba(255, 206, 86, 1.5)'
+            	'#fc9d9d',
+            	'#a0dffa',
+            	'#f7f781'
             ],
             hoverBorderColor : '#fff',
             data: [women, men, noGender]

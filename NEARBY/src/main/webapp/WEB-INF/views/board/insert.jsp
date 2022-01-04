@@ -11,6 +11,27 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/header.css" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/boardInsert.css" />
 <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=4lnq99nnpg&submodules=geocoder"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<style type="text/css">
+/* sweet alet */
+.swal2-popup {
+	width: 400px;
+	height: 130px;
+}
+.swal2-icon.swal2-warning { color: pink; border-color: pink;}  // 경고창 
+.swal2-header { height: 100px;}
+.swal2-icon {
+	width: 55px;
+	height: 55px;
+}
+.swal2-styled { padding: 0;}
+.swal2-styled.swal2-confirm { 
+	background-color: #d4d4d4;    
+    height: 28px;
+     width: 170px; 
+    }
+.swal2-actions { margin-top: 25px; }
+</style>
 <script>
   $(document).ready(function(){
 		fnFileCheck();
@@ -35,8 +56,11 @@
 	   $('#content').on('keyup', function(){
 	   //console.log(  $('#content').val());
 		   if( $('#content').val().length > 2000) {
-			   alert("글자수는 2000자까지입니다.");
-			   $(this).val( $(this).val().subString() );
+			//alert("글자수는 2000자까지입니다.");
+			Swal.fire({
+					text: '글자수는 2000자까지입니다.',
+				})
+			$(this).val( $(this).val().subString() );
 		   }
 	   });
    }
@@ -48,19 +72,30 @@
     	  
     	  // 위치 파일 내용 빈값일때
     	  if( $('.location').val() == ''  && $('#content').val() == '' && $('#modify_file').val() == '' )  {
-    		  alert("당신의 일상을 입력해주세요.");
+    		  Swal.fire({
+					text: '당신의 일상을 적어주세요.'
+				})
     	  	  event.preventDefault();
     	  
     	  // 위치는 빈값 이고 내용이나 파일은 있을 때
     	  } else if (  $('.location').val() == ''  &&  ( $('#content').val() != '' || $('#modify_file').val() != '' ) )  {
-    		  if ( confirm ("주변 사람들에게 일상을 공유하고 싶으시다면 위치를 입력해주세요") ) {
-    			  map();
-	    		  $("#map").css('display', 'block');
-	    		  event.preventDefault();
-    		  } else {}
+    		//  if ( confirm ("주변 사람들에게 일상을 공유하고 싶으시다면 위치를 입력해주세요") ) {
+    			  Swal.fire({
+    					text: "주변 사람들에게 위치를 알려주세요!",
+    			     })    
+		    			  map();
+			    		  $("#map").css('display', 'block');
+			    		  event.preventDefault();
+    		  
+    			  
+    		//  } else {}
     	// 위치는 빈값이 아니나 파일이랑 내용이 빈값일 때 
     	  } else if ( $('.location').val() != ''  &&   $('#content').val() == '' && $('#modify_file').val() == '' )  {
-    		  alert("사진이나 일상을 입력해주세요.");
+    		//  alert("사진이나 일상을 입력해주세요.");
+    		  Swal.fire({
+					text: '사진이나 일상을 적어주세요.'
+					
+				})
     		  event.preventDefault();
           }  
   	  })
@@ -76,7 +111,10 @@
 			
 			// 확장자 정보
 			if( $.inArray(extName, ["JPG", "PNG", "JPEG", "GIF","MP4", "MPEG", "AVI", "MOV", "M4V", "JFIF"])  == -1 )  {  // 첨부된 파일이 ["JPG", "PNG", "JPEC", "GIF"] 중 하나가 아니면
-			 	alert('업로드 할 수 없는 확장자입니다.');
+			// 	alert('업로드 할 수 없는 확장자입니다.');
+			 	Swal.fire({
+					text:'업로드 할 수 없는 확장자입니다.'
+				})
 				$(this).val('');
 				return;
 		   }
@@ -85,7 +123,10 @@
 			let maxSize = 1024 * 1024 * 1000;   		   // 최대크기 10MB
 			let fileSize = $(this)[0].files[0].size;       // 첨부된 파일 크기
 			if ( fileSize > maxSize ){
-				alert('1GB 이하의 파일만 업로드가 가능합니다.');
+			//	alert('1GB 이하의 파일만 업로드가 가능합니다.');
+				Swal.fire({
+					text:'1GB 이하의 파일만 업로드가 가능합니다.'
+				})
 				$(this).val('');
 				return;
 			}

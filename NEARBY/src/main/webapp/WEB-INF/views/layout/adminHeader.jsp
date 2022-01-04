@@ -45,7 +45,7 @@
    
 
    	  <div class="right_box">
-		<form class="main_search" action="/nearby/board/searchBoardList">
+		<form class="main_search board_search" action="/nearby/board/searchBoardList">
 			<div class="search_box">
 				<input type=text id="query" name="query" placeholder="조회할 게시판 정보 입력">
 				<button id="search_icon">

@@ -380,9 +380,9 @@ function fnSendBno(){
 	                            </div>
 	                            <!-- 내용 -->
 	                            <div class="content">
-	                            	<div class="textarea" style="display: flex;">
-	                            		${board.content}
-	                            	</div>
+		                            <div class="content textarea">
+			       		           		 <pre style='white-space:pre-wrap; word_wrap:break-word; word-break: break-all; width:505px;'>${board.content}</pre>
+			       		   		    </div>
 	                            </div>
 	                        </div>
 	                    </c:if>
@@ -420,9 +420,9 @@ function fnSendBno(){
 	
 	                        <input type="hidden" name="path" value="${board.path}">
 	                        <div class="content">
-                            	<div class="textarea" style="display: flex;">
-                            		${board.content}
-                            	</div>
+                            	<div class="content textarea">
+		       		            	<pre style='white-space:pre-wrap; word_wrap:break-word; word-break: break-all; width:496px;'>${board.content}</pre>
+		       		   			</div>
                             </div>
 	
 	                    </c:if>

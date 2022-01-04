@@ -11,6 +11,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/adminHeader.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <title>Insert title here</title>
 <style>
   .header {
@@ -74,14 +75,42 @@
    		border-right: none;
    		border-bottom: none;
       }
-   .fa-user{   color: #fe4662; }
-
-   .user_cursor {  cursor: pointer;  }
+   .fa-user{   color: #fe4662;   cursor: pointer; }
 	a { color:black; }
    .member_delete {		color : black; }
 
    .pageNo:hover{  font-weight: bold; color:black; }
    .nowPage {	color:red; }
+   
+   /* confirm 관련 */
+  .swal2-popup {
+ 	 width: 330px;
+  	 height: 220px;
+  	 padding: 0.6em;
+	}
+  .swal2-icon.swal2-warning {
+	width: 50px;
+	height: 50px;
+	border-color: pink;
+	color: pink;
+	}
+ .swal2-content{    font-size: 0.9em;  }
+ .swal2-icon .swal2-icon-content {
+    height: 30px; width:20px;
+ 	font-size: 45px;
+    padding-top: 10px;
+    padding-left: 4px;
+ }
+ .swal2-styled.swal2-confirm {
+ 	width: 75px;
+ 	font-size: 14px;
+ 	background-color: pink;
+ }
+.swal2-styled.swal2-cancel {
+	width:60px;
+	height: 35.5px;
+	font-size: 14px;
+}
 
 </style>
 <script type="text/javascript">
@@ -104,7 +133,7 @@ function fnShowBtnBox() {
 // 회원 비활성화 ajax
 function fnMemberDelete(i){
 		 
-	if (confirm( '유저 번호'+ i+'번을 삭제하겠습니다.' )) {
+	/* if (confirm( '유저 번호'+ i+'번을 삭제하겠습니다.' )) {
 		
 		$.ajax({
 			url : "/nearby/admin/deleteMember",
@@ -126,12 +155,53 @@ function fnMemberDelete(i){
 				console.log(xhr.responseText);
 			}
 		})
-	}	 
- }
+	}	  */
+	
+   Swal.fire({
+				//title: '정말로 삭제하시겠습니까',
+		        text: '유저 번호'+ i+'번을 삭제하겠습니다.',
+		        icon: 'warning',
+		        showCancelButton: true,
+		        closeOnClickOutside: false,
+		        confirmButtonColor: '#D4D4D4',  // confirm
+		        cancelButtonColor: '#D4D4D4',   // cancel
+		        confirmButtonText: '삭제',
+		        cancelButtonText: '취소'
+		        }).then((result) => {
+                    if (result.isConfirmed) {
+                    /*     Swal.fire({
+                            text : '삭제가 완료되었습니다.',
+                            closeOnConfirm : true,
+                            icon : 'success',
+                            timer : 4000
+                        }) */
+	                        $.ajax({
+									url : "/nearby/admin/deleteMember",
+									type: "get",
+									data : "mNo="+i,
+									dataType: 'json',
+									contentType:'application/json',
+									success : function(map){
+										 if(map.result.result > 0){
+										  $('#mNoReInsert'+i).addClass('member_delete');
+										  $('#mNo'+i).removeAttr('onclick');
+										  location.href="/nearby/admin/findMember";
+									 } else {
+										 alert('삭제실패');
+									 }
+									}, 
+									error: function(xhr){
+										alert('삭제서버 실패');
+										console.log(xhr.responseText);
+									}
+								})
+                        }
+                })
+      }
  
  // 회원 비활->활성
  function fnReInsert(i){
-	 if (confirm( '유저 번호'+ i+'번을 활성화 시키겠습니다.' )) {
+/* 	 if (confirm( '유저 번호'+ i+'번을 활성화시키겠습니다.' )) {
 		 $.ajax({
 				url : "/nearby/admin/reInsertMember",
 				type: "get",
@@ -151,7 +221,48 @@ function fnMemberDelete(i){
 					console.log(xhr.responseText);
 				}
 			})
-	 }
+	 } */
+	 
+	  Swal.fire({
+			//title: '정말로 삭제하시겠습니까',
+	        text: '유저 번호'+ i+'번을 활성화시키겠습니다.',
+	        icon: 'warning',
+	        closeOnClickOutside: false,
+	        showCancelButton: true,
+	        confirmButtonColor: '#D4D4D4',  // confirm
+	        cancelButtonColor: '#D4D4D4',   // cancel,
+	        closeOnConfirm : false,
+	        confirmButtonText: '활성화',
+	        cancelButtonText: '취소'
+	        }).then((result) => {
+              if (result.isConfirmed) {
+                /*   Swal.fire({
+                	  closeOnConfirm : true,
+                      text : '활성화 되었습니다.',
+                      timer : 4000,
+                      icon : 'success'
+                  }) */
+                      $.ajax({
+                    		url : "/nearby/admin/reInsertMember",
+            				type: "get",
+            				data : "mNo="+i,
+            				dataType: 'json',
+            				contentType:'application/json',
+            				success : function(map){
+            				 if(map.result.result > 0){
+            					 $('#mNo'+i).addClass('member_delete');
+            					 location.href="/nearby/admin/findMember";
+            				 } else {
+            					// alert('삭제실패');
+            				 }
+            				}, 
+            				error: function(xhr){
+            				//	alert('삭제서버 실패');
+            					console.log(xhr.responseText);
+            				}
+					 }) // ajax
+                }
+          }) // 
  }
 </script>
 

@@ -1,10 +1,20 @@
 @charset "UTF-8";
 	@import url('https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css');
-font-family: 'NanumSquare';
+	
+	
+@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+
+.notosanskr * { 
+ font-family: 'Noto Sans KR', sans-serif;
+}
+
+	
+	
 	*{
 	    margin: 0;  padding: 0;
 	    box-sizing: border-box;
-	    font-family: 'NanumSquare';
+		font-family: 'Noto Sans KR', sans-serif;
+		font-size:14px;
 	}
 	a {
 		text-decoration: none;
@@ -148,6 +158,7 @@ font-family: 'NanumSquare';
     	width: 38px;
     	height: 38px;
     	margin-top: 10px;
+    	cursor: pointer;
     }
  	#profile_box {
          position: absolute;

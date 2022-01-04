@@ -12,7 +12,34 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/header.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/boardUpdate.css">
 <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=4lnq99nnpg&submodules=geocoder"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<style>
+  /* sweet alet */
+.swal2-popup {
+	width: 470px;
+	height: 230px;
+}
+.swal2-icon.swal2-warning { color: pink; border-color: pink;}  // 경고창 
+.swal2-header { height: 90px;}
+.swal2-icon {
+	width: 55px;
+	height: 55px;
+}
+.swal2-styled { padding: 0;}
+.swal2-styled.swal2-confirm { 
+	background-color: #d4d4d4;    
+    height: 28px;
+    width: 170px;
+    }
+.swal2-styled.swal2-cancel {
+background-color: #d4d4d4;    
+    height: 28px;
+    width: 170px;
+}
+.swal2-actions {  	margin-top: 15px; }
+.swal2-icon .swal2-icon-content {  padding-left: 18px;  } 
 
+</style>
 
 <script>
 	$(document).ready(function(){
@@ -24,7 +51,13 @@
 	   $('#content').on('keyup', function(){
 	   //console.log(  $('#content').val());
 		   if( $('#content').val().length > 2000) {
-			   alert("글자수는 2000자까지입니다.");
+			   Swal.fire({
+					icon: 'warning',
+					text: '글자수는 2000자까지입니다.',
+				})
+			   
+			   
+			// alert ("글자수는 2000자까지입니다.");
 			   $(this).val( $(this).val().subString() );
 		   }
 	   });
@@ -35,10 +68,30 @@
 	}
 	
 	function fnDelete(){
-		if ( confirm('게시글을 삭제하시겠습니까?') ){
-			location.href= '/nearby/board/deleteBoard?bNo='+${board.bNo};
-		}
-	}
+	//	if ( confirm('게시글을 삭제하시겠습니까?') ){
+	//		location.href= '/nearby/board/deleteBoard?bNo='+${board.bNo};
+	//	}
+
+	
+	 Swal.fire({
+				//title: '정말로 삭제하시겠습니까',
+		        text: '게시글을 삭제하시겠습니까?',
+		        icon: 'warning',
+		        showCancelButton: true,
+		        confirmButtonColor: '#d4d4d4',
+		        cancelButtonColor: '#d4d4d4',
+		        confirmButtonText: '삭제',
+		        cancelButtonText: '취소'
+		        }).then((result) => {
+                    if (result.isConfirmed) {
+                    	location.href= '/nearby/board/deleteBoard?bNo='+${board.bNo};
+                    	
+                    }
+	
+	
+	  })
+		        
+	} // fnDelete
 	
 	///////////////////////// file update ///////////////////////////////
  	function readURL(input) {
@@ -216,7 +269,7 @@
 	
 	function initGeocoder() {
 		  if (!map.isStyleMapReady) {
-		    return;
+		       return;
 		  }
 
 		  map.addListener('click', function(e) {

@@ -161,7 +161,8 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public void login(HttpServletRequest request, HttpServletResponse response) {
 			Member member = new Member();
-			member.setId(request.getParameter("id"));
+			String id = request.getParameter("id");
+			member.setId(id);
 			member.setPw(SecurityUtils.sha256(request.getParameter("pw")));
 			MemberRepository repository = sqlSession.getMapper(MemberRepository.class);
 			Member loginUser = repository.login(member);
@@ -178,20 +179,27 @@ public class MemberServiceImpl implements MemberService {
 		 			PrintWriter out = response.getWriter();
 		 			if (loginUser != null) {
 		 				out.println("<script>");
-		 				out.println("alert('로그인 성공')");
-		 				// 관리자 일때는 관리자 페이지로 이동하기 
-		 					if( "admin".equals(loginUser.getId()) == false) {
-		 					out.println("location.href='/nearby/board/boardList'");
+		 				if( "admin".equals(loginUser.getId()) == false) {
+		 					out.println("location.href='/nearby/board/boardList';");
 		 				} else {
-		 					out.println("location.href='/nearby/admin/admin'");
+		 					out.println("location.href='/nearby/admin/admin';");
 		 				}
-		 				out.println("</script>");
+	 					out.println("</script>");
 		 				out.close();
 		 			} else {
+	                    out.println("<script src='https://code.jquery.com/jquery-3.6.0.js' integrity='sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=' crossorigin='anonymous'></script>");
+	                    out.println("<script src='https://cdn.jsdelivr.net/npm/sweetalert2@10'></script> ");
+	                    out.println("<script src='https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.11.4/sweetalert2.all.js'></script>");
+		 				out.println("<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>");
+	                    out.println("<script src='https://unpkg.com/sweetalert/dist/sweetalert.min.js'></script>");
+	                    out.println("<style> .swal2-styled.swal2-confirm { width: 100px; background-color: #d4d4d4;  }</style>");
 		 				out.println("<script>");
-		 				out.println("alert('응아니야!')");
-		 				out.println("history.back()");
-		 				out.println("</script>");
+		 			    out.println("$(document).ready(function(){");
+		 		//		out.println("alert('아이디와 비밀번호를 확인해주세요');");
+		 			  	out.println("Swal.fire({ text: '아이디와 비밀번호를 확인해주세요', confirmButtonText:'OK',   closeOnClickOutside: false, timer: 11000 }).then((result) => {   if (result.isConfirmed) {  history.back(); }; }) ");
+		 			//	out.println("history.back();");
+		 				out.println("});");
+	 					out.println("</script>");
 		 				out.close();
 		 			}
 		 		} catch (Exception e) {
