@@ -65,7 +65,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- total 댓글수 per 게시글 -->
 	<select id="selectTotalCountPerBoard" parameterType="Long" resultType="int">
-		SELECT COUNT(*)
+		SELECT COUNT(R_NO)
 		  FROM REPLY
 		 WHERE B_NO = #{bNo}
 	</select>

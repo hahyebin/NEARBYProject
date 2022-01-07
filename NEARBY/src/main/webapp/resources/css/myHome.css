@@ -182,9 +182,16 @@ body {
 .user_id {
    display: inline-block;
    width: 420px;
-   height: 80px;
+   height: 35px;
    padding: 10px 0 0 20px;
 }
+/* 게시 업로드 날짜 */
+.date {
+	    font-size: 11px;
+        margin-left: 35px;
+		color:#808080;
+}
+.fa-globe-asia { font-size: 11px;   }
 
 #board_writer {
    padding-left: 15px;

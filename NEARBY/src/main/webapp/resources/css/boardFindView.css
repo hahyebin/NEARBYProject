@@ -12,6 +12,7 @@
 	
 	body {
 		margin-top: 160px;
+	    background-color: #fafafa;
 	}
 
 	#home_btn { border-bottom: 8px solid  #fe4662; }
@@ -46,10 +47,17 @@
 		height: 80px;
 		border-radius: 100%;
 	}
+	.idAndDate { width: 400px; }
    .id {
    		width: 430px;
    		height: 80px;
    }
+   .date {
+		font-size: 12px; 
+		margin-left: 1px; 
+		color:#808080;
+	}
+	.fa-globe-asia { font-size: 11px;   }
 /* 셋팅 박스 = 수정 + 삭제 */   
    .setting_wrap{
   	   position: relative; 
@@ -58,20 +66,20 @@
    }
    .setting { 
 	 	color: #696969	;
-	 	font-size:20px;
+	 	font-size:15px;
 	 	width:20px;
 	 	cursor: pointer;
    }
    .b_see {
       display: block;
-      width: 90px;
+      width: 81px;
       height: 25px;
    }
    .b_no {   display: none;  }
     .delete_update_form, .delete_form {
        position:absolute;
-       top: 5px;
-       left: 5px;
+       top: -2px;
+       left: 6px;
        border-radius: 10px;
        border : 1px solid rgba(50,50,50,0.3);
        margin: 0 auto;

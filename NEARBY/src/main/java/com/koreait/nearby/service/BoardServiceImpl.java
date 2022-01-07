@@ -22,9 +22,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.koreait.nearby.domain.Board;
+import com.koreait.nearby.domain.Follow;
 import com.koreait.nearby.domain.Likes;
 import com.koreait.nearby.domain.Member;
 import com.koreait.nearby.repository.BoardRepository;
+import com.koreait.nearby.repository.FollowRepository;
 import com.koreait.nearby.repository.LikesRepository;
 
 public class BoardServiceImpl implements BoardService {
@@ -186,13 +188,6 @@ public class BoardServiceImpl implements BoardService {
 		MultipartFile file = multipartRequest.getFile("file");
 		String[] video = {"mp4", "mpeg", "avi", "mov"};
 		try {
-				// 기존에 파일있음  ->  그냥 그 사진 씀 
-			    //                ->  그 사진 변경함
-			    //                ->  그 사진 삭제함-> content만 넣겠다.
-			
-			    // 기존 파일 없음(내용만존재하는경우) -> 새롭게 파일 올림
-			
-			
 				if( multipartRequest.getParameter("path").isEmpty() == false ) {   // path가 빈값이 아니라는건 기존에 이미지/비디오가 있었다는 의미다. 때문에 없는 경우엔 새로 만들고, 아니면 원래  path, saved, origin을 board에 다시 넣는다!!!
 					String sep = Matcher.quoteReplacement(File.separator);
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -489,7 +484,8 @@ public class BoardServiceImpl implements BoardService {
 
 		return searchResult;
 	}
-	
+
+
 	/* myHome 이동 및 유저의 게시물 개수 구하기 */
 	@Override
 	public int selectUserBoardsCount(HttpServletRequest request) {
@@ -499,5 +495,69 @@ public class BoardServiceImpl implements BoardService {
 		int userBoardCount = boardRepository.selectUserBoardsCount(loginUser.getId());
 		return userBoardCount;
 	}
+	// myHome 이동시 user 팔로잉 정보 //
+	@Override
+	public List<Follow> userFollowingIdById(HttpServletRequest request) {
+		
+		FollowRepository followRepository = sqlSession.getMapper(FollowRepository.class);
+		
+		Member user = (Member) request.getSession().getAttribute("loginUser");
+		String id = user.getId();
+		List<Follow> list = followRepository.selectFollowingIdById(id);
+		
+		return list;
+	}
+	
+	// myHome 이동시 user 팔로워 정보 //
+	@Override
+	public List<Follow> userFollowedIdById(HttpServletRequest request) {
+		
+		FollowRepository followRepository = sqlSession.getMapper(FollowRepository.class);
+		
+		Member user = (Member) request.getSession().getAttribute("loginUser");
+		String id = user.getId();
+		List<Follow> list = followRepository.selectFollowedIdById(id);
+		
+		return list;
+		
+	}
+	
+	
+	/* 상대 홈으로 이동  / 모든 정보 가져오기 */
+	@Override
+	public List<Board> selectUserHome(String id) {
+		System.out.println("ServiceImpl 에서 받은 ID : " + id);
+		BoardRepository boardRepository = sqlSession.getMapper(BoardRepository.class);
+		String userId = id;
+		System.out.println("parameter 저장 id : " + userId);
+		List<Board> user = boardRepository.selectUserHome(userId);
+		
+		System.out.println("DB 다녀온 list 결과 : " + user);
+		return user;
+	}
+	
+	// 이동한 대상의 팔로잉 리스트
+	@Override
+	public List<Follow> selectFollowingIdById(String id) {
+
+		FollowRepository followRepository = sqlSession.getMapper(FollowRepository.class);
+		
+		List<Follow> list = followRepository.selectFollowingIdById(id);
+		
+		return list;
+	}
+	
+	
+	// 이동한 대상의 팔로워 리스트
+	@Override
+	public List<Follow> selectFollowedIdById(String id) {
+		
+		FollowRepository followRepository = sqlSession.getMapper(FollowRepository.class);
+		
+		List<Follow> list = followRepository.selectFollowedIdById(id);
+		
+		return list;
+	}
+	
 	
 }

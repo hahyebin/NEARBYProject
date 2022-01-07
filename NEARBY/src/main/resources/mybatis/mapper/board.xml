@@ -160,11 +160,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <!-- myHome 유저의 게시물 갯수 -->
 	<select id="selectUserBoardsCount" resultType="int" parameterType="String">
-		SELECT COUNT(*)
+		SELECT COUNT(B_NO)
 		  FROM BOARD
 		 WHERE ID = #{id}
+		   AND STATE = 0
 	</select>
 	
+    <!-- userHome -->
+    <select id="selectUserHome" resultMap="BoardMap" parameterType="String">
+		SELECT B.B_NO, B.CONTENT, B.IP, B.LOCATION, B.ORIGIN, B.SAVED, B.LIKES, B.CREATED, B.PATH, B.MODIFIED, B.STATE, P.ID, P.P_ORIGIN, P.P_SAVED, P.P_PATH
+          FROM BOARD B, PROFILE P
+         WHERE B.ID(+) = P.ID
+           AND P.ID = #{id}
+         ORDER BY B.B_NO DESC
+    </select>
+
 	
 	
 	

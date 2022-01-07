@@ -246,9 +246,9 @@ var donutdata =
     datasets:
         [{
             backgroundColor: [
-            	'#fc9d9d',
-            	'#a0dffa',
-            	'#f7f781'
+            	'rgb(255 122 122)',
+            	'rgb(112,212,255)',
+            	'#babaad'
             ],
             hoverBorderColor : '#fff',
             data: [women, men, noGender]

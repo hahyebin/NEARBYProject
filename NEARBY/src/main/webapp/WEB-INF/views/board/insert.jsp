@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,26 +13,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/boardInsert.css" />
 <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=4lnq99nnpg&submodules=geocoder"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-<style type="text/css">
-/* sweet alet */
-.swal2-popup {
-	width: 400px;
-	height: 130px;
-}
-.swal2-icon.swal2-warning { color: pink; border-color: pink;}  // 경고창 
-.swal2-header { height: 100px;}
-.swal2-icon {
-	width: 55px;
-	height: 55px;
-}
-.swal2-styled { padding: 0;}
-.swal2-styled.swal2-confirm { 
-	background-color: #d4d4d4;    
-    height: 28px;
-     width: 170px; 
-    }
-.swal2-actions { margin-top: 25px; }
-</style>
+
 <script>
   $(document).ready(function(){
 		fnFileCheck();
@@ -49,12 +31,26 @@
 	            $(this).height(this.scrollHeight);
 	        });
 	    }
+	    // 글 삽입 날짜
+	    let today = new Date();
+	    let year = today.getFullYear();
+	    let month = today.getMonth() + 1;
+	    let day = today.getDate();
+	    let hour = today.getHours();
+	    let minute = today.getMinutes();
+	    let amPm = '';
+	    if( hour < 12) { amPm = '오전'; }
+	    if( 12<= hour <24 ) { amPm = '오후'; }
+	    if (hour   < 10) {hour   = "0"+hour;}
+	    if (minute < 10) {minute = "0"+minute;}
+	    
+	    $('#today').text(month +"월 "+ day+"일 "+ amPm +" "+ hour+":"+minute);
 	}); // document 
-    
   
    function fnTextLimit(){
 	   $('#content').on('keyup', function(){
 	   //console.log(  $('#content').val());
+	   
 		   if( $('#content').val().length > 2000) {
 			//alert("글자수는 2000자까지입니다.");
 			Swal.fire({
@@ -76,19 +72,28 @@
 					text: '당신의 일상을 적어주세요.'
 				})
     	  	  event.preventDefault();
-    	  
     	  // 위치는 빈값 이고 내용이나 파일은 있을 때
     	  } else if (  $('.location').val() == ''  &&  ( $('#content').val() != '' || $('#modify_file').val() != '' ) )  {
-    		//  if ( confirm ("주변 사람들에게 일상을 공유하고 싶으시다면 위치를 입력해주세요") ) {
-    			  Swal.fire({
-    					text: "주변 사람들에게 위치를 알려주세요!",
-    			     })    
-		    			  map();
-			    		  $("#map").css('display', 'block');
-			    		  event.preventDefault();
-    		  
-    			  
-    		//  } else {}
+    		  Swal.fire({
+					text: "주변 사람들에게 위치를 알려주세요!",
+					showCancelButton: true,
+			        confirmButtonColor: '#D4D4D4',  // confirm
+			        cancelButtonColor: '#D4D4D4',   // cancel
+			        confirmButtonText: '위치확인',
+			        confirmButtonSize: '20px',
+			        closeOnClickOutside: false,
+			        cancelButtonText: '취소'
+			   }).then((result) => {
+                 if (result.isConfirmed) {
+	    			  map();
+		    		  $("#map").css('display', 'block');
+		    		  event.preventDefault();
+		    		  return;
+                 }else {
+                 	 return;   
+                 }
+                   	
+			   });
     	// 위치는 빈값이 아니나 파일이랑 내용이 빈값일 때 
     	  } else if ( $('.location').val() != ''  &&   $('#content').val() == '' && $('#modify_file').val() == '' )  {
     		//  alert("사진이나 일상을 입력해주세요.");
@@ -99,7 +104,6 @@
     		  event.preventDefault();
           }  
   	  })
-    
 }
   
 	// 이미지 및 비디오 확장자 및 크기  체크
@@ -379,10 +383,14 @@
 	    		<img id="user_img" src="/nearby/${loginUser.profile.pPath}/${loginUser.profile.pSaved}"  class="pointer">
 	    	</c:if>
 	    </div>
-		<span class="id_wrap">
-		    	   <a href="/nearby/board/selectBoard" id="board_writer">${loginUser.id}</a>
-		    	   	<input type="hidden" name="id" class="id" value="${loginUser.id}" >
-		 </span>
+		<div class="id_wrap">
+    	   <span id="board_writer">${loginUser.id}</span>
+    	   	<div class="date">
+	    	    <span id="today"></span>
+	    	    <i class="fas fa-globe-asia" ></i>
+	        </div>
+		 </div>
+		 <input type="hidden" name="id" class="id" value="${loginUser.id}" >
 			
 	     <div class="myMap">
 		     <span onclick="map()" id="my_location">내 위치   <i class="fas fa-map-marker-alt" onclick="map()"></i>

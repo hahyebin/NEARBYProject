@@ -39,5 +39,7 @@ public interface BoardRepository {
    // 관리자 글삭제
    public int adminBoardDelete(Long bNo);
    
-   
+   /* userHome */
+   public List<Board> selectUserHome(String id);
+
 }

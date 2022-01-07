@@ -8,7 +8,6 @@
 <script type="text/javascript">
 		$(document).ready(function() {
 			fnProfileBtn();			// 우측 상단 프로필 클릭했을 때 토글, 로그아웃, 프로필수정 메뉴 나타나기
-
 		});
 		
 		// fnProfileBtn();
@@ -28,7 +27,7 @@
 	<div class="mid_box">
 		<ul class="btn_box">
 			<li id="home_btn" ><a class="boxes" href="/nearby/board/boardList"><i id="home_icon" class="fas fa-home"></i></a></li>
-			<li id="chat_btn"><a class="boxes" href="/nearby/member/followList"><i id="chat_icon" class="fas fa-comments"></i></a></li>
+			<li id="follow_btn"><a class="boxes" href="/nearby/follow/followList"><i id="follow_icon" class="far fa-address-book"></i></a></li>
 			<li id="myhome_btn"><a class="boxes" href="/nearby/board/myHome"><i id="myhome_icon" class="fas fa-user-alt"></i></a></li>
 			<li id="insert_btn" ><a class="boxes" href="/nearby/board/insertPage"><i id="insert_icon" class="far fa-plus-square"></i></a></li>
 		</ul>
@@ -71,6 +70,7 @@
 					
 				</li>
    	   			<li><a id="profile_menu_list2" href="/nearby/member/mypage">계정 관리</a></li>
+   	   			<li><a id="profile_menu_list2" href="/nearby/member/changePasswordPage">비밀번호 변경</a></li>
    	   			<li><a id="profile_menu_list3" href="/nearby/member/logout">로그아웃</a></li>
 			</ul>
 		</div>

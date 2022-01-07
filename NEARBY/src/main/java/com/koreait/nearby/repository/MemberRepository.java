@@ -47,15 +47,14 @@ public interface MemberRepository {
 	// 이용하는 총멤버
 	public List<Member> memberCount();
 	
-	
     // 남자 유저
-	public List<Member> memberCountMen();
+	public List<Member> memberMen();
 	
 	// 여자 유저
-	public List<Member> memberCountWomen();
+	public List<Member> memberWomen();
 	
 	// 성별 없음 유저
-	public List<Member> memberCountNoGender();
+	public List<Member> memberNoGender();
 
 	//오늘 가입한 유저
 	public List<Member> memberCreatedDay();

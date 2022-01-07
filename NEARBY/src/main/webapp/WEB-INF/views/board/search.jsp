@@ -11,12 +11,22 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/header.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/boardView.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/outputReplyOnly.css">
+
+
+<style>
+	.replyCount {
+		margin-left: 100px;
+	}
+</style>
+
 
 <script type="text/javascript">
 	
 	$(document).ready(function(){
 		fnLike();
 		fnSendBno();
+		fnReply();
 		var txtArea = $(".content_height");
 	    if (txtArea) {
 	        txtArea.each(function(){
@@ -73,7 +83,7 @@ function fnLike(i){
 		 					console.log(board);
 		 					console.log("좋아요 누른 카운트"+ board.likes);
   			  			    $( '#like_count'+bNo ).text(board.likes);
-  		  			    location.href = "/nearby/board/boardList";
+  		  			        location.href = "/nearby/board/boardList";
 		 					
 		 				},
 		 				error : function(xhr, error){
@@ -108,9 +118,13 @@ function fnLike(i){
 	      } // if 
 	    }	 
  			
-/* ----------------------------------------- fnPrintReplyList() --------------------------------  */
+	
+ /* ----------------------------------------- fnReply() --------------------------------  */
+
 
 function fnReply(){
+
+		
 	$.each($('.output_reply_table'), function(i, replyTable) {
 		let bNo = $(replyTable).parent().prev().val();
 		var page = 1;
@@ -128,15 +142,14 @@ function fnReply(){
 			   }) // End ajax			
 	
 		function fnPrintReplyList(map){
+			$(replyTable).empty();
 
-					$(replyTable).empty();
-									
 			 var p = map.pageUtils;
 			 let id = '${loginUser.id}';
 		
 			if (p.totalRecord == 0) {
 			    $('<tr>')
-			    .append( $('<td colspan="5">').text('첫 번째 댓글의 주인공이 되어보세요!') )
+			    .append( $('<td colspan="5" class="reply_none">').text('첫 번째 댓글의 주인공이 되어보세요!') )
 			    .appendTo( replyTable );
 			 } else {
 			    
@@ -144,22 +157,32 @@ function fnReply(){
 				    if ( reply.profile.pSaved != null ) { 
 						let pSaved = reply.profile.pSaved;
 						let pPath = reply.profile.pPath;
-						$(replyTable).append( $('<tr>').html( $('<td rowspan="2" class="reply_user_image_area"><img class="reply_user_img pointer" src="/nearby/'+pPath+'/'+pSaved+'"></td>') ) );
+						$(replyTable).append( $('<tr>').html( $('<td rowspan="2" class="reply_user_image_area"><img class="reply_user_img" src="/nearby/'+pPath+'/'+pSaved+'"></td>') ) );
 				      } else if ( reply.profile.pPath == null ) { 
-						$(replyTable).append( $('<tr>').html( $('<td rowspan="2" class="reply_user_image_area"><img class="reply_user_img pointer" src="${pageContext.request.contextPath}/resources/image/profile_default.png"></td>') ) );
+						$(replyTable).append( $('<tr>').html( $('<td rowspan="2" class="reply_user_image_area"><img class="reply_user_img" src="${pageContext.request.contextPath}/resources/image/profile_default.png"></td>') ) );
 				      } // End if 프사 부분 
 				
 			         let strContent = reply.rContent;
 			         let reply_content = ''; 
-					if (strContent.length > 30) {
+					
+			         if (strContent.length > 30) {
 						reply_content = strContent.substring(0, 30) + '...';
 					} else {
 						reply_content = strContent;
 					}
+					
 					$('<tr class="reply_show">')
-					.append( $('<td class="reply_user_name_area">').html( $('<a href="#" class="nexon">'+reply.id+'</a>') ) )
+					.append( $('<td class="reply_user_name_area">').html( $('<a id="link_'+reply.rNo+'" class="user_page_link">'+reply.id+'</a>') ) )
 					.append( $('<td class="like_icon_area">').html( $('<td colspan="4" class="pointer re_content_area" onclick="fnShowViewPage('+reply.bNo+')">'+reply_content+'</td><td></td>') ) )
 					.appendTo( replyTable );
+					
+					// 유저 이름당 링크 만들기
+					if (reply.id != id) {
+						$('.user_page_link[id=link_'+reply.rNo+']').attr('href','/nearby/board/selectUserHome?id='+reply.id);
+					} else if(reply.id == id) {
+						$('.user_page_link[id=link_'+reply.rNo+']').attr('href','/nearby/board/myHome');
+					}
+					
 					
 				}) // End inner each
 				
@@ -173,11 +196,15 @@ function fnReply(){
 				} else if (map.total < 0 ) {
 					$('.countIcon[id=icon_'+bNo+']').addClass('unlike').removeClass('like');
 				}
+		 		
+
+				
 			 } // End if 
+
 		} // End fnPrintReplyList
 	}); // End outer each
-} // End aa 
- 	
+} // End fnReply 
+
  	
  	
  	

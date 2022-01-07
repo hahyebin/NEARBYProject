@@ -132,11 +132,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	     WHERE M.STATE = 0 AND M.ID NOT LIKE 'admin'
     </select>
 
-	
-	
-	
+
 	<!-- 가입 한 남자  -->
-	<select id="memberCountMen" resultType="Member">
+	<select id="memberMen" resultType="Member">
 		SELECT M_NO, ID, NAME, EMAIL, BIRTHDAY, PHONE, GENDER, STATE, M_CREATED
 		  FROM MEMBER
 	     WHERE STATE = 0 AND ID NOT LIKE 'admin'
@@ -144,8 +142,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 	
 	
-		<!-- 가입 한 여자 -->
-	<select id="memberCountWomen" resultType="Member">
+	<!-- 가입 한 여자 -->
+	<select id="memberWomen" resultType="Member">
 		SELECT M_NO, ID, NAME, EMAIL, BIRTHDAY, PHONE, GENDER, STATE, M_CREATED
 		  FROM MEMBER
 	     WHERE STATE = 0 AND ID NOT LIKE 'admin'
@@ -153,7 +151,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 	
    <!-- 가입 한 성별 그외  -->
-	<select id="memberCountNoGender" resultType="Member">
+	<select id="memberNoGender" resultType="Member">
 		SELECT M_NO, ID, NAME, EMAIL, BIRTHDAY, PHONE, GENDER, STATE, M_CREATED
 		  FROM MEMBER
 	     WHERE STATE = 0 AND ID NOT LIKE 'admin'

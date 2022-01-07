@@ -1,10 +1,6 @@
 INDEX VERSION 1.4+D:\nearbyProject\workspace\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
-4085693772.index
 4006027950.index
 1778130026.index
-3902800692.index
-955786501.index
+1163398879.index
 2770553436.index
 3899311422.index
-1163398879.index
-3109563606.index

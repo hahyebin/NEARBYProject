@@ -38,6 +38,7 @@
 	
 	.container{
 	    width: 600px;
+	    padding-top: 70px;
 	    margin: 100px auto;
 	    background-color: white;
 	    border-radius: 30px;
@@ -46,20 +47,7 @@
 	.head{
 	    width: 100%;
 	}
-	
-	/* 상단 로고 */
-	.title > a{
-	    display: block;
-	    width: 200px; height: 130px;
-	    margin: 30px auto;
-	    text-align: center;
-	    font-size: 0;
-	
-	    background-image: url(/NearBy_logo.png);
-	    background-size: 200px 130px;
-	    background-repeat: no-repeat;
-	}
-	
+		
 	.pw_change_box{
 	    width: 600px;
 	    margin: 0 auto;
@@ -122,10 +110,10 @@
 	    width: 450px;
 	    margin: 35px auto;
 	}
-	.btn_wrap input, button{
+	.btn_wrap button{
 		color:white;
-	    width: 220px; height: 50px;
-	    background: linear-gradient(#ff6e56,#ff3268);
+	    width: 450px; height: 45px;
+	    background: #fe585c;
 	    border-radius: 10px;
 	    margin-bottom: 40px;
 		border: none; 
@@ -157,6 +145,189 @@
 		display: flex;
 		width:220px;
 	}
+	
+	
+		/* header 관련 */
+  #myhome_icon { color :  #fe4662; }
+  #myhome_btn { border-bottom: 8px solid #fe4662}
+   .header_wrap {
+      z-index: 5;
+      position: fixed;
+      top: 0;
+      width:100%;
+      height: 100px;
+      background-color: white;
+      display: flex;
+   }
+   #header_logo {
+   	 display: inline-block;
+   	 margin-left: 40px;
+   	 margin-right: 100px;
+   }
+   	.header_right_box {
+		display: inline-flex;
+	}
+	
+    .header_left_box > a{
+        display: block;
+		margin: 10px 0 10px 70px;
+		width: 230px;
+		height: 85px;
+		background-size: 219px 85px;
+		background-repeat: no-repeat;
+		background-image: url(../image/logo_color.png);
+		font-size: 0;
+    }
+    
+	#logo_img {
+		width:  200px;
+		margin-top: 12px;
+		margin-left: 50px;
+	}
+	.header_mid_box {
+      display: inline-flex;
+	  margin: 0 auto;
+	}
+    .btn_box{
+        display: flex;
+        text-align: center;
+        margin: 0 0 0 150px;
+        width: 750px;
+    }
+	.btn_box .boxes {
+       	display: inline-block;
+		margin: 0 auto;
+		width: 187px;
+		height: 100%;
+	}
+	 .boxes > a{
+	 	width: 100%;
+	 	height: 100%;
+	 	margin: 0 auto;
+	 	flex-direction: row;
+	}
+	li  a  i {
+		color: #6f7070;
+		text-align: center;
+		margin: 30px auto;
+		font-size: 40px;
+	}
+
+
+	.search_box {
+		display: flex;
+		border-radius: 10px;
+		margin-left: 40px;
+		margin-bottom: 30px;
+		margin-top: 26px;
+		margin-left: 40px;
+		border: none;
+		width: 280px;
+		height: 46px;
+		line-height: 20px;
+		background-color: #e8f0fe;
+	}
+	
+	.search_box>input {
+		border: none;
+		outline: none;
+		width: 220px;
+		height: 30px;
+		line-height: 30px;
+		margin-top: 8px;
+		margin-left: 18px;
+		background-color: #e8f0fe;
+	}
+	
+	#search_icon {
+		width: 40px;
+		height: 40px;
+		text-align: center;
+		margin-top: 4px;
+		margin-right: 16px;
+		border: none;
+		background-color: #e8f0fe;
+	}
+	
+	#search_icon>i {
+		color: #6f7070;
+		width: 38px;
+		height: 38px;
+		margin-top: 10px;
+		cursor: pointer;
+	}
+	
+	#header_profile_box {
+		width: 60px;
+		height: 60px;
+		margin: 18px;
+		border-radius: 100%;
+	}
+	
+	#header_profile_img {
+		width: 60px;
+		height: 60px;
+		top: 20px;
+		border-radius: 100%;
+	}
+
+	#header_profile_menu {
+		z-index: 6000;
+	    margin-top: 84px;
+	    margin-left: -140px;
+		width: 140px;
+		height: 138px;
+		border: 1px solid rgb(240, 242, 245);
+		border-radius: 3px;
+		background-color: white;
+		box-shadow: 5px 5px 8px rgba(160, 160, 160, 0.3);
+	}
+	
+	#header_profile_menu li {
+		margin-top: 4px;
+		margin-left: 4px;
+		font-size: 14px;
+		font-weight: lighter;
+		border-bottom: 1px solid rgb(240, 242, 245);
+	}
+	
+	#header_profile_menu p {
+		font-size: 12px;
+		color: rgb(50, 50, 50);
+	}
+	
+	.header_profile_no {
+		display: none;
+	}
+	
+	.header_profile_see {
+		display: block;
+	}
+	
+	#profile_menu_list1, #profile_menu_list2, #profile_menu_list3 {
+		font-size: 14px;
+		font-weight: normal;
+		color: black;
+	}
+	
+	#profile_menu_list1 {
+		font-weight: bold;
+		font-size: 15px;
+	}
+	
+	.pointer:hover {
+		cursor: pointer;
+	}
+	
+	/*  footer */
+   .footer_wrap {
+	   margin-top: 100px;
+	   padding-bottom: 40px;
+	   text-align: center;
+	   color: #6e6e6e;
+   }
+  .footer_wrap  h2 { margin-top:  40px;}
+	
 	
 </style>
 
@@ -441,14 +612,51 @@ function fnHomeBtn() {
 </head>
 <body>
 
- <!-- 레이아웃 header 삽입하기 -->
- 
-    <div class="container">
-    
-        <div class="head">
-            <h1 class="title"><a href="/nearby/">NearBy</a></h1>
-        </div>
- 
+ 	<header class="header_wrap">
+	    <div class="header_left_box">
+			  <a href="/nearby/board/boardList"><img id="header_logo" src="${pageContext.request.contextPath}/resources/image/logo_color.png" width="200px"></a>
+		</div>
+	     <div class="header_mid_box">
+			<ul class="btn_box">
+				<li id="home_btn" ><a class="boxes" href="/nearby/board/boardList"><i id="home_icon" class="fas fa-home"></i></a></li>
+				<li id="follow_btn"><a class="boxes" href="/nearby/follow/followList"><i id="follow_icon" class="far fa-address-book"></i></a></li>
+				<li id="myhome_btn"><a class="boxes" href="/nearby/board/myHome"><i id="myhome_icon" class="fas fa-user-alt"></i></a></li>
+				<li id="insert_btn" ><a class="boxes" href="/nearby/board/insertPage"><i id="insert_icon" class="far fa-plus-square"></i></a></li>
+			</ul>
+		</div>
+	     <div class="header_right_box">
+			<form class="main_search" action="/nearby/board/searchBoardList">
+				<div class="search_box pointer">
+					<input type=text id="query" name="query">
+					<button id="search_icon">
+						<i class="fas fa-search"></i>
+					</button>
+				</div>
+			</form>
+			<div id="header_profile_box">
+	   	   	 	<c:if test="${empty loginUser.profile.pSaved}">
+						<img id="header_profile_img" src="${pageContext.request.contextPath}/resources/image/profile_default.png" class="pointer defaultImg">
+				</c:if>
+				<c:if test="${not empty loginUser.profile.pSaved}">
+						<img id="header_profile_img" src="/nearby/${loginUser.profile.pPath}/${loginUser.profile.pSaved}" class="pointer">
+				</c:if>
+            </div>
+		    <div id="header_profile_menu" class="header_profile_no">
+				<ul>
+					<li>
+						<a id="profile_menu_list1" href="#">${loginUser.id}</a>
+						<p>${loginUser.name}님<p>
+						<p>${loginUser.email}</p>	
+					</li>
+	   	   			<li><a id="profile_menu_list2" href="/nearby/member/mypage">계정 관리</a></li>
+	   	   			<li><a id="profile_menu_list2" href="/nearby/member/changePasswordPage">비밀번호 변경</a></li>
+	   	   			<li><a id="profile_menu_list3" href="/nearby/member/logout">로그아웃</a></li>
+				</ul>
+		    </div>
+		</div>
+     
+     </header>
+    <div class="container" style="margin-top: 160px;">
         <div class="pw_change_box">
     
             <form action="/nearby/member/changePassword" method="post" id="pw_change_form">
@@ -507,12 +715,16 @@ function fnHomeBtn() {
 
                <div class="btn_wrap">
                    <button id="modify_btn" class="btn btn-primary pointer">수정완료</button>             
-                   <input type="button" value="홈으로" id="home_btn" class="pointer">                
                </div>                    
             </form>
             
         </div>
    
     </div>
+      <footer class="footer_wrap">
+           <h2>About NearBy</h2><br>
+           <p>로고     히스토리     개인정보처리방침     도움말      제휴      광고      문의/피드백      채용</p>
+           <p>© NearBy Corp. All rights reserved.</p>
+    </footer>
 </body>
 </html>

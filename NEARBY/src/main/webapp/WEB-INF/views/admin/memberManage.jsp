@@ -304,14 +304,16 @@ function fnMemberDelete(i){
 		<c:if test="${map.searchResult != null }">
 		 <c:forEach items="${map.searchResult}" var="memberSearch" varStatus="vs">
 			<tr>
-			
 				<td>${memberSearch.mNo}</td>
 				<td>${memberSearch.id}</td>
 				<td>${memberSearch.name}</td>
 				<td>${memberSearch.email}</td>
 				<td>${memberSearch.birthday}</td>
 				<td>${memberSearch.phone}</td>
-				<td>${memberSearch.gender}</td>
+			<%-- 	<td>${memberSearch.gender}</td> --%>
+				<c:if test="${memberSearch.gender == 'f'}"><td>F</td></c:if>
+				<c:if test="${memberSearch.gender == 'm'}"><td>M</td></c:if>
+				<c:if test="${memberSearch.gender == 'n'}"><td>N</td></c:if>
 				<td>${memberSearch.mCreated}</td>
 				<c:if test="${memberSearch.state == 0 }">
 					<td><i class="fas fa-user user_cursor" id="mNo${memberSearch.mNo}" onclick="fnMemberDelete(${memberSearch.mNo})" ></i></td>

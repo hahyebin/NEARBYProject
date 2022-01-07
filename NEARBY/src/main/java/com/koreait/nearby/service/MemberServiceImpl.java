@@ -255,7 +255,7 @@ public class MemberServiceImpl implements MemberService {
 			String content = m.getProfile().getpContent();
 			if (birthday.length() != 8) throw new NullPointerException("생일 정보가 없습니다");
 			if (name.isEmpty()) throw new NullPointerException("입력된 이름이 없습니다");
-			if (phone.isEmpty()) throw new NullPointerException("입력된 핸드폰 번호가 없습니다");
+			if (phone == null || phone.isEmpty()) throw new NullPointerException("입력된 핸드폰 번호가 없습니다");
 			if (phone.length() != 11 ) throw new NullPointerException("올바른 형식이 아닙니다.");
 			
 			// Profile DB로 보낼 Bean 
@@ -371,20 +371,20 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public List<Member> selectMemberMen() {
 		MemberRepository memberRepository = sqlSession.getMapper(MemberRepository.class);
-		return memberRepository.memberCountMen();
+		return memberRepository.memberMen();
 	}
 	
 	// 여자 회원
 	@Override
 	public List<Member> selectMemberWomen() {
 		MemberRepository memberRepository = sqlSession.getMapper(MemberRepository.class);
-		return memberRepository.memberCountWomen();
+		return memberRepository.memberWomen();
 	}
 	// 성별없음 회원 
 	@Override
 	public List<Member> selectMemberNoGender() {
 		MemberRepository memberRepository = sqlSession.getMapper(MemberRepository.class);
-		return memberRepository.memberCountNoGender();
+		return memberRepository.memberNoGender();
 	}
 	// 오늘 가입한 사람 목록
 	@Override
