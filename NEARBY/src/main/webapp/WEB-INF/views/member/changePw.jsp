@@ -9,6 +9,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="${pageContext.request.contextPath}/resources/js/fnLoginCheck.js"></script>
+
 <style>
 
 
@@ -43,7 +45,7 @@
 	    background-color: white;
 	    border-radius: 30px;
 	}
-	
+
 	.head{
 	    width: 100%;
 	}
@@ -83,12 +85,7 @@
 	    border-radius: 10px;
 	    font-size: 12px;
 	}
-	
-	.email_box input[type=button]:hover{
-	    background-color: #ff3268;
-	}
-	
-	
+
 	/* input tag 공백 */
 	.space input[type=text] {
 		padding-left:15px;
@@ -151,7 +148,7 @@
   #myhome_icon { color :  #fe4662; }
   #myhome_btn { border-bottom: 8px solid #fe4662}
    .header_wrap {
-      z-index: 5;
+      z-index: 8;
       position: fixed;
       top: 0;
       width:100%;
@@ -321,7 +318,6 @@
 	
 	/*  footer */
    .footer_wrap {
-	   margin-top: 100px;
 	   padding-bottom: 40px;
 	   text-align: center;
 	   color: #6e6e6e;
@@ -341,7 +337,8 @@
 		fnNewPwCheck(); // 새 비밀번호 정규식
 		fnPwDoubleCheck();
 		fnCurrentEmailCheck();
-		fnHomeBtn(); // 홈으로 가기
+		fnProfileBtn();
+		fnCheckLogin();
 	}); 
 	
 	// 서브밋
@@ -353,23 +350,37 @@
 	          return false;
 			} else if ( pw_result == false ) {
                 event.preventDefault(); 
+					Swal.fire({
+						text: '현재 비밀번호를 확인해주세요'
+					})
                 console.log('submit result : ' + pw_result);
                 return false;  
             } else if ( new_pw_result == false ) {
                 event.preventDefault();  
+					Swal.fire({
+						text: '새 비밀번호를 확인해주세요'
+					})
                 console.log('submit new_pw_result : ' + new_pw_result);
                 return false;  
             } else if ( pw_double_result == false ) {
-                event.preventDefault();  
+                event.preventDefault(); 
+					Swal.fire({
+						text: '새 비밀번호를 확인해주세요'
+					})
                 console.log('submit pw_double_result : ' + pw_double_result);
                 return false;  
             } else if ( email_result == false ) {
 				event.preventDefault();
+	    		  Swal.fire({
+						text: '이메일을 확인해주세요'
+					})
                 console.log('submit email_result : ' + email_result);
                 return false;  
             } else if ( authCodePass == false ) { 
 				event.preventDefault();
-				alert('이메일 인증을 진행해주세요'); 
+	    		  Swal.fire({
+						text: '이메일 인증을 진행해주세요'
+					})
                 console.log('submit authCodePass : ' + authCodePass);
             	return false;
             } else{
@@ -444,28 +455,38 @@
          			data: 'email='+ $('#email').val(),
          			dataType: 'json',
          			success : function(map) {
-         				alert('인증코드가 발송되었습니다.');
+    					Swal.fire({
+    						text: '인증코드가 전송되었습니다.'
+    					})
          				fnVerifyAuthcode(map.authCode); // 12/13추가
          			},
          			error: function() {
-     					alert('인증코드 전송 실패');
+    					Swal.fire({
+    						text: '인증코드 전송 실패'
+    					})
      				}
          		});	 // ajax
          	});
          	return;
          } 
-/* ******************* 12/14 수정 ************* fnVerifyAuthcode() ********************* */
+/* ------------------------------------------ fnVerifyAuthcode() ------------------------------------ */
       	// 인증코드 검증 변수와 함수
       	function fnVerifyAuthcode(authCode){
       		$('#verify_btn').click(function(){
-      			if ( $('#authCode').val() == authCode ) {
-      				alert('인증되었습니다.');
-      				authCodePass = true;
-      			} else if ( $('#authCode').val() == '' ) {
-      				alert('인증번호를 입력하세요');
+      			if ( $('#authCode').val() == '' ) {
+					Swal.fire({
+						text: '인증번호를 입력하세요'
+					});
       				authCodePass = false;
+      			}else if ( $('#authCode').val() == authCode ) {
+					Swal.fire({
+						text: '인증되었습니다.'
+					});
+      				authCodePass = true;
       			} else {
-      				alert('인증에 실패했습니다.');
+					Swal.fire({
+						text: '인증에 실패했습니다.'
+					});
       				authCodePass = false;
       			}
       		}); // end click
@@ -500,7 +521,7 @@
 						Swal.fire({
 							icon: 'error',
 							title: '비밀번호 재확인필요',
-							text: name + '님의 비밀번호가 일치하지 않습니다. 다시시도해 주세요.',
+							text: name + '님의 비밀번호가 일치하지 않습니다.',
 						})
 						 pw_result = false;
 					 }
@@ -568,7 +589,9 @@
     				fnVerifyAuthcode(map.authCode, id); // 12/13추가
     			},
     			error: function() {
-					alert('인증코드 전송 실패');
+					Swal.fire({
+						text: '인증코드 전송실패'
+					})
 				}
     		});	 // ajax
 /*     	}); */
@@ -581,13 +604,19 @@
    	function fnVerifyAuthcode(authCode){
    		$('#verify_btn').click(function(){
    			if ( $('#authCode').val() == authCode ) {
-   				alert('인증되었습니다.');
+				Swal.fire({
+					text: '인증되었습니다.'
+				})
    				authCodePass = true;
    			} else if ( $('#authCode').val() == '' ) { // 12/14 추가
-   				alert('인증번호를 입력하세요');
+				Swal.fire({
+					text: '인증번호를 입력하세요'
+				})
    				authCodePass = false;
    			} else {
-   				alert('인증에 실패했습니다.');
+				Swal.fire({
+					text: '인증에 실패했습니다.'
+				})
    				authCodePass = false;
    			}
    			
@@ -595,24 +624,41 @@
    	}         
 
 
+	// fnProfileBtn();
+	function fnProfileBtn() {
+		$('#header_profile_box').click(function (){
+			$('#header_profile_menu').toggleClass('header_profile_see');
+		});
+	};
+
+
+	
+	/* ----------------------------------------- fnCheckLogin() --------------------------------  */
+ 	function fnCheckLogin(){
+		let loginInfo = '${loginUser.id}';
+		if (loginInfo == '') {
+			
+		 Swal.fire({
+				text: '세션이 만료되었습니다. 로그인 화면으로 이동하시겠습니까?',
+		        icon: 'warning',
+		        showCancelButton: true,
+		        confirmButtonColor: '#D4D4D4',  // confirm
+		        cancelButtonColor: '#D4D4D4',   // cancel
+		        confirmButtonText: '이동',
+		        cancelButtonText: '취소'	
+		     }).then((result) => {
+				if(result.isConfirmed) { // confirm이 false이면 return
+					location.href='/nearby/';
+				}
+		     })
+		}
+	}	 	
+	
 </script>	
 
-
-<script>
-/* ---------------------------------------	fnHomeBtn()	------------------------------------------- */
-// 홈으로 가기
-function fnHomeBtn() {
-	$('#home_btn').on('click', function(){
-		if(confirm('홈으로 이동하시겠습니까?')) {
-			location.href='/nearby/board/updateProfilePicture';
-		}
-	}) // End home_btn click event
-} // End fnHomeBtn
-</script>
 </head>
 <body>
-
- 	<header class="header_wrap">
+	<header class="header_wrap">
 	    <div class="header_left_box">
 			  <a href="/nearby/board/boardList"><img id="header_logo" src="${pageContext.request.contextPath}/resources/image/logo_color.png" width="200px"></a>
 		</div>
@@ -621,7 +667,7 @@ function fnHomeBtn() {
 				<li id="home_btn" ><a class="boxes" href="/nearby/board/boardList"><i id="home_icon" class="fas fa-home"></i></a></li>
 				<li id="follow_btn"><a class="boxes" href="/nearby/follow/followList"><i id="follow_icon" class="far fa-address-book"></i></a></li>
 				<li id="myhome_btn"><a class="boxes" href="/nearby/board/myHome"><i id="myhome_icon" class="fas fa-user-alt"></i></a></li>
-				<li id="insert_btn" ><a class="boxes" href="/nearby/board/insertPage"><i id="insert_icon" class="far fa-plus-square"></i></a></li>
+				<li id="header_insert_btn" ><a class="boxes" href="/nearby/board/insertPage"><i id="insert_icon" class="far fa-plus-square"></i></a></li>
 			</ul>
 		</div>
 	     <div class="header_right_box">
@@ -684,7 +730,7 @@ function fnHomeBtn() {
 
                 <!-- 비밀번호 확인 -->
                 <div class="input_box">
-                    <label for="pw">새 비밀번호 확인</label>
+                    <label for="pwCheck">새 비밀번호 확인</label>
                     <span class="space">
 	                    <input type="text" id="pwCheck" >
                     </span>

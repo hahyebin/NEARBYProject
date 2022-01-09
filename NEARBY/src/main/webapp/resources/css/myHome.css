@@ -311,3 +311,16 @@ footer {
    width: 100%;
    height: 150px;
 }
+
+.id > a{
+    padding-left: 15px;
+    font-size: 18px;
+}
+
+.goHome{
+   width: 80px; height: 80px;
+   display: inline-block;
+   margin-left: 35px;
+   opacity:0;
+   position: absolute;
+}

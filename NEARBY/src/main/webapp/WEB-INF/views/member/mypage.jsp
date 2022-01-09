@@ -10,11 +10,20 @@
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/myPage.css">
+<script src="${pageContext.request.contextPath}/resources/js/fnLoginCheck.js"></script>
+
 
 <style>
 
    @import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
-	
+
+  /* sweet alert */
+
+   .swal2-styled { margin:  0.5em; }
+   .swal2-styled.swal2-confirm { width: 100px; background-color: #d4d4d4;  }
+   .swal2-styled.swal2-cancel {width: 100px;}
+   .swal2-icon.swal2-warning { color: pink; border-color: pink;}
+
 	.hidden_box {
 		z-index: -99;
 	    background-color: white;
@@ -26,7 +35,6 @@
 	    padding-bottom: 20px;
 	    position: absolute;
 	    top: 150px;
-
 	}
 	.hidden_class{
 		z-index: 2;
@@ -36,7 +44,7 @@
   #myhome_icon { color :  #fe4662; }
   #myhome_btn { border-bottom: 8px solid #fe4662}
    .header_wrap {
-      z-index: 5;
+      z-index: 8;
       position: fixed;
       top: 0;
       width:100%;
@@ -206,7 +214,6 @@
 	
 	/*  footer */
    .footer_wrap {
-	   margin-top: 100px;
 	   padding-bottom: 40px;
 	   text-align: center;
 	   color: #6e6e6e;
@@ -244,12 +251,12 @@
  /* ************************************************************************************ */
 
 
-// fnProfileBtn();
-function fnProfileBtn() {
-	$('#header_profile_box').click(function (){
-		$('#header_profile_menu').toggleClass('header_profile_see');
-	});
-};
+	// fnProfileBtn();
+	function fnProfileBtn() {
+		$('#header_profile_box').click(function (){
+			$('#header_profile_menu').toggleClass('header_profile_see');
+		});
+	};
 
 /* ------------------------------------------------------------ fnFindMemberInfo() ------------------------------------------------------------ */
 	// 회원 조회 함수
@@ -261,11 +268,19 @@ function fnProfileBtn() {
 			dataType: 'json', // 받아오는 data Type
 			success: function(map){
 				if(map.loginErrorMsg != null) {
-					Swal.fire({
-						icon: 'error',
-						title: '로그인세션만료',
-						text: '로그인을 다시 진행해 주세요.',
-					})
+					 Swal.fire({
+							text: '세션이 만료되었습니다. 로그인 화면으로 이동하시겠습니까?',
+					        icon: 'warning',
+					        showCancelButton: true,
+					        confirmButtonColor: '#D4D4D4',  // confirm
+					        cancelButtonColor: '#D4D4D4',   // cancel
+					        confirmButtonText: '이동',
+					        cancelButtonText: '취소'	
+					     }).then((result) =>{
+							if(result.isConfirmed) { // confirm이 false이면 return
+								location.href='/nearby/';
+							}
+					     })
 				} else if (map.member != null) { 
 				let birthday = map.result.birthday;
 				console.log(birthday);
@@ -282,8 +297,10 @@ function fnProfileBtn() {
 					$('#day').val(day);
 					if (map.result.profile.pOrigin != null) {
 						$('#user_img').attr('src', '/nearby/' + map.result.profile.pPath + '/' + map.result.profile.pSaved);
+						$('#header_profile_img').attr('src', '/nearby/' + map.result.profile.pPath + '/' + map.result.profile.pSaved);
 					} else {
 						$('#user_img').attr('src', '${pageContext.request.contextPath}/resources/image/profile_default.png');
+						$('#header_profile_img').attr('src', '${pageContext.request.contextPath}/resources/image/profile_default.png');
 					}
 					$('input:radio[name="gender"][value="'+map.result.gender+'"]').prop('checked', true); // prop는 객체에 저장 된 값이므로 true or false가 된다
 				} else {
@@ -308,7 +325,7 @@ function fnProfileBtn() {
 			let extName = origin.substring(origin.lastIndexOf(".") + 1).toUpperCase(); // 확장자를 대문자로 저장 aaa.aaa.aaa.ccc 일 때, 마지막 마침표 다음 자리부터 끝까지 substring으로 가지고오고 
 			if ( $.inArray(extName, ['JPG', 'JPEG', 'GIF', 'PNG', 'JFIF']) == -1 ) {	// 첨부된 파일이 ['JPG', 'JPEG', 'GIF', 'PNG'] 중 하나가 아니면 (-1) :: 확장자 제한 두기
 				Swal.fire({
-					icon: 'warning',
+				//	icon: 'warning',
 					title: '확장자를 확인해주세요',
 					text: '첨부 가능한 이미지의 확장자는 jpg, jpeg, gif, png, jfif 입니다.'
 				});
@@ -321,7 +338,7 @@ function fnProfileBtn() {
 			let fileSize = $(this)[0].files[0].size; // 첨부된 파일 크기
 			if (fileSize > maxSize) {
 				Swal.fire({
-					icon: 'warning',
+				//	icon: 'warning',
 					title: '파일의 크기를 확인해 주세요',
 					text: '10MB 이하의 파일만 사용하실 수 있습니다.'
 				});
@@ -341,9 +358,7 @@ function fnProfileBtn() {
 			
 			let formData = new FormData();
 				let file = $('#file')[0].files[0];
-				console.log(file);
 				formData.append('file', file); // 첨부를 FormData에 넣기
-/* 				console.log(formData); */
 				$.ajax({
 				url: '/nearby/profile/profilePic',
 				type: 'post',
@@ -357,7 +372,6 @@ function fnProfileBtn() {
 					if(map.insertResult && map.insertResult != null) {
 						Swal.fire({
 							icon: 'success',
-							title: '사진등록완료',
 							text: name + '님의 프로필 사진등록이 완료되었습니다.',
 						})
 						$('#file').val('');
@@ -368,13 +382,11 @@ function fnProfileBtn() {
 						console.log(map.nullMsg);
 						Swal.fire({
 							icon: 'error',
-							title: '사진의 변경사항 없음',
 							text: name + '님의 프로필 사진등록을 실패했습니다.',
 						})
 					} else {
 						Swal.fire({
 							icon: 'error',
-							title: '사진등록실패',
 							text: name + '님의 프로필 사진등록을 실패했습니다.',
 						})
 					}
@@ -398,7 +410,6 @@ function fnProfileBtn() {
 				if(map.deleteResult && map.deleteResult != null) {
 					Swal.fire({
 						icon: 'success',
-						title: '사진초기화완료',
 						text: name + '님의 프로필이 초기화되었습니다.',
 					})
 					$('#file').val('');
@@ -408,7 +419,6 @@ function fnProfileBtn() {
 				} else {
 					Swal.fire({
 						icon: 'error',
-						title: '사진초기화실패',
 						text: name + '님의 프로필이 초기화되지 않았습니다.',
 					})
 				}
@@ -441,26 +451,22 @@ function fnProfileBtn() {
 					if(map.result && map.result != null) {
 						Swal.fire({
 				            icon: 'success',
-				            title: '수정완료',
 				            text: map.member.name + '님의 회원정보가 수정되었습니다.',
 				        });
 						fnFindMemberInfo();
 					} else if (map.nullErrorMsg == '올바른 형식이 아닙니다.'){
 						Swal.fire({
 				            icon: 'error',
-				            title: map.nullErrorMsg,
 				            text: '핸드폰 번호는 11자리 정수입니다.',
 				        });
 					} else if (map.nullErrorMsg != null){
 						Swal.fire({
 	                        icon: 'error',
-	                        title: map.nullErrorMsg,
 	                        text: map.nullErrorMsg + ' 내용을 채워주세요.',
 	                    });
 					} else {
 						Swal.fire({
 				            icon: 'error',
-				            title: '잘못 된 접근',
 				            text: '잘못 된 접근입니다. 다시 시도해 주세요.',
 				        });
 					}
@@ -470,31 +476,44 @@ function fnProfileBtn() {
 	} // End fnModifyMemberInfo
 
 	
+
+	
+	
 /* ---------------------------------------------------------- fnLeave() ------------------------------ */
 	// 회원 탈퇴
 	function fnLeave() {
 		$('#leave_btn').on('click', function(){
-					$('#pw').val('');
-			if(confirm('정말 탈퇴하시겠습니까?') == false) { // confirm이 false이면 return
-				return;
-			} else { // confirm이 true이면 pw_result check
-				if(pw_result == true) { // if pw_result == true이면 submit
-					Swal.fire({
-			            icon: 'error',
-			            title: '탈퇴되었습니다.',
-			            text: 'NearBy를 이용해주셔서 감사합니다.',
-			        });
-					$('#form').attr('action', '/nearby/member/leaveMember/');
-					$('#form').submit();
-				} else if (pw_result == false || $('#pw').val()=='') { // pw_result == false 이면 return;
-					Swal.fire({
-			            icon: 'error',
-			            title: '비밀번호 확인필요',
-			            text: '비밀번호 확인 후 진행해 주세요',
-			        });
-					return;
-				}
-			}
+			 Swal.fire({
+					text: '정말 탈퇴하시겠습니까?',
+			        icon: 'warning',
+			        showCancelButton: true,
+			        confirmButtonColor: '#D4D4D4',  // confirm
+			        cancelButtonColor: '#D4D4D4',   // cancel
+			        confirmButtonText: '탈퇴',
+			        cancelButtonText: '취소'	
+			     }).then((result) =>{
+					if(result.isConfirmed) { // confirm이 false이면 return
+						if(pw_result == true) { 
+								Swal.fire({
+						     //       icon: 'error',
+						            title: '탈퇴되었습니다.',
+						            text: 'NearBy를 이용해주셔서 감사합니다.',
+						            timer: 300000,
+						        });
+								$('#form').attr('action', '/nearby/member/leaveMember/');
+								$('#form').submit();
+							} else if (pw_result == false || $('#pw').val()=='') { // pw_result == false 이면 return;
+								Swal.fire({
+						            icon: 'error',
+						      //      title: '비밀번호 확인필요',
+						            text: '비밀번호 확인 후 진행해 주세요',
+						        });
+							return;
+						}
+					} else { 
+						return;
+					} // End if
+		     	})
 
 		}) // End click event
 	} // End fnLeave
@@ -515,14 +534,14 @@ function fnProfileBtn() {
 					 if( map.selectResult > 0){
 						Swal.fire({
 							icon: 'success',
-							title: '비밀번호 확인완료',
+				//			title: '비밀번호 확인완료',
 							text: name + '님의 비밀번호가 확인되었습니다.',
 						})
 						 pw_result = true;
 		             } else if(map.selectResult == 0) {
 						Swal.fire({
 							icon: 'error',
-							title: '비밀번호 재확인필요',
+					//		title: '비밀번호 재확인필요',
 							text: name + '님의 비밀번호가 일치하지 않습니다. 다시시도해 주세요.',
 						})
 						 pw_result = false;
@@ -674,10 +693,6 @@ function fnProfileBtn() {
  <!-- 레이아웃 header 삽입하기 -->
     <div class="profile_container"> <!-- 1 -->
 	<div class="hidden_box"></div> <!-- hidden BOX -->
-    	<c:if test="${loginUser == null}">
-    		<h1> 세션이 만료되었습니다. </h1>
-    		<a href="/nearby/">로그인하러 가기 </a>
-    	</c:if>
     	<c:if test="${loginUser.state == 0}">
 	    	<!-- 회원탈퇴 -->
 	    	<div class="leave_user_wrap">

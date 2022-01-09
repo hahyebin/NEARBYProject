@@ -393,8 +393,6 @@
    
    
 </script>
-
-
 </head>
 <body>
    <div class="container">
@@ -476,7 +474,7 @@
                   <button class="nanum_square" id="login_submit">로그인</button>
                         <div id="move_area">
                         <a id="find_btn1" class="find_btn1" href="/nearby/member/findIdPw"><i class="fas fa-key"></i>아이디/비밀번호 찾기</a><br><br>
-                        <a id="join_btn1" class="join_btn1" href="/nearby/member/memberJoin"><i class="fas fa-sign-in-alt"></i>회원가입 하러가기</a>
+                        <a id="join_btn1" class="join_btn1" href="/nearby/member/agreement"><i class="fas fa-sign-in-alt"></i>회원가입 하러가기</a>
                     </div>
              </form>   
       

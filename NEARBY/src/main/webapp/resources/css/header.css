@@ -40,7 +40,7 @@ ul, li {
 }
 
 .left_box {
-	width: 440px;
+	width: 360px;
 	height: 100%;
 }
 
@@ -51,6 +51,7 @@ ul, li {
 
 .right_box {
 	display: inline-flex;
+	width: 400px;
 }
 
 .left_box > a {
@@ -72,7 +73,17 @@ ul, li {
 
 .text_icon_box {
 	display: none;
+	position: absolute;
+	height: 36px;
+	padding: 6px 20px;
+	border-radius:8px;
+	background-color: rgba(40, 40, 40, 0.7);
+	top:104px;
 }
+.t1 {margin-left: -121px}
+.t2 {margin-left: -131px}
+.t3 {margin-left: -134px}
+.t4 {margin-left: -161px}
 
 .btn_box {
 	display: flex;
@@ -95,12 +106,14 @@ ul, li {
 	flex-direction: row;
 }
 
-li  a  i {
+.btn_box li  a  i {
 	color: #6f7070;
 	text-align: center;
 	margin: 30px auto;
 	font-size: 40px;
 }
+
+
 
 a:link {
 	color: black;
@@ -121,17 +134,22 @@ li>a:hover {
 	border-radius: 4px;
 }
 
+
+
 form {
 	display: inline-block;
+}
+.main_search {
+	position: absolute;
+	left: 1400px;
+	
 }
 
 .search_box {
 	display: flex;
 	border-radius: 10px;
-	margin-left: 40px;
 	margin-bottom: 30px;
 	margin-top: 26px;
-	margin-left: 40px;
 	border: none;
 	width: 280px;
 	height: 46px;
@@ -169,9 +187,11 @@ form {
 }
 
 #profile_box {
+	position: absolute;
+	top : 20px;
+	left: 1760px;
 	width: 60px;
 	height: 60px;
-	margin: 18px;
 	border-radius: 100%;
 }
 
@@ -184,10 +204,11 @@ form {
 
 #profile_menu {
 	z-index: 6000;
-    margin-top: 84px;
-    margin-left: -140px;
-	width: 140px;
-	height: 138px;
+    position: absolute;
+	top : 104px;
+	left: 1710px;
+	width: 160px;
+	height: 178px;
 	border: 1px solid rgb(240, 242, 245);
 	border-radius: 3px;
 	background-color: white;
@@ -215,17 +236,47 @@ form {
 	display: block;
 }
 
-#profile_menu_list1, #profile_menu_list2, #profile_menu_list3 {
+#profile_menu_list1, #profile_menu_list2, #profile_menu_list3 ,  #profile_menu_list4,  #profile_menu_list5 {
 	font-size: 14px;
 	font-weight: normal;
+	color: rgb(100, 100, 100);
+}
+
+#profile_menu li:hover a{
+	cursor: pointer;
 	color: black;
+	font-weight: bold;
+}
+#profile_menu li:hover i{
+	cursor: pointer;
+	color: black;
+	font-weight: bold;
 }
 
 #profile_menu_list1 {
 	font-weight: bold;
 	font-size: 15px;
+	color: black;
+}
+#profile_menu_list5 {
+	border-bottom: none;
+}
+
+#profile_menu i {
+	font-size: 12px;
+	color: gray;
+	margin: 6px 4px;
 }
 
 .pointer:hover {
 	cursor: pointer;
 }
+.text_icon_box a {
+	color:white;
+	font-weight: 300;
+	font-size: 16px;
+	font-family: 'Noto Sans KR';
+}
+.boxes:hover +.text_icon_box {
+	display: inline-block;
+} 

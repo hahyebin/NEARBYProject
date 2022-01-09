@@ -10,7 +10,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/header.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/boardUpdate.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/board/boardUpdate.css">
 <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=4lnq99nnpg&submodules=geocoder"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
@@ -18,6 +18,7 @@
 	$(document).ready(function(){
 		map();
 		fnTextLimit(); // 글자수제한
+		fnCheckLogin();
 		// 글 수정 날짜
 	    let today = new Date();
 	    let year = today.getFullYear();
@@ -34,6 +35,7 @@
 	    $('#today').text(month +"월 "+ day+"일 "+ amPm +" "+ hour+":"+minute);
 	    
 	})
+	
 	
 	 function fnTextLimit(){
 	   $('#content').on('keyup', function(){
@@ -257,6 +259,28 @@
 		naver.maps.onJSContentLoaded = initGeocoder;
 		naver.maps.Event.once(map, 'init_stylemap', initGeocoder);
 	}
+	
+
+	/* ----------------------------------------- fnCheckLogin() --------------------------------  */
+ 	function fnCheckLogin(){
+		let loginInfo = '${loginUser.id}';
+		if (loginInfo == '') {
+			
+		 Swal.fire({
+				text: '세션이 만료되었습니다. 로그인 화면으로 이동하시겠습니까?',
+		        icon: 'warning',
+		        showCancelButton: true,
+		        confirmButtonColor: '#D4D4D4',  // confirm
+		        cancelButtonColor: '#D4D4D4',   // cancel
+		        confirmButtonText: '이동',
+		        cancelButtonText: '취소'	
+		     }).then((result) => {
+				if(result.isConfirmed) { // confirm이 false이면 return
+					location.href='/nearby/';
+				}
+		     })
+		}
+	}	 	 		
 	
 </script>
 </head>

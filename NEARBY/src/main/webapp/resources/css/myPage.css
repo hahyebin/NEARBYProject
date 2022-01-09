@@ -35,7 +35,7 @@
 	.profile_container{
 	    width: 600px;
 	    height: 850px;
-	    margin: 150px auto;
+	    margin: 150px auto 0 auto;
 	    background-color: white;
 	    border-radius: 30px;
 	    padding-bottom: 20px;

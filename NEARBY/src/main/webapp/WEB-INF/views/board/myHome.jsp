@@ -16,11 +16,18 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/myHome.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/outputReplyOnly.css">
 <script src="${pageContext.request.contextPath}/resources/js/myHome.js" ></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
 <style>
 
 /* ------------------- reply 구역 ----------------- */
+
+	.output_reply_area {
+		margin-left: 20px;
+	}
+	
 	.replyCount {
-      margin-left: 50px;
+      margin-left: 80px;
       line-height: 37px; 
 	}
 	/* 댓글 없을 때 */
@@ -49,6 +56,7 @@
 $(document).ready(function(){
 	 fnSendBno();
 	 fnReply();
+	 fnCheckLogin();
  });
 function fnSendBno(){
 	
@@ -232,6 +240,27 @@ function fnSendBno(){
 	         location.href= '/nearby/board/updateBoardPage?bNo='+ $('#selectBoardNo').val();
    }
  
+	 
+	/* ----------------------------------------- fnCheckLogin() --------------------------------  */
+ 	function fnCheckLogin(){
+		let loginInfo = '${loginUser.id}';
+		if (loginInfo == '') {
+			
+		 Swal.fire({
+				text: '세션이 만료되었습니다. 로그인 화면으로 이동하시겠습니까?',
+		        icon: 'warning',
+		        showCancelButton: true,
+		        confirmButtonColor: '#D4D4D4',  // confirm
+		        cancelButtonColor: '#D4D4D4',   // cancel
+		        confirmButtonText: '이동',
+		        cancelButtonText: '취소'	
+		     }).then((result) => {
+				if(result.isConfirmed) { // confirm이 false이면 return
+					location.href='/nearby/';
+				}
+		     })
+		}
+	}	 
 </script>
 
 </head>
@@ -245,7 +274,7 @@ function fnSendBno(){
 		<div class="user_box">
 			<div class="user_img_box">
 				<c:if test="${empty loginUser.profile.pSaved}">
-					<img id="user_img" src="${pageContext.request.contextPath}/resources/image/profile_default.png" onclick="fnShowBtnBox()" class="pointer defaultImg">
+					<img id="user_img" src="${pageContext.request.contextPath}/resources/image/profile_default.png"  class="pointer defaultImg">
 				</c:if>
 				<c:if test="${not empty loginUser.profile.pSaved}">
 					<img id="user_img" src="/nearby/${loginUser.profile.pPath}/${loginUser.profile.pSaved}">               
@@ -259,11 +288,11 @@ function fnSendBno(){
                     <input id="my_border" type="button" value="게시물">
                     <label for="my_border">${userBoardCount}</label>
 
-                    <input id="my_follower" type="button" value="팔로워">
-                    <label for="my_follower">${f:length(followedList)}</label>
+                    <input id="my_follower" type="button" value="팔로워" onclick="location.href='/nearby/follow/followList'">
+                    <label for="my_follower" onclick="location.href='/nearby/follow/followList'">${f:length(followedList)}</label>
 
-                    <input id="my_following" type="button" value="팔로잉">
-                    <label for="my_following">${f:length(followingList)}</label>
+                    <input id="my_following" type="button" value="팔로잉" onclick="location.href='/nearby/follow/followList'">
+                    <label for="my_following" onclick="location.href='/nearby/follow/followList'">${f:length(followingList)}</label>
                 </div>
 
                 <div class="content_box">
@@ -320,7 +349,12 @@ function fnSendBno(){
 	                   <div class="idAndDate">
 	                     	
 							<div class="user_id id">
-								<a href="/nearby/board/selectBoard" id="board_writer">${board.id}</a>
+					    	     <c:if test="${loginUser.id != board.id}">
+		                   			<a href="/nearby/board/selectUserHome?id=${board.id}">${board.id}</a>
+		               			</c:if>
+		               			<c:if test="${loginUser.id == board.id}">
+		                		   <a href="/nearby/board/myHome">${board.id}</a>                
+		              			</c:if>
 							</div>
 							<div class="date">
 					    	    <fmt:formatDate value="${board.created}" pattern="MM월 dd일  a hh:mm" />

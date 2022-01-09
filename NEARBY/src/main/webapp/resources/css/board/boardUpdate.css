@@ -1,5 +1,5 @@
 @charset "UTF-8";
-/* 초기화 */
+    /* 초기화 */
 	*{
 		padding: 0;
 		margin: 0;
@@ -10,7 +10,7 @@
 		color: black;
 		font-weight: bold;
 	}
-/* header css */
+    /* header css */
 	.header {
 		width: 100%;
 		height: 106px;
@@ -18,7 +18,7 @@
 	}
 	#home_btn { border-bottom: 8px solid  #fe4662; }
 	#home_icon { color: #fe4662; }
-/* End header Css */	
+    /* End header Css */	
 	
 	.mainBoard_wrap {
 		margin: 0 auto;
@@ -28,7 +28,7 @@
 	/*  board form */
 	#mainBoardWrap_form {
 		width: 560px; 
-		border: 1px solid #fe4662;
+		border : 2px solid pink;
 		padding : 15px 15px 30px 15px;
 		border-radius: 10px;
 		margin: 30px auto;

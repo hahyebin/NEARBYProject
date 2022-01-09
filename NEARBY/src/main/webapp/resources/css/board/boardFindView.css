@@ -22,7 +22,7 @@
 /* main board wrap */
 	.mainBoardWrap {
 		width: 560px; 
-		border: 2px solid #fab1bc; 
+		border: 2px solid pink; 
 		padding: 15px;
 		border-radius: 15px;
 		margin: 30px auto;

@@ -8,24 +8,21 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-@ControllerAdvice
-@Controller
+/*@ControllerAdvice
+@Controller*/
 public class ErrorController {
 
 	
 	
-	
-	@ExceptionHandler(Exception.class)
-	public String except(Exception e, Model model){
-		model.addAttribute("exception", e);
-		return "error/500error";
-	}
-	
-	
-	@ExceptionHandler(NoHandlerFoundException.class)
-	@ResponseStatus(value = HttpStatus.NOT_FOUND)
-	public String handle404(NoHandlerFoundException ex) {
-		return "error/404error";
-	}
+//	/*
+//	 * @ExceptionHandler(Exception.class) public String except(Exception e, Model
+//	 * model){ model.addAttribute("exception", e); return "error/500error"; }
+//	 * 
+//	 * 
+//	 * @ExceptionHandler(NoHandlerFoundException.class)
+//	 * 
+//	 * @ResponseStatus(value = HttpStatus.NOT_FOUND) public String
+//	 * handle404(NoHandlerFoundException ex) { return "error/404error"; }
+//	 */
 	
 }

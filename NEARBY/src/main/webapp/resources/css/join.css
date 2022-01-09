@@ -260,6 +260,33 @@ input[type=text]{
 	font-weight: 900;
 }
 
+/* sweet alert */
+/* error icon */
+.swal2-icon.swal2-error {color: pink; border-color: pink;}
+.swal2-icon.swal2-error [class^=swal2-x-mark-line] {
+    display: block;
+    position: absolute;
+    top: 2.3125em;
+    width: 2.9375em;
+    height: 0.3125em;
+    border-radius: 0.125em;
+    background-color: #ffc0cb;
+}
+
+/* success icon*/
+.swal2-icon.swal2-success [class^=swal2-success-line] {background-color: #2778c4;}
+.swal2-icon.swal2-success .swal2-success-ring{border: 0.25em solid #2778c4;}
+
+/* button */
+.swal2-confirm {
+    border: 0;
+    border-radius: 0.25em;
+    background: initial;
+    background-color: #ffc1cb;
+    color: #fff;
+    font-size: 1em;
+}
+
 /* 정규식 메세지 */
 .error_msg {
     display: block;

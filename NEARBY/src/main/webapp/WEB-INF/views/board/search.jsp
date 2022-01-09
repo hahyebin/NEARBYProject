@@ -10,8 +10,9 @@
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/header.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/boardView.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/search.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/outputReplyOnly.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 
 <style>
@@ -34,7 +35,13 @@
 	        });
 	    }
 	    
-	})
+	    fnCheckLogin();
+	});
+	//fnMoveUserHome();
+	function fnMoveUserHome(id) {
+		location.href='/nearby/board/selectUserHome?id='+ id; 
+	}
+	
 	function fnSendBno(){
 		
 		$.each($('.output_reply_table'), function(i, replyTable) {	
@@ -121,93 +128,111 @@ function fnLike(i){
 	
  /* ----------------------------------------- fnReply() --------------------------------  */
 
-
-function fnReply(){
-
-		
-	$.each($('.output_reply_table'), function(i, replyTable) {
-		let bNo = $(replyTable).parent().prev().val();
-		var page = 1;
-		$.ajax({
-			      url: '/nearby/reply/replyList',
-			      type: 'get',
-			      data: "bNo=" + bNo + "&page=" + page,
-			      dataType: 'json',
-			      success: function(map) {
-						fnPrintReplyList(map);
-			      },
-			      error: function(xhr) {
-			         console.log(xhr.responseText);
-			      }
-			   }) // End ajax			
 	
-		function fnPrintReplyList(map){
-			$(replyTable).empty();
-
-			 var p = map.pageUtils;
-			 let id = '${loginUser.id}';
+	function fnReply(){
+	
+			
+		$.each($('.output_reply_table'), function(i, replyTable) {
+			let bNo = $(replyTable).parent().prev().val();
+			var page = 1;
+			$.ajax({
+				      url: '/nearby/reply/replyList',
+				      type: 'get',
+				      data: "bNo=" + bNo + "&page=" + page,
+				      dataType: 'json',
+				      success: function(map) {
+							fnPrintReplyList(map);
+				      },
+				      error: function(xhr) {
+				         console.log(xhr.responseText);
+				      }
+				   }) // End ajax			
 		
-			if (p.totalRecord == 0) {
-			    $('<tr>')
-			    .append( $('<td colspan="5" class="reply_none">').text('첫 번째 댓글의 주인공이 되어보세요!') )
-			    .appendTo( replyTable );
-			 } else {
-			    
-				$.each(map.replyList, function(i, reply){
-				    if ( reply.profile.pSaved != null ) { 
-						let pSaved = reply.profile.pSaved;
-						let pPath = reply.profile.pPath;
-						$(replyTable).append( $('<tr>').html( $('<td rowspan="2" class="reply_user_image_area"><img class="reply_user_img" src="/nearby/'+pPath+'/'+pSaved+'"></td>') ) );
-				      } else if ( reply.profile.pPath == null ) { 
-						$(replyTable).append( $('<tr>').html( $('<td rowspan="2" class="reply_user_image_area"><img class="reply_user_img" src="${pageContext.request.contextPath}/resources/image/profile_default.png"></td>') ) );
-				      } // End if 프사 부분 
-				
-			         let strContent = reply.rContent;
-			         let reply_content = ''; 
+			function fnPrintReplyList(map){
+				$(replyTable).empty();
+	
+				 var p = map.pageUtils;
+				 let id = '${loginUser.id}';
+			
+				if (p.totalRecord == 0) {
+				    $('<tr>')
+				    .append( $('<td colspan="5" class="reply_none">').text('첫 번째 댓글의 주인공이 되어보세요!') )
+				    .appendTo( replyTable );
+				 } else {
+				    
+					$.each(map.replyList, function(i, reply){
+					    if ( reply.profile.pSaved != null ) { 
+							let pSaved = reply.profile.pSaved;
+							let pPath = reply.profile.pPath;
+							$(replyTable).append( $('<tr>').html( $('<td rowspan="2" class="reply_user_image_area"><img class="reply_user_img" src="/nearby/'+pPath+'/'+pSaved+'"></td>') ) );
+					      } else if ( reply.profile.pPath == null ) { 
+							$(replyTable).append( $('<tr>').html( $('<td rowspan="2" class="reply_user_image_area"><img class="reply_user_img" src="${pageContext.request.contextPath}/resources/image/profile_default.png"></td>') ) );
+					      } // End if 프사 부분 
 					
-			         if (strContent.length > 30) {
-						reply_content = strContent.substring(0, 30) + '...';
-					} else {
-						reply_content = strContent;
+				         let strContent = reply.rContent;
+				         let reply_content = ''; 
+						
+				         if (strContent.length > 30) {
+							reply_content = strContent.substring(0, 30) + '...';
+						} else {
+							reply_content = strContent;
+						}
+						
+						$('<tr class="reply_show">')
+						.append( $('<td class="reply_user_name_area">').html( $('<a id="link_'+reply.rNo+'" class="user_page_link">'+reply.id+'</a>') ) )
+						.append( $('<td class="like_icon_area">').html( $('<td colspan="4" class="pointer re_content_area" onclick="fnShowViewPage('+reply.bNo+')">'+reply_content+'</td><td></td>') ) )
+						.appendTo( replyTable );
+						
+						// 유저 이름당 링크 만들기
+						if (reply.id != id) {
+							$('.user_page_link[id=link_'+reply.rNo+']').attr('href','/nearby/board/selectUserHome?id='+reply.id);
+						} else if(reply.id == id) {
+							$('.user_page_link[id=link_'+reply.rNo+']').attr('href','/nearby/board/myHome');
+						}
+						
+						
+					}) // End inner each
+					
+					// 게시글당 댓글 수 삽입부
+					$(".reply_count_per_board[id=\""+bNo+"\"]").text(map.total);
+					
+					
+					// 게시글당 댓글 수에 따른 아이콘 색상변경부
+			 		if (map.total > 0 ) {
+						$('.countIcon[id=icon_'+bNo+']').addClass('like').removeClass('unlike');
+					} else if (map.total < 0 ) {
+						$('.countIcon[id=icon_'+bNo+']').addClass('unlike').removeClass('like');
 					}
+			 		
+	
 					
-					$('<tr class="reply_show">')
-					.append( $('<td class="reply_user_name_area">').html( $('<a id="link_'+reply.rNo+'" class="user_page_link">'+reply.id+'</a>') ) )
-					.append( $('<td class="like_icon_area">').html( $('<td colspan="4" class="pointer re_content_area" onclick="fnShowViewPage('+reply.bNo+')">'+reply_content+'</td><td></td>') ) )
-					.appendTo( replyTable );
-					
-					// 유저 이름당 링크 만들기
-					if (reply.id != id) {
-						$('.user_page_link[id=link_'+reply.rNo+']').attr('href','/nearby/board/selectUserHome?id='+reply.id);
-					} else if(reply.id == id) {
-						$('.user_page_link[id=link_'+reply.rNo+']').attr('href','/nearby/board/myHome');
-					}
-					
-					
-				}) // End inner each
-				
-				// 게시글당 댓글 수 삽입부
-				$(".reply_count_per_board[id=\""+bNo+"\"]").text(map.total);
-				
-				
-				// 게시글당 댓글 수에 따른 아이콘 색상변경부
-		 		if (map.total > 0 ) {
-					$('.countIcon[id=icon_'+bNo+']').addClass('like').removeClass('unlike');
-				} else if (map.total < 0 ) {
-					$('.countIcon[id=icon_'+bNo+']').addClass('unlike').removeClass('like');
+				 } // End if 
+	
+			} // End fnPrintReplyList
+		}); // End outer each
+	} // End fnReply 
+
+	/* ----------------------------------------- fnCheckLogin() --------------------------------  */
+ 	function fnCheckLogin(){
+		let loginInfo = '${loginUser.id}';
+		if (loginInfo == '') {
+			
+		 Swal.fire({
+				text: '세션이 만료되었습니다. 로그인 화면으로 이동하시겠습니까?',
+		        icon: 'warning',
+		        showCancelButton: true,
+		        confirmButtonColor: '#D4D4D4',  // confirm
+		        cancelButtonColor: '#D4D4D4',   // cancel
+		        confirmButtonText: '이동',
+		        cancelButtonText: '취소'	
+		     }).then((result) => {
+				if(result.isConfirmed) { // confirm이 false이면 return
+					location.href='/nearby/';
 				}
-		 		
-
-				
-			 } // End if 
-
-		} // End fnPrintReplyList
-	}); // End outer each
-} // End fnReply 
-
- 	
- 	
- 	
+		     })
+		}
+	}	 	 		
+	
 </script>
 <style>
   .board_icon{
@@ -235,15 +260,36 @@ function fnReply(){
 	</c:if>	
 	
 	<div class="search_result_text">
-		<c:if test="${empty list[0]}">
+		<c:if test="${empty list[0] and empty profileList}">
 			<div class="search_result_wrap"><h3>" ${query} " </h3> 에 대한 검색 결과가 없습니다.</div>
 		</c:if>
-		<c:if test="${not empty list[0]}">
+		<c:if test="${not empty list[0] or not empty profileList}">
 			<div class="search_result_wrap"><h3>" ${query} " </h3> 에 대한 검색 결과</div>
 		</c:if>
 	</div>
 
 	<div class="board_container">
+	
+	 <c:if test="${not empty profileList}">
+            <div class="profile_list_container">
+                <c:forEach items="${profileList}" var="profileList">
+                    <c:if test="${not empty profileList.pSaved}" >
+                        <div class="profile_each_container">
+                            <img id="user_img" src="/nearby/${profileList.pPath}/${profileList.pSaved}" onclick="fnMoveUserHome('${profileList.id}')" class="pointer">
+                            <p>${profileList.id}</p>
+                        </div>
+
+                    </c:if>
+                    <c:if test="${empty profileList.pSaved}">
+                        <div class="profile_each_container">
+                            <img id="user_img" src="${pageContext.request.contextPath}/resources/image/profile_default.png" onclick="fnMoveUserHome('${profileList.id}')" class="pointer defaultImg">
+                            <p>${profileList.id}</p>
+                        </div>
+
+                    </c:if>
+                </c:forEach>
+            </div>
+   	  </c:if>
 	 	 
 	 
 	 <c:if test="${not empty list[0]}"> 
@@ -254,10 +300,10 @@ function fnReply(){
 		    <div class="boardIntro"> 
 		    	<div class="profileImg"  id="p_img">
 		    <c:if test="${empty board.profile.pSaved}">
-				<img id="user_img" src="${pageContext.request.contextPath}/resources/image/profile_default.png" onclick="fnShowBtnBox()" class="pointer defaultImg">
+				<img id="user_img" src="${pageContext.request.contextPath}/resources/image/profile_default.png" onclick="fnMoveUserHome('${board.profile.id}')"  class="pointer defaultImg">
 			</c:if>
 		    <c:if test="${board.profile.id == board.id and not empty board.profile.pSaved}" >
-		    		<img id="user_img" src="/nearby/${board.profile.pPath}/${board.profile.pSaved}"  class="pointer">
+		    		<img id="user_img" src="/nearby/${board.profile.pPath}/${board.profile.pSaved}"  class="pointer" onclick="fnMoveUserHome('${board.profile.id}')" >
 		    </c:if>
 		    	</div>
 		    	<input type="hidden" id="bNo" value="${board.bNo}">
@@ -265,9 +311,9 @@ function fnReply(){
 		    	<input type="hidden" id="saved" value="${board.saved}">
 		    	<input type="hidden" id="location" value="${board.location}">
 		    	<div class="id">
-		    	   <a href="/nearby/board/selectBoard" id="board_writer">${board.id}</a>
+		    	   <a href="/nearby/board/selectUserHome?id=${board.id}" id="board_writer">${board.id}</a>
 		    	</div>
-		    </div>
+		 </div>
   		<!--------------------- 내용만 삽입할 때 ------------------------------->
  			 <c:if test="${ null == board.origin }">
 	  			<div class="AddrAndContent"  onclick="location.href='/nearby/board/selectBoard?bNo=${board.bNo}';">
@@ -326,7 +372,7 @@ function fnReply(){
 				  		</div>
 		  		</div>
 		  			<!--  댓글 보이기  -->
-		  			<div class="input_reply_area">	  			
+	  			<div class="input_reply_area">	  			
 			  		<div class="reply_wrap">
 			  			<!-- 댓글 뿌리기 -->
 			  			<div class="output_reply_area">

@@ -15,6 +15,12 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 --><tomcat-users version="1.0" xmlns="http://tomcat.apache.org/xml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://tomcat.apache.org/xml tomcat-users.xsd">
+<!-- 톰캣 매니저 추가하는 부분 -->
+<role rolename="manager-gui"/>
+<role rolename="manager-script"/>
+<role rolename="manager-jmx"/>
+<role rolename="manager-status"/>
+<user password="1111" roles="manager-gui, manager-script, manager-jmx, manager-status" username="tomcat-manager"/>
 <!--
   By default, no user is included in the "manager-gui" role required
   to operate the "/manager/html" web application.  If you wish to use this app,

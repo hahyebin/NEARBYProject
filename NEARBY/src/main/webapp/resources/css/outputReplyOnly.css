@@ -50,6 +50,7 @@
 	.output_reply_area .reply_user_name_area{
 		color: black;
 		width: auto;
+	    font-weight: 600;
 	}
 	.like_icon_area {
 		font-size: 16px;

@@ -59,6 +59,7 @@
                     <!-- 이메일 -->
                     <label for="email">이메일</label>
                         <input type="text" id="email" name="email">
+                        <input type="button" value="이메일 확인" id="emailCheck_btn">
                     	<span class="icon"><i class="fas fa-check emailCheckTrue"></i><i class="fas fa-times emailCheckFalse"></i></span>
                     
                     <!-- 인증코드 발송 버튼-->

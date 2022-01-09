@@ -12,10 +12,12 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
         integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/header.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/myHome.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/outputReplyOnly.css">
 <script src="${pageContext.request.contextPath}/resources/js/myHome.js" ></script>
+
 <style>
 
 
@@ -33,6 +35,12 @@
    .like   { color: #fe4662; cursor: pointer;  }
    .unlike { color: gray; cursor: pointer;     }
 /* ------------------- reply 구역 ----------------- */
+	
+	
+	.output_reply_area {
+		margin-left: 20px;
+	}
+
 	.replyCount {
       margin-left: 80px;
       line-height: 37px; 
@@ -51,11 +59,12 @@ $(document).ready(function(){
 	 fnCheckFollow();	 
 	 fnSendBno();
 	 fnReply();
-	 
+	 fnCheckLogin();
  });
-//fnCheckFollow();
+//fnCheckFollow(); 
 function fnCheckFollow() {
-	let pId = '${user[0].profile.id}';
+	console.log('ddd${userId}');
+	let pId = '${userId}';
 	let follow = JSON.stringify({
   	  profile : {id : pId} 
 	  	});
@@ -68,11 +77,13 @@ function fnCheckFollow() {
 	    success: function(map) {
 	    	  console.log(map);
 	    	  if(map.result == 1) { 
-	    	  console.log('팔로잉중');
+		    	  console.log('팔로잉중');
+		    	  $('#profile_setup').val('팔로잉').attr('onclick', 'fnUnfollowing()');
 	    	  } else if (map.result == 0) {
-	    	  console.log('팔로우하기');		  
-	    	  }
-	    	  
+	    	 	  console.log('팔로우하기');		  
+	    	 	  $('#profile_setup').val('팔로우').attr('onclick', 'fnFollowing()');
+	    	 	  
+	    	  }	  
 	      },
 	     error: function(xhr) {
 	    	  console.log(xhr.responseText);
@@ -85,7 +96,7 @@ function fnCheckFollow() {
 //fnFollowing();
 function  fnFollowing() {
 	console.log('Following() 실행');
-	let id = '${user[0].profile.id}';
+	let id = '${userId}';
 	console.log(id);
 	$.ajax({
 	      url: '/nearby/follow/following',
@@ -99,6 +110,7 @@ function  fnFollowing() {
 	    	  console.log(map);
 	    	  if(map.result == 1) { 
 	    	  console.log('성공');
+	    	  location.href='/nearby/board/selectUserHome?id=' +id;
 	    	  } else {
 	    	  console.log('실패');		  
 	    	  }
@@ -113,7 +125,7 @@ function  fnFollowing() {
 //fnUnfollowing();
 function  fnUnfollowing() {
 	console.log('unfollowing() 실행');
-	let id = '${user[0].profile.id}';
+	let id = '${userId}';
 	console.log(id);
 	$.ajax({
 	      url: '/nearby/follow/unfollowing',
@@ -127,16 +139,16 @@ function  fnUnfollowing() {
 	    	  console.log(map);
 	    	  if(map.result == 1) { 
 	    	  console.log('성공');
+	    	  location.href='/nearby/board/selectUserHome?id=' +id;
 	    	  } else {
 	    	  console.log('실패');		  
 	    	  }
-	    	  
 	      },
 	      error: function(xhr) {
 	    	  console.log(xhr.responseText);
 	      }
 	   }) // End ajax	   
-}
+} 
  
  
  
@@ -305,7 +317,29 @@ function fnSendBno(){
 	      if(confirm('게시글을 수정하시겠습니까?') )
 	         location.href= '/nearby/board/updateBoardPage?bNo='+ $('#selectBoardNo').val();
    }
+
 	 
+	/* ----------------------------------------- fnCheckLogin() --------------------------------  */
+ 	function fnCheckLogin(){
+		console.log('logincheck');
+		let loginInfo = '${loginUser.id}';
+		if (loginInfo == '') {
+			
+		 Swal.fire({
+				text: '세션이 만료되었습니다. 로그인 화면으로 이동하시겠습니까?',
+		        icon: 'warning',
+		        showCancelButton: true,
+		        confirmButtonColor: '#D4D4D4',  // confirm
+		        cancelButtonColor: '#D4D4D4',   // cancel
+		        confirmButtonText: '이동',
+		        cancelButtonText: '취소'	
+		     }).then((result) => {
+				if(result.isConfirmed) { // confirm이 false이면 return
+					location.href='/nearby/';
+				}
+		     })
+		}
+	}	 	 		 
 </script>
 </head>
 <body>
@@ -325,17 +359,18 @@ function fnSendBno(){
             </div>
 
             <div class="user_item_box">
-                <span>${user[0].profile.id}</span>
+                <span>${userId}</span>
 
                 <div class="follower_box">
                     <input id="my_border" type="button" value="게시물">
-                    <label for="my_border">구현 안 됨</label>
+                    <label for="my_border">${userBoardCount}</label>
+					
+                    <input id="my_follower" type="button" value="팔로워" onclick="location.href='/nearby/follow/userFollow?id='+ '${user[0].profile.id}'">
+                    <label for="my_follower" onclick="location.href='/nearby/follow/userFollow?id='+ '${user[0].profile.id}'">${f:length(followedList)}</label>
 
-                    <input id="my_follower" type="button" value="팔로워">
-                    <label for="my_follower">${f:length(followedList)}</label>
-
-                    <input id="my_following" type="button" value="팔로잉">
-                    <label for="my_following">${f:length(followingList)}</label>
+                    <input id="my_following" type="button" value="팔로잉" onclick="location.href='/nearby/follow/userFollow?id='+ '${user[0].profile.id}'">
+                    <label for="my_following" onclick="location.href='/nearby/follow/userFollow?id='+ '${user[0].profile.id}'">${f:length(followingList)}</label>
+               	
                 </div>
 
                 <div class="content_box">
@@ -345,15 +380,16 @@ function fnSendBno(){
             </div>
 
             <div class="profile_setup_box">
-                <input id="profile_setup" type="button" value="팔로우" onclick="fnFollowing()">
-                <input id="profile_setup" type="button" value="언팔하기" onclick="fnUnfollowing()">
-                <input id="profile_setup" type="button" value="맞팔로하기" onclick="">
+                <input id="profile_setup" type="button" value="" >
             </div>
-
         </div>
 
+		<c:if test="${empty user}">
+			<h1 style="text-align: center; font-size: 24px;">게시물 없음</h1>	
+		</c:if>   
+   
 		<!-- 게시물이 있을 때 -->
-		<c:if test="${not empty user[0]}">
+		<c:if test="${not empty user}">
 			<c:forEach items="${user}" var="board">
 			
 	        <!-- 게시물 전체를 감싸고 있는 박스 -->
@@ -365,12 +401,18 @@ function fnSendBno(){
 		                <!-- 유저 정보 -->
 		                <div class="board_head">
 		                    <div class="board_intro">
-		                    <c:if test="${empty board.profile.pSaved}">
-		                    	<img id="user_img" src="${pageContext.request.contextPath}/resources/image/profile_default.png">
-		                    </c:if>
-	    					<c:if test="${not empty board.profile.pSaved}">
-		                    	<img id="user_img" id="user_img" src="/nearby/${board.profile.pPath}/${board.profile.pSaved}">    					
-	    					</c:if>
+					    	    <c:if test="${loginUser.id != board.id}">
+		                   			<a class="goHome" href="/nearby/board/selectUserHome?id=${board.id}"></a>
+		               			</c:if>
+		               			<c:if test="${loginUser.id == board.id}">
+		                		   <a class="goHome" href="/nearby/board/myHome"></a>                
+		              			</c:if>
+			                    <c:if test="${empty board.profile.pSaved}">
+			                    	<img id="user_img" src="${pageContext.request.contextPath}/resources/image/profile_default.png">
+			                    </c:if>
+		    					<c:if test="${not empty board.profile.pSaved}">
+			                    	<img id="user_img" id="user_img" src="/nearby/${board.profile.pPath}/${board.profile.pSaved}">    					
+		    					</c:if>
 		                        <input type="hidden" id="bNo" value="${board.bNo}">
 		                        <input type="hidden" id="origin" value="${board.origin}">
 		                        <input type="hidden" id="saved" value="${board.saved}">
@@ -388,10 +430,10 @@ function fnSendBno(){
 						    	</div>
 							</div>
 		                </div>
-		
+						
 		                <div class="board_body">
 		                    <!-- 내용만 작성 했을 경우 -->
-		                    <c:if test="${ null == board.origin }">
+		                    <c:if test="${null == board.origin}">
 		                        <div class="AddrAndContent" onclick="location.href='/nearby/board/selectBoard?bNo=${board.bNo}';">
 		                            <!-- 지도 -->
 		                            <div class="addrAndMap">
@@ -410,8 +452,7 @@ function fnSendBno(){
 		                    <!-- 이미지/ 비디오가 삽입 되어 있을 경우 -->
 		                    <c:if test="${board.saved ne null}">
 		
-		                        <div class="addressAndImage"
-		                            onclick="location.href='/nearby/board/selectBoard?bNo=${board.bNo}';">
+		                        <div class="addressAndImage" onclick="location.href='/nearby/board/selectBoard?bNo=${board.bNo}';">
 		                            <div class="addrAndMap">
 		                                <i class="fas fa-map-marker-alt"></i>
 		                                <span class="address">${board.location}</span>

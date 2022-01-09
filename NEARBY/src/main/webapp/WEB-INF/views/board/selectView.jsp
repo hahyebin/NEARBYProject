@@ -12,8 +12,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/header.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/boardFindView.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/board/boardFindView.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/selectViewReply.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
 <style>
    .board_icon{
        margin-left: 25px;
@@ -59,6 +61,7 @@
 		fnShowUpdateBtn();
 		fnUpdateReply(); // 댓글 수정
 		fnDeleteReply(); // 댓글 삭제
+	    fnCheckLogin();
 		
 	    var txtArea = $(".content_height");
 	    if (txtArea) {
@@ -66,6 +69,7 @@
 	            $(this).height(this.scrollHeight);
 	        });
 	    }
+	    
 	})
 
 	function fnSetting(){
@@ -148,7 +152,6 @@
 			    	    } else if (map.count == 0) {
 			    	    	$("#like"+bNo).removeClass('like');
 			    	    }
-			    	  
 			      },
 			      error: function() {
  			      }
@@ -232,27 +235,14 @@
 	   }) // End ajax
 	} // End fnReplyList
 
-	   function fnReplyTotalCount(map) {
+	function fnReplyTotalCount(map) {
 	         $('#reply_count_per_board').text(map.total);
-	         console.log('  여기는 함수 내부이다     : '+map.total);
 	         if (map.total > 0 ) {
 	            $('.replyCount').addClass('like').removeClass('unlike');
 	         } else if (map.total == 0) {
 	            $('.replyCount').addClass('unlike').removeClass('like');
 	         }
 	}
-
-	   function fnReplyTotalCount(map) {
-	         $('#reply_count_per_board').text(map.total);
-	         console.log('  여기는 함수 내부이다     : '+map.total);
-	         if (map.total > 0 ) {
-	            $('.replyCount').addClass('like').removeClass('unlike');
-	         } else if (map.total == 0) {
-	            $('.replyCount').addClass('unlike').removeClass('like');
-	         }
-	}
-
-
 
 	   /* ----------------------------------------- fnPrintReplyList() --------------------------------  */
 
@@ -333,7 +323,7 @@
 				   return;
 			   }
 			   
-		       let reply = JSON.stringify({
+		      let reply = JSON.stringify({
 		         bNo: '${board.bNo}',
 		         id: '${loginUser.id}',
 		         rContent: $('#rContent').val(),
@@ -525,7 +515,26 @@
 			}) // body click event
 		} // End fnChangePage   
 		
-	
+		/* ----------------------------------------- fnCheckLogin() --------------------------------  */
+	 	function fnCheckLogin(){
+			let loginInfo = '${loginUser.id}';
+			if (loginInfo == '') {
+				
+			 Swal.fire({
+					text: '세션이 만료되었습니다. 로그인 화면으로 이동하시겠습니까?',
+			        icon: 'warning',
+			        showCancelButton: true,
+			        confirmButtonColor: '#D4D4D4',  // confirm
+			        cancelButtonColor: '#D4D4D4',   // cancel
+			        confirmButtonText: '이동',
+			        cancelButtonText: '취소'	
+			     }).then((result) => {
+					if(result.isConfirmed) { // confirm이 false이면 return
+						location.href='/nearby/';
+					}
+			     })
+			}
+		}	 	 		
 	
 </script>
 </head>

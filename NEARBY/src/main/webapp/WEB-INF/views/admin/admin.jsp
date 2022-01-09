@@ -9,83 +9,10 @@
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/adminHeader.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/admin/admin.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <title>Insert title here</title>
-<style>
 
-	#admin_btn { border-bottom: 8px solid #fe4662; }
-	#admin_icon {  color: #fe4662; border: none; }
-	.nearbyInfWrap{		margin-top: 130px;	}
-	
-	
-   /* 총 정보*/
-	.nearbyInfo {
-		display: inline-block;
-		text-align:center;
-		width:100%;
-		height: 100px;
-		margin: 15px auto;
-		text-align: center;
-	
-	}
-	.totalInfoWrap {
-		display: inline-block;
-		margin: 7px auto;	
-	}
-	.totalInfo {
-		display: inline-block;
-		margin: 0 50px;
-	}
-	.total_info_name { font-size: 20px;  color : #787777}
-	.total_info_result { font-size: 30px; color :#454545; }
-	
-	
-	.search_input { height: 30px; }
-	
-	#query {
-		padding-left: 10px;
-		outline: none;
-	}
-	.search_btn {
-		width: 50px;
-		height: 30px;
-		color : white;
-		border : none;
-		outline: none;
-		border-radius: 5%;
-		background-color: #fe4662;
-		cursor: pointer;
-	}
-	#column { outline : none; }
-	
-	
-/* 	<!-- 차트관련 -->	 */
-  .chartjs {
- 	width: 1950px;
- 	height: 850px;
- 	margin: 5px auto;
-  
-   }
-   .chartjs div {
-   	padding: 10px 80px;
-   }
- .donutchart1{
- 	margin-left: 30px;
- }
-  .barchart2{
- 	width: 100%;
- 	margin: 10px auto;
- }
- #barchart2 { margin: 0 auto; padding-left: 30px; }
- .genderAndAge {
- 	width: 100%;
- 	margin: 15px auto;
- 	display: flex;
- 	justify-content: center;
- }
- 
-</style>
 <script type="text/javascript">
   $(document).ready(function(){
 	 let today = new Date();
@@ -213,7 +140,7 @@ new Chart(document.getElementById("barchart2"), {
       datasets: [
         {
           label: "Location",
-          backgroundColor: ["#ffa358", "#ffa358","#ffa358","#fac0c0","#fc9d9d","#fc9d9d","#fc9d9d","#fc9d9d","#fc8b8b","#fc8b8b","#fc8b8b","pink","pink","#ffa358","#ffa358", "#ffa358","#ffa358"],
+          backgroundColor: ["#ffa358", "#ffa358","#ffa358","#ffa358","#ffa358","#ffa358","#ffa358","#ffa358","#ffa358","#ffa358","#ffa358","#ffa358","#ffa358","#ffa358","#ffa358", "#ffa358","#ffa358"],
           data: [ $("#seoul").val() , $("#incheon").val(),  $("#busan").val(), $("#daegu").val(), $("#daejun").val(),
         	      $("#ulsan").val(), $("#gwangju").val(), $("#sejong").val(), $("#gangwon").val(),$("#gyeonggi").val(), 
         	      $("#chungcheongbuk").val(), $("#chungcheongnam").val(), $("#gyeongsangbuk").val(), $("#gyeongsangnam").val(), 
