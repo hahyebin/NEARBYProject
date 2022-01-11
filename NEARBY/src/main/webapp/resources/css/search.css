@@ -240,9 +240,14 @@
    	   font-weight: bold; 
    }
    .profile_list_container {
-   	   display: block;
-   	   width: 600px;
+   	   display: flex;
+   	   width: 560px;
    	   margin: 0 auto;
    	   margin-bottom: 60px;
    	   
    }
+  .profile_each_container {
+  	text-align: center;
+  	margin: 10px;
+  }
+ 

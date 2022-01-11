@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.koreait.nearby.domain.Board;
 import com.koreait.nearby.domain.Follow;
 import com.koreait.nearby.domain.Likes;
+import com.koreait.nearby.domain.Profile;
 
 @Service
 public interface BoardService {
@@ -29,8 +30,10 @@ public interface BoardService {
      public Map<String, Object> boardBnoList(Long bNo,  HttpSession session);
     
     
-    // 검색
-    public List<Board> searchBoardList(HttpServletRequest request);
+  // 통합 검색
+     public List<Board> searchBoardList(HttpServletRequest request);
+     // ID 만 검색
+     public List<Profile> searchProfileList(HttpServletRequest request);
    
     /* myHome 이동 및 유저의 게시물 갯수 구하기 */
 	public int selectUserBoardsCount(HttpServletRequest request);
@@ -56,6 +59,8 @@ public interface BoardService {
 	public List<Follow> selectFollowedIdById(String id);
 	
 	
+	// 해당 유저의 게시물 구하기
+	public int selectUserHomeBoardsCount(String id);
     
    // default method
  	public default void message(int result, HttpServletResponse response,  String path) {

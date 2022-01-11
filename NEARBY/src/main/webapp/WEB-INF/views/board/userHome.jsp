@@ -7,7 +7,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>NearBy</title>
+<link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/resources/image/titleImg3.png">
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
         integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
@@ -63,13 +64,12 @@ $(document).ready(function(){
  });
 //fnCheckFollow(); 
 function fnCheckFollow() {
-	console.log('ddd${userId}');
 	let pId = '${userId}';
 	let follow = JSON.stringify({
   	  profile : {id : pId} 
 	  	});
 	$.ajax({
-		url: '/nearby/follow/checkFollow',
+		url: '<%=request.getContextPath()%>/follow/checkFollow',
 		type: 'post',
 		data: follow,
   	  	contentType: 'application/json',
@@ -79,11 +79,19 @@ function fnCheckFollow() {
 	    	  if(map.result == 1) { 
 		    	  console.log('팔로잉중');
 		    	  $('#profile_setup').val('팔로잉').attr('onclick', 'fnUnfollowing()');
+		    	 
+	    	  	
+	    	  
 	    	  } else if (map.result == 0) {
 	    	 	  console.log('팔로우하기');		  
 	    	 	  $('#profile_setup').val('팔로우').attr('onclick', 'fnFollowing()');
 	    	 	  
-	    	  }	  
+	    	 	  
+	    	  }
+
+	    	 
+	    	  
+	    	  
 	      },
 	     error: function(xhr) {
 	    	  console.log(xhr.responseText);
@@ -99,7 +107,7 @@ function  fnFollowing() {
 	let id = '${userId}';
 	console.log(id);
 	$.ajax({
-	      url: '/nearby/follow/following',
+	      url: '<%=request.getContextPath()%>/follow/following',
 	      type: 'post',
 	      data: JSON.stringify({
 	    	  'followedId' : id
@@ -110,7 +118,7 @@ function  fnFollowing() {
 	    	  console.log(map);
 	    	  if(map.result == 1) { 
 	    	  console.log('성공');
-	    	  location.href='/nearby/board/selectUserHome?id=' +id;
+	    	  location.href='<%=request.getContextPath()%>/board/selectUserHome?id=' +id;
 	    	  } else {
 	    	  console.log('실패');		  
 	    	  }
@@ -128,7 +136,7 @@ function  fnUnfollowing() {
 	let id = '${userId}';
 	console.log(id);
 	$.ajax({
-	      url: '/nearby/follow/unfollowing',
+	      url: '<%=request.getContextPath()%>/follow/unfollowing',
 	      type: 'post',
 	      data: JSON.stringify({
 	    	  'followedId' : id
@@ -139,10 +147,11 @@ function  fnUnfollowing() {
 	    	  console.log(map);
 	    	  if(map.result == 1) { 
 	    	  console.log('성공');
-	    	  location.href='/nearby/board/selectUserHome?id=' +id;
+	    	  location.href='<%=request.getContextPath()%>/board/selectUserHome?id=' +id;
 	    	  } else {
 	    	  console.log('실패');		  
 	    	  }
+	    	  
 	      },
 	      error: function(xhr) {
 	    	  console.log(xhr.responseText);
@@ -158,7 +167,7 @@ function fnSendBno(){
 	$.each($('.output_reply_table'), function(i, replyTable) {	
 		let bNo = $(replyTable).parent().prev().val();
 		$.ajax({
-			  url: '/nearby/board/boardBnoList',
+			  url: '<%=request.getContextPath()%>/board/boardBnoList',
 		      type: 'get',
 		      data: "bNo=" + bNo,
 		      dataType: 'json',
@@ -184,7 +193,7 @@ function fnSendBno(){
           if( $("#"+i).find('i').hasClass('like') == false )  {
             	$("#"+i).find('i').addClass('like');
 	            $.ajax({
-	 				url : '/nearby/board/likes',
+	 				url : '<%=request.getContextPath()%>/board/likes',
 	 				type: 'post',
 					data: "bNo="+i, 
 					dataType: 'json',
@@ -192,7 +201,7 @@ function fnSendBno(){
 	 					console.log(board);
 	 					console.log("좋아요 누른 카운트"+ board.likes);
 			  			   $( '#like_count'+bNo ).text(board.likes);
-			  			   location.href="/nearby/board/myHome";  
+			  			   location.href="<%=request.getContextPath()%>/board/myHome";  
 	 				},
 	 				error : function(xhr, error){
 	 					console.log(xhr.status);
@@ -206,13 +215,13 @@ function fnSendBno(){
     	$("#"+i).find('i').removeClass('like');
     	
  		$.ajax({
-  				url : '/nearby/board/likesCancel',
+  				url : '<%=request.getContextPath()%>/board/likesCancel',
   				type: 'post',
   				data: "bNo="+i, 
  				dataType: 'json',
   				success: function(board){
   				   $( '#like_count'+ bNo ).text(board.likes);
-  			   	 location.href="/nearby/board/myHome";
+  			   	 location.href="<%=request.getContextPath()%>/board/myHome";
   				   
   				},
   				error : function(xhr, error){
@@ -233,7 +242,7 @@ function fnSendBno(){
 			let bNo = $(replyTable).parent().prev().val();
 			var page = 1;
 			$.ajax({
-				      url: '/nearby/reply/replyList',
+				      url: '<%=request.getContextPath()%>/reply/replyList',
 				      type: 'get',
 				      data: "bNo=" + bNo + "&page=" + page,
 				      dataType: 'json',
@@ -282,9 +291,9 @@ function fnSendBno(){
 					
 						// 유저 이름당 href 링크 만들기
 						if (reply.id != id) {
-							$('.user_page_link[id=link_'+reply.rNo+']').attr('href','/nearby/board/selectUserHome?id='+reply.id);
+							$('.user_page_link[id=link_'+reply.rNo+']').attr('href','<%=request.getContextPath()%>/board/selectUserHome?id='+reply.id);
 						} else if(reply.id == id) {
-							$('.user_page_link[id=link_'+reply.rNo+']').attr('href','/nearby/board/myHome');
+							$('.user_page_link[id=link_'+reply.rNo+']').attr('href','<%=request.getContextPath()%>/board/myHome');
 						}
 						
 						
@@ -309,13 +318,13 @@ function fnSendBno(){
 	
 	
 	function fnShowViewPage(bNo) {
-		location.href='/nearby/board/selectBoard?bNo='+bNo;
+		location.href='<%=request.getContextPath()%>/board/selectBoard?bNo='+bNo;
 	}
 	
 	 /* 게시물 수정 */
 	function fnUpdateBtn(){
 	      if(confirm('게시글을 수정하시겠습니까?') )
-	         location.href= '/nearby/board/updateBoardPage?bNo='+ $('#selectBoardNo').val();
+	         location.href= '<%=request.getContextPath()%>/board/updateBoardPage?bNo='+ $('#selectBoardNo').val();
    }
 
 	 
@@ -335,7 +344,7 @@ function fnSendBno(){
 		        cancelButtonText: '취소'	
 		     }).then((result) => {
 				if(result.isConfirmed) { // confirm이 false이면 return
-					location.href='/nearby/';
+					location.href='<%=request.getContextPath()%>/';
 				}
 		     })
 		}
@@ -344,17 +353,29 @@ function fnSendBno(){
 </head>
 <body>
 
-    <jsp:include page="/WEB-INF/views/layout/header.jsp" flush="true" />
+    <c:if test="${loginUser.id != 'admin'}"> 
+      <header class="header">
+         <jsp:include page="/WEB-INF/views/layout/header.jsp" flush="true" />
+      </header>
+   </c:if>
+   
+    <c:if test="${loginUser.id == 'admin'}"> 
+      <header class="header">
+         <jsp:include page="/WEB-INF/views/layout/adminHeader.jsp" flush="true" />
+      </header>
+    </c:if>
+    
+       
      <section class="board">
 
         <!-- 프로필 사진, 이름, 게시물, 팔로워, 팔로잉, 프로필 설정-->
         <div class="user_box">
             <div class="user_img_box">
-            	<c:if test="${empty user[0].profile.pSaved}">
+            	<c:if test="${empty userProfile[0].pSaved}">
             		<img id="user_img" src="${pageContext.request.contextPath}/resources/image/profile_default.png">
             	</c:if>
-            	<c:if test="${not empty user[0].profile.pSaved}">
-            		<img id="user_img" src="/nearby/${user[0].profile.pPath}/${user[0].profile.pSaved}">            	
+            	<c:if test="${not empty userProfile[0].pSaved}">
+            		<img id="user_img" src="/nearby/${userProfile[0].pPath}/${userProfile[0].pSaved}">            	
             	</c:if>
             </div>
 
@@ -365,11 +386,11 @@ function fnSendBno(){
                     <input id="my_border" type="button" value="게시물">
                     <label for="my_border">${userBoardCount}</label>
 					
-                    <input id="my_follower" type="button" value="팔로워" onclick="location.href='/nearby/follow/userFollow?id='+ '${user[0].profile.id}'">
-                    <label for="my_follower" onclick="location.href='/nearby/follow/userFollow?id='+ '${user[0].profile.id}'">${f:length(followedList)}</label>
+                    <input id="my_follower" type="button" value="팔로워" onclick="location.href='<%=request.getContextPath()%>/follow/userFollow?id='+ '${userId}'">
+                    <label for="my_follower" onclick="location.href='<%=request.getContextPath()%>/follow/userFollow?id='+ '${userId}'">${f:length(followedList)}</label>
 
-                    <input id="my_following" type="button" value="팔로잉" onclick="location.href='/nearby/follow/userFollow?id='+ '${user[0].profile.id}'">
-                    <label for="my_following" onclick="location.href='/nearby/follow/userFollow?id='+ '${user[0].profile.id}'">${f:length(followingList)}</label>
+                    <input id="my_following" type="button" value="팔로잉" onclick="location.href='<%=request.getContextPath()%>/follow/userFollow?id='+ '${userId}'">
+                    <label for="my_following" onclick="location.href='<%=request.getContextPath()%>/follow/userFollow?id='+ '${userId}'">${f:length(followingList)}</label>
                	
                 </div>
 
@@ -402,10 +423,10 @@ function fnSendBno(){
 		                <div class="board_head">
 		                    <div class="board_intro">
 					    	    <c:if test="${loginUser.id != board.id}">
-		                   			<a class="goHome" href="/nearby/board/selectUserHome?id=${board.id}"></a>
+		                   			<a class="goHome" href="<%=request.getContextPath()%>/board/selectUserHome?id=${board.id}"></a>
 		               			</c:if>
 		               			<c:if test="${loginUser.id == board.id}">
-		                		   <a class="goHome" href="/nearby/board/myHome"></a>                
+		                		   <a class="goHome" href="<%=request.getContextPath()%>/board/myHome"></a>                
 		              			</c:if>
 			                    <c:if test="${empty board.profile.pSaved}">
 			                    	<img id="user_img" src="${pageContext.request.contextPath}/resources/image/profile_default.png">
@@ -422,7 +443,7 @@ function fnSendBno(){
 		                    <!-- 유저 아이디와 날짜 -->
 		                    <div class="idAndDate">
 			                    <div class="user_id">
-			                        <a href="/nearby/board/selectBoard" id="board_writer">${board.id}</a>
+			                        <a href="<%=request.getContextPath()%>/board/selectUserHome?id=${board.id}" id="board_writer">${board.id}</a>
 			                    </div>
 			                    <div class="date">
 						    	    <fmt:formatDate value="${board.created}" pattern="MM월 dd일  a hh:mm" />
@@ -434,7 +455,7 @@ function fnSendBno(){
 		                <div class="board_body">
 		                    <!-- 내용만 작성 했을 경우 -->
 		                    <c:if test="${null == board.origin}">
-		                        <div class="AddrAndContent" onclick="location.href='/nearby/board/selectBoard?bNo=${board.bNo}';">
+		                        <div class="AddrAndContent" onclick="location.href='<%=request.getContextPath()%>/board/selectBoard?bNo=${board.bNo}';">
 		                            <!-- 지도 -->
 		                            <div class="addrAndMap">
 		                                <i class="fas fa-map-marker-alt"></i>
@@ -452,7 +473,7 @@ function fnSendBno(){
 		                    <!-- 이미지/ 비디오가 삽입 되어 있을 경우 -->
 		                    <c:if test="${board.saved ne null}">
 		
-		                        <div class="addressAndImage" onclick="location.href='/nearby/board/selectBoard?bNo=${board.bNo}';">
+		                        <div class="addressAndImage" onclick="location.href='<%=request.getContextPath()%>/board/selectBoard?bNo=${board.bNo}';">
 		                            <div class="addrAndMap">
 		                                <i class="fas fa-map-marker-alt"></i>
 		                                <span class="address">${board.location}</span>
@@ -498,7 +519,7 @@ function fnSendBno(){
 		                        </div>
 		                        <!-- 댓글 수 -->
 	  				  		<div class="countIcon replyCount">
-				  				<i class="fas board_icon fa-comments countIcon replyCount"  id="icon_${board.bNo}" onclick="location.href='/nearby/board/selectBoard?bNo=${board.bNo}';"></i>
+				  				<i class="fas board_icon fa-comments countIcon replyCount"  id="icon_${board.bNo}" onclick="location.href='<%=request.getContextPath()%>/board/selectBoard?bNo=${board.bNo}';"></i>
 				  				<span class="reply_count_per_board" id="${board.bNo}">0</span>
 					  		</div>
 		                </div>

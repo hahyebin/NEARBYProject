@@ -41,7 +41,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    <!-- 회원가입 -->
      <insert id="joinMember" parameterType="Member">
         INSERT INTO MEMBER (ID, PW, NAME, EMAIL, BIRTHDAY, PHONE, GENDER, STATE, M_CREATED )
-     	VALUES ( #{id}, #{pw}, #{name}, #{email}, #{birthday}, #{phone}, #{gender}, 0, NOW() )
+     	VALUES ( #{id}, #{pw}, #{name}, #{email}, #{birthday}, #{phone}, #{gender}, 0, DATE_SUB(NOW(), INTERVAL 9 HOUR))
      </insert>
 
 

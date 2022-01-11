@@ -12,6 +12,7 @@ import com.koreait.nearby.domain.Follow;
 import com.koreait.nearby.domain.Member;
 import com.koreait.nearby.domain.Profile;
 import com.koreait.nearby.repository.FollowRepository;
+import com.koreait.nearby.repository.ProfileRepository;
 
 public class FollowServiceImpl implements FollowService {
 
@@ -80,14 +81,10 @@ public class FollowServiceImpl implements FollowService {
 	@Override
 	public List<Follow> selectFollowedIdById(HttpSession session) {
 
-		System.out.println("서비스세션 : " + session);
-		
 		FollowRepository followRepository = sqlSession.getMapper(FollowRepository.class);
 		
 		Member user = (Member)session.getAttribute("loginUser");
 		String id = user.getId();
-		
-		System.out.println("아이디 : " + id);
 		
 		List<Follow> list = followRepository.selectFollowedIdById(id);
 
@@ -95,6 +92,33 @@ public class FollowServiceImpl implements FollowService {
 		return list;
 		
 	}
+	@Override
+	public List<Follow> selectUserFollowedIdById(String id) {
+		FollowRepository followRepository = sqlSession.getMapper(FollowRepository.class);
+		
+		List<Follow> list = followRepository.selectFollowedIdById(id);
+	
+		
+		
+		return list;
+	}
+	
+	@Override
+	public List<Follow> selectUserFollowingIdById(String id) {
+		
+		FollowRepository followRepository = sqlSession.getMapper(FollowRepository.class);
+		List<Follow> list = followRepository.selectFollowingIdById(id);
+		return list;
+	}
+	
+	// 프로필만 가져오기
+	@Override
+	public Profile selectUserProfileOnly(String id) {
+		ProfileRepository profileRepository = sqlSession.getMapper(ProfileRepository.class);
+		Profile profile =profileRepository.selectProfile(id);
+		return profile;
+	}
+	
 	
 	// 팔로잉 체크
 	@Override

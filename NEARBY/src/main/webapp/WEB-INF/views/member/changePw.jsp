@@ -5,326 +5,23 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>비밀번호 변경</title>
+<title>NearBy - 비밀번호 변경</title>
+<link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/resources/image/titleImg3.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script src="${pageContext.request.contextPath}/resources/js/fnLoginCheck.js"></script>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/header.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/changePw.css">
 
 <style>
+ @import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+	.notosanskr * { font-family: 'Noto Sans KR', sans-serif; }
+	*{ margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Sans KR', sans-serif; font-size: 14px; }
 
-
-	/* 초기화 */
-	*{ margin: 0; padding: 0; box-sizing: border-box; font-size: 14px; font-weight: 600; }
-	
-	html{ background-color: rgb(240, 242, 245); }
-	
-	a{ text-decoration: 0; color: black; }
-	ul, ol{ list-style-type: none; }
-	
-	label{
-	    display: block;
-	    text-align: left;
-	    padding-bottom: 5px;
-	    font-size: 18px;
+	footer {
+		margin-top : 200px;
 	}
-	
-	input{
-		background-color: aliceblue;
-	    border: 2px solid rgb(0, 0, 0, 0);
-	}
-	
-	input:focus{
-	    outline: none;
-	}
-	
-	.container{
-	    width: 600px;
-	    padding-top: 70px;
-	    margin: 100px auto;
-	    background-color: white;
-	    border-radius: 30px;
-	}
-
-	.head{
-	    width: 100%;
-	}
-		
-	.pw_change_box{
-	    width: 600px;
-	    margin: 0 auto;
-	}
-	
-	/* 비밀번호 : 현재 비밀번호 / 새 비밀번호 / 새 비밀번호 확인 */
-	.input_box{
-	    width: 450px;
-	    height: 80px;
-	    margin: 35px auto 20px; 	
-	}
-	
-	.input_box input{
-	    width: 100%; height: 45px;
-	    border-radius: 10px;
-	}
-	
-	/* 이메일 */
-	.email_box{
-	    width: 450px;
-	    margin: 35px auto;
-	}
-	
-	.email_box input[type=text]{
-	    width: 75%; height: 45px;
-	    border-radius: 10px;
-	    margin-bottom: 5px;
-	}
-	
-	.email_box input[type=button]{
-	    width: 23%; height: 45px;
-	    background-color: pink;
-	    border-radius: 10px;
-	    font-size: 12px;
-	}
-
-	/* input tag 공백 */
-	.space input[type=text] {
-		padding-left:15px;
-	}
-	
-	/* 정규식 메세지 */
-	.error_msg {
-	    font-size:13px;
-	    color:red;
-	}
-	.pass_msg {
-	    font-size:13px;
-	    color:grey;
-	}
-	
-	
-	/* btn */
-	.btn_wrap{
-	    width: 450px;
-	    margin: 35px auto;
-	}
-	.btn_wrap button{
-		color:white;
-	    width: 450px; height: 45px;
-	    background: #fe585c;
-	    border-radius: 10px;
-	    margin-bottom: 40px;
-		border: none; 
-	}
-	
-	/* 포인터 */
-	.pointer:hover {
-		cursor: pointer;
-	}
-	
-	/* 안내메세지 박스 */
-	.msg_box {
-		padding: 5px;
-	} 
-	
-	/* 현재 비밀번호 */
-	#password_check_btn {
-	    width: 102.5px;
-	    height: 45px;
-	    background-color: pink;
-	    border-radius: 10px;
-	    font-size: 12px;
-	    margin-left: 5px;
-	}
-	#pw {
-		width: 337.5px;
-	}
-	#current_pw_box {
-		display: flex;
-		width:220px;
-	}
-	
-	
-		/* header 관련 */
-  #myhome_icon { color :  #fe4662; }
-  #myhome_btn { border-bottom: 8px solid #fe4662}
-   .header_wrap {
-      z-index: 8;
-      position: fixed;
-      top: 0;
-      width:100%;
-      height: 100px;
-      background-color: white;
-      display: flex;
-   }
-   #header_logo {
-   	 display: inline-block;
-   	 margin-left: 40px;
-   	 margin-right: 100px;
-   }
-   	.header_right_box {
-		display: inline-flex;
-	}
-	
-    .header_left_box > a{
-        display: block;
-		margin: 10px 0 10px 70px;
-		width: 230px;
-		height: 85px;
-		background-size: 219px 85px;
-		background-repeat: no-repeat;
-		background-image: url(../image/logo_color.png);
-		font-size: 0;
-    }
-    
-	#logo_img {
-		width:  200px;
-		margin-top: 12px;
-		margin-left: 50px;
-	}
-	.header_mid_box {
-      display: inline-flex;
-	  margin: 0 auto;
-	}
-    .btn_box{
-        display: flex;
-        text-align: center;
-        margin: 0 0 0 150px;
-        width: 750px;
-    }
-	.btn_box .boxes {
-       	display: inline-block;
-		margin: 0 auto;
-		width: 187px;
-		height: 100%;
-	}
-	 .boxes > a{
-	 	width: 100%;
-	 	height: 100%;
-	 	margin: 0 auto;
-	 	flex-direction: row;
-	}
-	li  a  i {
-		color: #6f7070;
-		text-align: center;
-		margin: 30px auto;
-		font-size: 40px;
-	}
-
-
-	.search_box {
-		display: flex;
-		border-radius: 10px;
-		margin-left: 40px;
-		margin-bottom: 30px;
-		margin-top: 26px;
-		margin-left: 40px;
-		border: none;
-		width: 280px;
-		height: 46px;
-		line-height: 20px;
-		background-color: #e8f0fe;
-	}
-	
-	.search_box>input {
-		border: none;
-		outline: none;
-		width: 220px;
-		height: 30px;
-		line-height: 30px;
-		margin-top: 8px;
-		margin-left: 18px;
-		background-color: #e8f0fe;
-	}
-	
-	#search_icon {
-		width: 40px;
-		height: 40px;
-		text-align: center;
-		margin-top: 4px;
-		margin-right: 16px;
-		border: none;
-		background-color: #e8f0fe;
-	}
-	
-	#search_icon>i {
-		color: #6f7070;
-		width: 38px;
-		height: 38px;
-		margin-top: 10px;
-		cursor: pointer;
-	}
-	
-	#header_profile_box {
-		width: 60px;
-		height: 60px;
-		margin: 18px;
-		border-radius: 100%;
-	}
-	
-	#header_profile_img {
-		width: 60px;
-		height: 60px;
-		top: 20px;
-		border-radius: 100%;
-	}
-
-	#header_profile_menu {
-		z-index: 6000;
-	    margin-top: 84px;
-	    margin-left: -140px;
-		width: 140px;
-		height: 138px;
-		border: 1px solid rgb(240, 242, 245);
-		border-radius: 3px;
-		background-color: white;
-		box-shadow: 5px 5px 8px rgba(160, 160, 160, 0.3);
-	}
-	
-	#header_profile_menu li {
-		margin-top: 4px;
-		margin-left: 4px;
-		font-size: 14px;
-		font-weight: lighter;
-		border-bottom: 1px solid rgb(240, 242, 245);
-	}
-	
-	#header_profile_menu p {
-		font-size: 12px;
-		color: rgb(50, 50, 50);
-	}
-	
-	.header_profile_no {
-		display: none;
-	}
-	
-	.header_profile_see {
-		display: block;
-	}
-	
-	#profile_menu_list1, #profile_menu_list2, #profile_menu_list3 {
-		font-size: 14px;
-		font-weight: normal;
-		color: black;
-	}
-	
-	#profile_menu_list1 {
-		font-weight: bold;
-		font-size: 15px;
-	}
-	
-	.pointer:hover {
-		cursor: pointer;
-	}
-	
-	/*  footer */
-   .footer_wrap {
-	   padding-bottom: 40px;
-	   text-align: center;
-	   color: #6e6e6e;
-   }
-  .footer_wrap  h2 { margin-top:  40px;}
-	
-	
 </style>
 
 <script type="text/javascript">
@@ -337,13 +34,11 @@
 		fnNewPwCheck(); // 새 비밀번호 정규식
 		fnPwDoubleCheck();
 		fnCurrentEmailCheck();
-		fnProfileBtn();
 		fnCheckLogin();
 	}); 
 	
 	// 서브밋
 	 function fnCheckSubmit(){
-	  /*   $('#pw_change_form').on('submit', function(event){ */
 	    $('#modify_btn').on('click', function(event){
 	      if( confirm('변경하시겠습니까?') == false){
 				event.preventDefault(); 
@@ -450,7 +145,7 @@
          	
          	$('#authCode_btn').click(function(){
          		$.ajax({
-         			url : '/nearby/member/sendAuthCode',
+         			url : '<%=request.getContextPath()%>/member/sendAuthCode',
          			type: 'post',
          			data: 'email='+ $('#email').val(),
          			dataType: 'json',
@@ -503,7 +198,7 @@
 	    $('#password_check_btn').on('click',function(){ // TODO ajax로 select 결과 받아서 처리하기해야함.
 
 			$.ajax({
-				url : '/nearby/member/checkPassword',
+				url : '<%=request.getContextPath()%>/member/checkPassword',
 				type : 'post',
 				data : 'pw=' + $('#pw').val(),
 				dataType: 'json',               // 받아올 데이터 타입
@@ -544,7 +239,7 @@
 	    $('#authCode_btn').on('click',function(){ 
 
 			$.ajax({
-				url : '/nearby/member/selectByEmail',
+				url : '<%=request.getContextPath()%>/member/selectByEmail',
 				type : 'post',
 				data : 'email=' + $('#email').val(),
 				dataType: 'json',               // 받아올 데이터 타입
@@ -581,7 +276,7 @@
     	
    /*  	$('#authCode_btn').click(function(){ */
     		$.ajax({
-    			url : '/nearby/member/sendAuthCode',
+    			url : '<%=request.getContextPath()%>/member/sendAuthCode',
     			type: 'post',
     			data: 'email='+ $('#email').val(),
     			dataType: 'json',
@@ -622,16 +317,6 @@
    			
    		}); // end click
    	}         
-
-
-	// fnProfileBtn();
-	function fnProfileBtn() {
-		$('#header_profile_box').click(function (){
-			$('#header_profile_menu').toggleClass('header_profile_see');
-		});
-	};
-
-
 	
 	/* ----------------------------------------- fnCheckLogin() --------------------------------  */
  	function fnCheckLogin(){
@@ -648,7 +333,7 @@
 		        cancelButtonText: '취소'	
 		     }).then((result) => {
 				if(result.isConfirmed) { // confirm이 false이면 return
-					location.href='/nearby/';
+					location.href='<%=request.getContextPath()%>/';
 				}
 		     })
 		}
@@ -658,54 +343,16 @@
 
 </head>
 <body>
-	<header class="header_wrap">
-	    <div class="header_left_box">
-			  <a href="/nearby/board/boardList"><img id="header_logo" src="${pageContext.request.contextPath}/resources/image/logo_color.png" width="200px"></a>
-		</div>
-	     <div class="header_mid_box">
-			<ul class="btn_box">
-				<li id="home_btn" ><a class="boxes" href="/nearby/board/boardList"><i id="home_icon" class="fas fa-home"></i></a></li>
-				<li id="follow_btn"><a class="boxes" href="/nearby/follow/followList"><i id="follow_icon" class="far fa-address-book"></i></a></li>
-				<li id="myhome_btn"><a class="boxes" href="/nearby/board/myHome"><i id="myhome_icon" class="fas fa-user-alt"></i></a></li>
-				<li id="header_insert_btn" ><a class="boxes" href="/nearby/board/insertPage"><i id="insert_icon" class="far fa-plus-square"></i></a></li>
-			</ul>
-		</div>
-	     <div class="header_right_box">
-			<form class="main_search" action="/nearby/board/searchBoardList">
-				<div class="search_box pointer">
-					<input type=text id="query" name="query">
-					<button id="search_icon">
-						<i class="fas fa-search"></i>
-					</button>
-				</div>
-			</form>
-			<div id="header_profile_box">
-	   	   	 	<c:if test="${empty loginUser.profile.pSaved}">
-						<img id="header_profile_img" src="${pageContext.request.contextPath}/resources/image/profile_default.png" class="pointer defaultImg">
-				</c:if>
-				<c:if test="${not empty loginUser.profile.pSaved}">
-						<img id="header_profile_img" src="/nearby/${loginUser.profile.pPath}/${loginUser.profile.pSaved}" class="pointer">
-				</c:if>
-            </div>
-		    <div id="header_profile_menu" class="header_profile_no">
-				<ul>
-					<li>
-						<a id="profile_menu_list1" href="#">${loginUser.id}</a>
-						<p>${loginUser.name}님<p>
-						<p>${loginUser.email}</p>	
-					</li>
-	   	   			<li><a id="profile_menu_list2" href="/nearby/member/mypage">계정 관리</a></li>
-	   	   			<li><a id="profile_menu_list2" href="/nearby/member/changePasswordPage">비밀번호 변경</a></li>
-	   	   			<li><a id="profile_menu_list3" href="/nearby/member/logout">로그아웃</a></li>
-				</ul>
-		    </div>
-		</div>
-     
-     </header>
-    <div class="container" style="margin-top: 160px;">
+
+
+   		<header class="header">
+			<jsp:include page="/WEB-INF/views/layout/header.jsp" flush="true" />
+		</header>
+
+    <div class="form_container" style="margin-top: 160px;">
         <div class="pw_change_box">
     
-            <form action="/nearby/member/changePassword" method="post" id="pw_change_form">
+            <form action="<%=request.getContextPath()%>/member/changePassword" method="post" id="pw_change_form">
 
                 <!-- 비밀번호 -->
                 <div class="input_box">
@@ -767,10 +414,11 @@
         </div>
    
     </div>
-      <footer class="footer_wrap">
-           <h2>About NearBy</h2><br>
-           <p>로고     히스토리     개인정보처리방침     도움말      제휴      광고      문의/피드백      채용</p>
-           <p>© NearBy Corp. All rights reserved.</p>
-    </footer>
+    
+
+	  <footer>
+           <jsp:include page="/WEB-INF/views/layout/footer.jsp" flush="true" />
+      </footer>
+
 </body>
 </html>

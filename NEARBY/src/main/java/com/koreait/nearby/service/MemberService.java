@@ -75,8 +75,6 @@ public interface MemberService {
 	// 검색(총 수, 리스트)
 	public Map<String, Object> findMember(HttpServletRequest request);
 	
-	
-	
 	// default method
 	 	public default void message(int result, HttpServletResponse response, 
 	 			String success, String fail, String path) {

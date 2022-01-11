@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.koreait.nearby.domain.Board;
 import com.koreait.nearby.domain.Likes;
+import com.koreait.nearby.domain.Profile;
 
 @Repository
 public interface BoardRepository {
@@ -16,8 +17,10 @@ public interface BoardRepository {
    public int updateBoard(Board board);
    public int deleteBoard(Map<String, Object> map);
    
-   // 검색
+// 통합 검색
    public List<Board> searchListBoard(Map<String, Object> map);
+   // ID만 검색
+   public List<Profile> searchProfileList(Map<String, Object> map);
    
    /* myHome 및 유저의 게시물 갯수 구하기 */
    public int selectUserBoardsCount(String id);
@@ -41,5 +44,5 @@ public interface BoardRepository {
    
    /* userHome */
    public List<Board> selectUserHome(String id);
-
+   
 }

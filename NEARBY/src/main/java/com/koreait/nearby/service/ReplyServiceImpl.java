@@ -57,8 +57,8 @@ public class ReplyServiceImpl implements ReplyService {
 			pageUtils.setPageEntity(totalRecord, page);
 			  
 			Map<String, Object> mapForDB = new HashMap<String, Object>();
-			mapForDB.put("beginRecord", pageUtils.getBeginRecord());
-			mapForDB.put("endRecord", pageUtils.getEndRecord());
+			mapForDB.put("beginRecord", pageUtils.getBeginRecord() -1);
+			mapForDB.put("recordPerPage", pageUtils.getRecordPerPage());
 			mapForDB.put("bNo", bNo);
 			List<Reply> replyList = replyRepository.selectReplyListForPaging(mapForDB);
 			  
@@ -67,7 +67,6 @@ public class ReplyServiceImpl implements ReplyService {
 			map.put("pageUtils", pageUtils);
 			map.put("replyList", replyList);
 			map.put("count", count);
-				
 		      return map;
 		   }
 

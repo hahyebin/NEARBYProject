@@ -7,7 +7,6 @@ $(document).ready(function(){
 	fnPhoneCheck();
 	fnbirth();
 	fnAllCheck();
-	fnResetBtn();
 });
 
 	// 아이디 정규식
@@ -171,10 +170,12 @@ $(document).ready(function(){
 	function fnEmailCheck(){
 	    $('#email').on('keyup blur', function(){
 	        if(regEmail.test($(this).val()) == false){
+				$('#email').css('width', '450px');
+	            $('#authCode_btn').css('display', 'none');
+	            $('#emailCheck_btn').css('display', 'none');
+				$('.verifyCheckTrue').css('display', 'none');
 				$('.emailCheckTrue').css('display', 'none');
 				$('.emailCheckFalse').css('display', 'block');
-				$('#email').css('width', '450px');
-	            $('#authCode_btn').css('disply', 'none');
 	            $('#email_check_msg').text('이메일을 다시 확인 해주세요.')
 	                                 .removeClass('pass_msg')
 	                                 .addClass('error_msg');
@@ -183,18 +184,45 @@ $(document).ready(function(){
 				$('.emailCheckFalse').css('display', 'none');
 				$('#email').css('width', '337.5px');
 				$('#authCode').css('width', '337.5px');
-	            $('#authCode_btn').css('display', 'inline-block');
+	            $('#emailCheck_btn').css('display', 'inline-block');
 	            $('#email_check_msg').text('')
 	            email_result = true;
 	        }
-	    });	        
+	    });	
+	    	// 이메일 중복 확인
+	    	$('#emailCheck_btn').click(function(){
+	    		$.ajax({
+	    			url: '/nearby/member/selectByEmail',
+	    			type: 'post',
+	    			data: 'email=' + $('#email').val(),
+	    			dataType: 'json',
+	    			success: function(map){
+						if(map.result == null){
+							$('#email_check_msg').text('가입 가능한 이메일 입니다.')
+												 .removeClass('error_msg')
+												 .addClass('.pass_msg');
+							$('#emailCheck_btn').css('display', 'none');
+							$('#authCode_btn').css('display', 'inline-block');
+							email_result = true;
+						}else if(map.result.email == $('#email').val()){
+							$('#email_check_msg').text('');
+							Swal.fire({
+								icon: 'error',
+								title: '동일한 이메일이 존재 합니다.',
+							});
+							email_result = false;
+						}
+					}
+	    		});
+	    	});
+	    
 	        // 인증코드 전송 버튼
 	        $('#authCode_btn').click(function(){
 	        	Swal.fire({
 					icon: 'info',
+					timer: 3000,
 					title: '인증 코드 전송 중..',
-  					timer: 2000,
-  					button: false,
+  					button: false
 				});
 				$('#email').css('width', '450px');
 				$('.emailCheckTrue').css('display', 'block');
@@ -297,16 +325,6 @@ $(document).ready(function(){
 		     day += '<option value="'+i+'">'+i+'</option>';
 		 }
 	      $('#day').html(day);
-		 /*
-		  if(){
-			  alert('생년월일을 입력 해주세요');
-			  birthday_result = false;
-			  return;
-		  }else{
-			  alert($('#year').val() + $('#month').val() + $('#day').val() );
-			  birthday_result = true;
-		  }
-		  */
 	} // end fnPhoneCheck
 
 	/*
@@ -396,24 +414,12 @@ $(document).ready(function(){
 				});
 	            return false;
 	        }else{
+				Swal.fire({
+					icon: 'success',
+					title: '필수 정보 입니다.',
+					text: '생년월일을 입력 해주세요.',
+				});
 	            return true;
 	        }
 	    });
 	}// end fnAllCheck
-
-	// 초기화 버튼
-	function fnResetBtn(){
-	    $('#reset_btn').click(function(){
-	        $('#id_check_msg').text('');
-	        $('#pw_check_msg').text('');
-	        $('#pw2_check_msg').text('');
-	        $('#name_check_msg').text('');
-	        $('#authCode').text('');
-	        $('#phone_check_msg').text('');
-			$('#email').css('width', '450px');
-	        $('#email_check_msg').text('');
-	        $('#authCode_box').css('display', 'none');
-			$('#verify_msg').text('');
-	        $('#authCode_btn').css('display', 'none');
-	    });
-	}

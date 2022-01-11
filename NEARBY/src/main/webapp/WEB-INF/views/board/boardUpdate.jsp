@@ -6,7 +6,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>NearBy</title>
+<link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/resources/image/titleImg3.png">
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/header.css">
@@ -64,7 +65,7 @@
 		        cancelButtonText: '취소'
 		        }).then((result) => {
                     if (result.isConfirmed) {
-                    	location.href= '/nearby/board/deleteBoard?bNo='+${board.bNo};
+                    	location.href= '<%=request.getContextPath()%>/board/deleteBoard?bNo='+${board.bNo};
                     }
 	      })
 	} // fnDelete
@@ -276,7 +277,7 @@
 		        cancelButtonText: '취소'	
 		     }).then((result) => {
 				if(result.isConfirmed) { // confirm이 false이면 return
-					location.href='/nearby/';
+					location.href='<%=request.getContextPath()%>/';
 				}
 		     })
 		}
@@ -289,7 +290,7 @@
 		<jsp:include page="/WEB-INF/views/layout/header.jsp" flush="true" />
 	</header>
  <div class="mainBoard_wrap">
-	<form id="mainBoardWrap_form" method="post" action="/nearby/board/updateBoard" enctype="multipart/form-data">
+	<form id="mainBoardWrap_form" method="post" action="<%=request.getContextPath()%>/board/updateBoard" enctype="multipart/form-data">
 	    <div class="boardIntro"> 
 	    	<div class="profileImg"  id="p_img">
 	    	 <c:if test="${empty loginUser.profile.pSaved}">

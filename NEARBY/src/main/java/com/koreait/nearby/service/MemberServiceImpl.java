@@ -22,6 +22,7 @@ import org.springframework.ui.Model;
 
 import com.koreait.nearby.domain.Member;
 import com.koreait.nearby.domain.Profile;
+import com.koreait.nearby.repository.BoardRepository;
 import com.koreait.nearby.repository.MemberRepository;
 import com.koreait.nearby.repository.ProfileRepository;
 import com.koreait.nearby.util.SecurityUtils;
@@ -141,10 +142,11 @@ public class MemberServiceImpl implements MemberService {
 			
 			MimeMessage message = javaMailSender.createMimeMessage();
 			message.setHeader("Content-Type", "text/plain; charset=UTF-8");
-			message.setFrom(new InternetAddress("nearby.corp@gmail.com", "인증코드관리자"));
+			message.setFrom(new InternetAddress("nearby.corp@gmail.com", "NEARBY"));
 			message.setRecipient(Message.RecipientType.TO, new InternetAddress(email));
 			message.setSubject("NEARBY 인증 요청 메일입니다.");
 			message.setText("인증번호는 " + authCode + " 입니다.");
+			System.out.println(authCode);
 			javaMailSender.send(message);
 			
 		} catch (Exception e) {
@@ -253,9 +255,9 @@ public class MemberServiceImpl implements MemberService {
 			String phone = m.getPhone();
 			String gender = m.getGender();
 			String content = m.getProfile().getpContent();
-			if (birthday.length() != 8) throw new NullPointerException("생일 정보가 없습니다");
-			if (name.isEmpty()) throw new NullPointerException("입력된 이름이 없습니다");
-			if (phone == null || phone.isEmpty()) throw new NullPointerException("입력된 핸드폰 번호가 없습니다");
+			if (birthday.length() != 8) throw new NullPointerException("생일 정보가 없습니다.");
+			if (name.isEmpty()) throw new NullPointerException("입력된 이름이 없습니다.");
+			if (phone == null || phone.isEmpty()) throw new NullPointerException("입력된 핸드폰 번호가 없습니다.");
 			if (phone.length() != 11 ) throw new NullPointerException("올바른 형식이 아닙니다.");
 			
 			// Profile DB로 보낼 Bean 
@@ -449,8 +451,8 @@ public class MemberServiceImpl implements MemberService {
 	      p.setPageEntity(cnt, page);
 	  
 	  
-	      dbMap.put("beginRecord", p.getBeginRecord());
-	      dbMap.put("endRecord", p.getEndRecord());
+	      dbMap.put("beginRecord", p.getBeginRecord()-1 );
+	      dbMap.put("recordPerPage", p.getRecordPerPage());
 	      
 	      
 	      // 검색 결과 리스트
@@ -477,4 +479,8 @@ public class MemberServiceImpl implements MemberService {
 	      return resultMap;
 	  		
 	}
+
+	
+	
+	
 }

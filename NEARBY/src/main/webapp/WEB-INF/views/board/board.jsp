@@ -7,7 +7,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>NearBy</title>
+<link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/resources/image/titleImg3.png">
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/header.css">
@@ -52,7 +53,7 @@
 		$.each($('.output_reply_table'), function(i, replyTable) {	
  		let bNo = $(replyTable).parent().prev().val();
  		$.ajax({
- 			      url: '/nearby/board/boardBnoList',
+ 			      url: '<%=request.getContextPath()%>/board/boardBnoList',
 			      type: 'get',
 			      data: "bNo=" + bNo,
 			      dataType: 'json',
@@ -78,7 +79,7 @@
 	          if( $("#"+i).find('i').hasClass('like') == false )  {
 	            	$("#"+i).find('i').addClass('like');
 		            $.ajax({
-		 				url : '/nearby/board/likes',
+		 				url : '<%=request.getContextPath()%>/board/likes',
 		 				type: 'post',
 						data: "bNo="+i, 
 						dataType: 'json',
@@ -86,7 +87,7 @@
 		 	//				console.log(board);
 		 	//				console.log("좋아요 누른 카운트"+ board.likes);
   			  			   $( '#like_count'+bNo ).text(board.likes);
-  			  			   location.href="/nearby/board/boardList";
+  			  			   location.href="<%=request.getContextPath()%>/board/boardList";
 		 					
 		 				},
 		 				error : function(xhr, error){
@@ -102,13 +103,13 @@
 	    	$("#"+i).find('i').removeClass('like');
 	    	
 	 		$.ajax({
-	  				url : '/nearby/board/likesCancel',
+	  				url : '<%=request.getContextPath()%>/board/likesCancel',
 	  				type: 'post',
 	  				data: "bNo="+i, 
 	 				dataType: 'json',
 	  				success: function(board){
 	  				   $( '#like_count'+ bNo ).text(board.likes);
-	  			   	 location.href="/nearby/board/boardList";
+	  			   	 location.href="<%=request.getContextPath()%>/board/boardList";
 	  				   
 	  				},
 	  				error : function(xhr, error){
@@ -128,7 +129,7 @@
 			let bNo = $(replyTable).parent().prev().val();
 			var page = 1;
 			$.ajax({
-				      url: '/nearby/reply/replyList',
+				      url: '<%=request.getContextPath()%>/reply/replyList',
 				      type: 'get',
 				      data: "bNo=" + bNo + "&page=" + page,
 				      dataType: 'json',
@@ -177,9 +178,9 @@
 						
 						// 유저 이름당 링크 만들기
 						if (reply.id != id) {
-							$('.user_page_link[id=link_'+reply.rNo+']').attr('href','/nearby/board/selectUserHome?id='+reply.id);
+							$('.user_page_link[id=link_'+reply.rNo+']').attr('href','<%=request.getContextPath()%>/board/selectUserHome?id='+reply.id);
 						} else if(reply.id == id) {
-							$('.user_page_link[id=link_'+reply.rNo+']').attr('href','/nearby/board/myHome');
+							$('.user_page_link[id=link_'+reply.rNo+']').attr('href','<%=request.getContextPath()%>/board/myHome');
 						}
 						
 					}) // End inner each
@@ -219,7 +220,7 @@
 		        cancelButtonText: '취소'	
 		     }).then((result) => {
 				if(result.isConfirmed) { // confirm이 false이면 return
-					location.href='/nearby/';
+					location.href='<%=request.getContextPath()%>/';
 				}
 		     })
 		}
@@ -228,7 +229,7 @@
 /* ----------------------------------------- fnShowViewPage() --------------------------------  */
 	// board 상세 보기로 이동
 	function fnShowViewPage(bNo) {
-		location.href='/nearby/board/selectBoard?bNo='+bNo;
+		location.href='<%=request.getContextPath()%>/board/selectBoard?bNo='+bNo;
 	}
 
 </script>
@@ -256,10 +257,10 @@
 			    <div class="boardIntro"> 
 			    	<div class="profileImg"  id="p_img">
 			    	     <c:if test="${loginUser.id != board.id}">
-                   			<a class="goHome" href="/nearby/board/selectUserHome?id=${board.id}"></a>
+                   			<a class="goHome" href="<%=request.getContextPath()%>/board/selectUserHome?id=${board.id}"></a>
                			</c:if>
                			<c:if test="${loginUser.id == board.id}">
-                		   <a class="goHome" href="/nearby/board/myHome"></a>                
+                		   <a class="goHome" href="<%=request.getContextPath()%>/board/myHome"></a>                
               			</c:if>
 			    	
 			    <c:if test="${empty board.profile.pSaved}">
@@ -275,10 +276,10 @@
 			    	<div class="idAndDate">	
 				    	<div class="id">
 							<c:if test="${loginUser.id != board.id}">
-								<a href="/nearby/board/selectUserHome?id=${board.id}">${board.id}</a>                
+								<a href="<%=request.getContextPath()%>/board/selectUserHome?id=${board.id}">${board.id}</a>                
 							</c:if>
 							<c:if test="${loginUser.id == board.id}">
-								<a href="/nearby/board/myHome">${board.id}</a>                
+								<a href="<%=request.getContextPath()%>/board/myHome">${board.id}</a>                
 							</c:if>
 				    	</div>
 				    	<div class="date">
@@ -289,7 +290,7 @@
 			    </div>
 	  		<!--------------------- 내용만 삽입할 때 ------------------------------->
 	 			<c:if test="${ null == board.origin }">
-		  			<div class="AddrAndContent"  onclick="location.href='/nearby/board/selectBoard?bNo=${board.bNo}';">
+		  			<div class="AddrAndContent"  onclick="location.href='<%=request.getContextPath()%>/board/selectBoard?bNo=${board.bNo}';">
 		  				  <div class="addrAndMap">
 				       		  <i class="fas board_icon fa-map-marker-alt" style="color:#fe4662; font-size:15px; width:30px"></i>
 				              <span class="address"> ${board.location} </span>
@@ -303,7 +304,7 @@
 			    </c:if>
 	  		  <!-------------------- 이미지/비디오 삽입할 때---------------->		  
 			   <c:if test="${board.saved ne null}">	  
-			      <div class="addressAndImage"  onclick="location.href='/nearby/board/selectBoard?bNo=${board.bNo}';">
+			      <div class="addressAndImage"  onclick="location.href='<%=request.getContextPath()%>/board/selectBoard?bNo=${board.bNo}';">
 				      <div class="addrAndMap">
 			       		  <i class="fas board_icon fa-map-marker-alt" style="color:#fe4662; font-size:15px; width:30px"></i>
 			              <span class="address"> ${board.location} </span>
@@ -334,7 +335,7 @@
   					</span>
 		            </div>
 			  		<div class="countIcon replyCount">
-		  				<i class="fas board_icon fa-comments countIcon replyCount"  id="icon_${board.bNo}" onclick="location.href='/nearby/board/selectBoard?bNo=${board.bNo}';"></i>
+		  				<i class="fas board_icon fa-comments countIcon replyCount"  id="icon_${board.bNo}" onclick="location.href='<%=request.getContextPath()%>/board/selectBoard?bNo=${board.bNo}';"></i>
 		  				<span class="reply_count_per_board" id="${board.bNo}">0</span>
 			  		</div>
 				  </div> <!-- End Class likesAndReplyCount DIV tag -->

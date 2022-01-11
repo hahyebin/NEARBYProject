@@ -87,12 +87,11 @@
 	    padding-left: 4px;
 	 }
 	 .swal2-styled.swal2-confirm {
-	 	width: 75px;
-	 	font-size: 14px;
+	 	width: 90px;
+	 	font-size: 13px;
 	 	background-color: pink;
 	 }
 	.swal2-styled.swal2-cancel {
-		width:60px;
-		height: 35.5px;
-		font-size: 14px;
+		width: 90px;
+		font-size: 13px;
 	}

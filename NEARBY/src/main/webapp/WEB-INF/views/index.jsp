@@ -6,6 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>NearBy - 내 주변의 빠른 소식통</title>
+<link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/resources/image/titleImg3.png">
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <!-- fontawesome -->
@@ -287,12 +288,6 @@
      color: rgb(30, 30, 30);   
      font-weight: bold;
    }
-   .footer_wrap {
-   margin-top: 70px;
-   padding-bottom: 80px;
-   text-align: center;
-   font-weight: bold;
-   }
    
    /* sweet alert */
   .swal2-popup { padding: 0.5em; }
@@ -393,6 +388,8 @@
    
    
 </script>
+
+
 </head>
 <body>
    <div class="container">
@@ -440,11 +437,11 @@
          </div>
          <div class="main_box1 main_box3">
             <h1 class="s_core_dream_m">지금 당장 NEARBY 시작하기</h1>
-            <a href="/nearby/member/memberJoin"><input type="button" class="nanum_square btn" value="간편회원가입" id="join_btn2" class="btn join_btn"></a>
+            <a href="<%=request.getContextPath()%>/member/agreement"><input type="button" class="nanum_square btn" value="간편회원가입" id="join_btn2" class="btn join_btn"></a>
          </div>
       </main>
       <!---------------------------------------- 로그인 폼(숨김)---------------------------------------> 
-             <form id="login_form" method="post" class="no" action="/nearby/member/login">
+             <form id="login_form" method="post" class="no" action="<%=request.getContextPath()%>/member/login">
                <div>
                   <i id="close_login_btn" class="fas fa-times"></i>   
                </div>
@@ -473,20 +470,15 @@
                       
                   <button class="nanum_square" id="login_submit">로그인</button>
                         <div id="move_area">
-                        <a id="find_btn1" class="find_btn1" href="/nearby/member/findIdPw"><i class="fas fa-key"></i>아이디/비밀번호 찾기</a><br><br>
-                        <a id="join_btn1" class="join_btn1" href="/nearby/member/agreement"><i class="fas fa-sign-in-alt"></i>회원가입 하러가기</a>
+                        <a id="find_btn1" class="find_btn1" href="<%=request.getContextPath()%>/member/findIdPw"><i class="fas fa-key"></i>아이디/비밀번호 찾기</a><br><br>
+                        <a id="join_btn1" class="join_btn1" href="<%=request.getContextPath()%>/member/agreement"><i class="fas fa-sign-in-alt"></i>회원가입 하러가기</a>
                     </div>
              </form>   
       
         
      <!------------------------------------- footer ---------------------------------------->
-      <footer class="footer_wrap">
-           <h2>About NearBy©</h2><br>
-           <p>로고     히스토리     개인정보처리방침     도움말      제휴      광고      문의/피드백      채용</p>
-           <p>© 2021-2022 NEARBY.COM NEARBY isn’t endorsed by Facebook and doesn’t reflect the views or opinions of Facebook or anyone officially </p>
-           <p>involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot</p>
-           <p>Games, Inc. NEARBY Company © NearBy, Inc.</p>   
-            <br><br>
+      <footer>
+           <jsp:include page="/WEB-INF/views/layout/footerIndex.jsp" flush="true" />
       </footer>
    </div>   
 </body>

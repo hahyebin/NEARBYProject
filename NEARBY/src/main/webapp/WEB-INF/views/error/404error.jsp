@@ -4,7 +4,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>NearBy - 페이지 오류</title>
+<link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/resources/image/titleImg3.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 </head>
@@ -15,9 +16,13 @@
 	 font-family: 'Noto Sans KR', sans-serif;
 	 padding: 0; margin: 0;
 	 box-sizing: border-box;
-	 background-color: #fafafa; 
 	}
-	
+	.main_wrap {
+		background-color: #fafafa;
+		width: 100%;
+		height: 800px;
+		padding-top: 100px;		
+	}
 	/* header 관련 */
    .header_wrap {
       z-index: 5;
@@ -27,7 +32,6 @@
       height: 100px;
       background-color: white;
       display: flex;
-      margin-bottom: 30px;
    }
    .header_wrap a { background-color: white;}
    .header_btn {
@@ -47,7 +51,7 @@
    	background-color: white;
    }
 	
-	main { margin-top: 180px; }
+	main { margin-top: 100px; }
     .title {
     	font-size: 24px;
     	text-align: center;
@@ -57,7 +61,9 @@
     
 	.img_wrap {
 		width: 100%;
-		margin: 90px auto;
+		height: 400px;
+		background-color: #fafafa;
+		margin: 0 auto;
 		text-align: center;
 		}
 	.fa-frown {
@@ -202,13 +208,8 @@
    
    
 /* footer */
-  .footer_wrap {
-   margin-top: 250px;
-   padding-bottom: 40px;
-   text-align: center;
-   color: #6e6e6e;
-   }
- .footer_wrap  h2 { margin-top:  40px;}
+	footer {
+	}
 </style>
 <script type="text/javascript">
 
@@ -300,22 +301,22 @@ $(document).ready(function(){
 </head>
 <body>
      <header class="header_wrap">
-           <a href="/nearby/"><img id="header_logo" src="${pageContext.request.contextPath}/resources/image/logo_color.png" width="200px"></a>
+           <a href="<%=request.getContextPath()%>/"><img id="header_logo" src="${pageContext.request.contextPath}/resources/image/logo_color.png" width="200px"></a>
 	       <input type="button" value="로그인" id="login_btn1" class="btn login_btn">     
      </header>
  
-    <main>
+    <main class="main_wrap">
 	      <div class="img_wrap">
-	         <a href="/nearby/"><i class="far fa-frown"></i></a>
+	         <a href="<%=request.getContextPath()%>/"><i class="far fa-frown"></i></a>
 		  </div>
 	
 		  <div>
 			<div class="title">요청하신 페이지를  찾을 수 없습니다.</div>
 		  </div>	
-    </main>
+    
     
       <!---------------------------------------- 로그인 폼(숨김)---------------------------------------> 
-             <form id="login_form" method="post" class="no" action="/nearby/member/login">
+             <form id="login_form" method="post" class="no" action="<%=request.getContextPath()%>/member/login">
                <div>
                   <i id="close_login_btn" class="fas fa-times"></i>   
                </div>
@@ -344,19 +345,16 @@ $(document).ready(function(){
                       
                   <button class="nanum_square" id="login_submit">로그인</button>
                         <div id="move_area">
-                        <a id="find_btn1" class="find_btn1" href="/nearby/member/findIdPw"><i class="fas fa-key"></i>아이디/비밀번호 찾기</a><br><br>
-                        <a id="join_btn1" class="join_btn1" href="/nearby/member/memberJoin"><i class="fas fa-sign-in-alt"></i>회원가입 하러가기</a>
+                        <a id="find_btn1" class="find_btn1" href="<%=request.getContextPath()%>/member/findIdPw"><i class="fas fa-key"></i>아이디/비밀번호 찾기</a><br><br>
+                        <a id="join_btn1" class="join_btn1" href="<%=request.getContextPath()%>/member/memberJoin"><i class="fas fa-sign-in-alt"></i>회원가입 하러가기</a>
                     </div>
              </form>   
-      
+      </main>
         
     
     
     
-    
-     <footer class="footer_wrap">
-           <h2>About NearBy</h2><br>
-           <p>로고     히스토리     개인정보처리방침     도움말      제휴      광고      문의/피드백      채용</p>
-           <p>© NearBy Corp. All rights reserved.</p>
-     </footer>
+	  <footer>
+           <jsp:include page="/WEB-INF/views/layout/footer.jsp" flush="true" />
+      </footer>
 </html>

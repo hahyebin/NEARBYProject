@@ -63,11 +63,9 @@ public class adminController {
 	public String findMember(HttpServletRequest request, Model model) {
 		  String query = request.getParameter("query");
 		  String column = request.getParameter("column");
-	//	  System.out.println("파라미터 받은 " +column + ",  "+ query);
 		  model.addAttribute("request", request);
 		  Map<String, Object> map = mService.findMember(request);
 	      model.addAttribute("map", map);
-	//	  System.out.println("map??? " +map);
 		  return "admin/memberManage";
 	}
 	

@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.koreait.nearby.domain.Follow;
@@ -34,7 +35,16 @@ public class FollowController {
 			model.addAttribute("followedList", service.selectFollowedIdById(session));
 			return "member/follow";
 		}
-	   
+		// userFollow페이지 이동
+		@GetMapping(value="follow/userFollow")
+		public String userFollow(@RequestParam String id, Model model) {
+			model.addAttribute("id", id);
+			model.addAttribute("followingList", service.selectUserFollowingIdById(id));
+			model.addAttribute("followedList", service.selectUserFollowedIdById(id));
+			model.addAttribute("userProfile", service.selectUserProfileOnly(id));
+			System.out.println("model로 반환할 profile : " + service.selectUserProfileOnly(id));
+			return "/member/userFollow";
+		}
 	   
 	   // 팔로잉
 	   @ResponseBody

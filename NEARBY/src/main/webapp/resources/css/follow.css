@@ -106,6 +106,8 @@ body {
 	width: 600px;
 	border-radius: 8px;
 	box-shadow: 5px 10px 15px 3px gray;
+	background-color: #fefafa;
+	border: 2px solid #ffc0cb;
 	
 }
 
@@ -279,7 +281,10 @@ body {
 	display: flex;
 	padding-top: 10px;
 }
-
+.each_follow_box .no_follow {
+	margin: 50px auto;
+	
+}
 .profile_next_content {
 	position: absolute;
 	left: 100px;
@@ -295,3 +300,6 @@ body {
 	
 }
 
+.virtual_space {
+	height: 400px;	
+}

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 
 import com.koreait.nearby.domain.Follow;
+import com.koreait.nearby.domain.Profile;
 
 @Service
 public interface FollowService {
@@ -17,4 +18,7 @@ public interface FollowService {
 	public List<Follow> selectFollowingIdById(HttpSession session);
 	public List<Follow> selectFollowedIdById(HttpSession session);
 	public Map<String, Object> checkFollow(Follow follow, HttpSession session);
+	public List<Follow> selectUserFollowingIdById(String id); 
+	public List<Follow> selectUserFollowedIdById(String id); 
+	public Profile selectUserProfileOnly(String id);
 }

@@ -72,6 +72,5 @@ public interface MemberRepository {
 	
 	// 관리자의 검색 결과 리스트 
 	public List<Member> selectFindList(Map<String, Object> map);
-	
-	
+		
 }

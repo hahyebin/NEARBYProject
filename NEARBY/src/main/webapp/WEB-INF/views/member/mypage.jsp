@@ -6,11 +6,13 @@
 <head>
 <meta charset="UTF-8">
 <title>개인정보수정</title>
+<link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/resources/image/titleImg3.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/myPage.css">
 <script src="${pageContext.request.contextPath}/resources/js/fnLoginCheck.js"></script>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/header.css">
 
 
 <style>
@@ -39,186 +41,15 @@
 	.hidden_class{
 		z-index: 2;
 	}
-	
-		/* header 관련 */
-  #myhome_icon { color :  #fe4662; }
-  #myhome_btn { border-bottom: 8px solid #fe4662}
-   .header_wrap {
-      z-index: 8;
-      position: fixed;
-      top: 0;
-      width:100%;
-      height: 100px;
-      background-color: white;
-      display: flex;
-   }
-   #header_logo {
-   	 display: inline-block;
-   	 margin-left: 40px;
-   	 margin-right: 100px;
-   }
-   	.header_right_box {
-		display: inline-flex;
-	}
-	
-    .header_left_box > a{
-        display: block;
-		margin: 10px 0 10px 70px;
-		width: 230px;
-		height: 85px;
-		background-size: 219px 85px;
-		background-repeat: no-repeat;
-		background-image: url(../image/logo_color.png);
-		font-size: 0;
-    }
-    
-	#logo_img {
-		width:  200px;
-		margin-top: 12px;
-		margin-left: 50px;
-	}
-	.header_mid_box {
-      display: inline-flex;
-	  margin: 0 auto;
-	}
-    .btn_box{
-        display: flex;
-        text-align: center;
-        margin: 0 0 0 150px;
-        width: 750px;
-    }
-	.btn_box .boxes {
-       	display: inline-block;
-		margin: 0 auto;
-		width: 187px;
-		height: 100%;
-	}
-	 .boxes > a{
-	 	width: 100%;
-	 	height: 100%;
-	 	margin: 0 auto;
-	 	flex-direction: row;
-	}
-	li  a  i {
-		color: #6f7070;
-		text-align: center;
-		margin: 30px auto;
-		font-size: 40px;
-	}
 
 
-	.search_box {
-		display: flex;
-		border-radius: 10px;
-		margin-left: 40px;
-		margin-bottom: 30px;
-		margin-top: 26px;
-		margin-left: 40px;
-		border: none;
-		width: 280px;
-		height: 46px;
-		line-height: 20px;
-		background-color: #e8f0fe;
-	}
-	
-	.search_box>input {
-		border: none;
-		outline: none;
-		width: 220px;
-		height: 30px;
-		line-height: 30px;
-		margin-top: 8px;
-		margin-left: 18px;
-		background-color: #e8f0fe;
-	}
-	
-	#search_icon {
-		width: 40px;
-		height: 40px;
-		text-align: center;
-		margin-top: 4px;
-		margin-right: 16px;
-		border: none;
-		background-color: #e8f0fe;
-	}
-	
-	#search_icon>i {
-		color: #6f7070;
-		width: 38px;
-		height: 38px;
-		margin-top: 10px;
-		cursor: pointer;
-	}
-	
-	#header_profile_box {
-		width: 60px;
-		height: 60px;
-		margin: 18px;
-		border-radius: 100%;
-	}
-	
-	#header_profile_img {
-		width: 60px;
-		height: 60px;
-		top: 20px;
-		border-radius: 100%;
-	}
-
-	#header_profile_menu {
-		z-index: 6000;
-	    margin-top: 84px;
-	    margin-left: -140px;
-		width: 140px;
-		height: 138px;
-		border: 1px solid rgb(240, 242, 245);
-		border-radius: 3px;
-		background-color: white;
-		box-shadow: 5px 5px 8px rgba(160, 160, 160, 0.3);
-	}
-	
-	#header_profile_menu li {
-		margin-top: 4px;
-		margin-left: 4px;
-		font-size: 14px;
-		font-weight: lighter;
-		border-bottom: 1px solid rgb(240, 242, 245);
-	}
-	
-	#header_profile_menu p {
-		font-size: 12px;
-		color: rgb(50, 50, 50);
-	}
-	
-	.header_profile_no {
-		display: none;
-	}
-	
-	.header_profile_see {
-		display: block;
-	}
-	
-	#profile_menu_list1, #profile_menu_list2, #profile_menu_list3 {
-		font-size: 14px;
-		font-weight: normal;
-		color: black;
-	}
-	
-	#profile_menu_list1 {
-		font-weight: bold;
-		font-size: 15px;
-	}
-	
 	.pointer:hover {
 		cursor: pointer;
 	}
+	footer {
+		margin-top: 150px;
+	}
 	
-	/*  footer */
-   .footer_wrap {
-	   padding-bottom: 40px;
-	   text-align: center;
-	   color: #6e6e6e;
-   }
-  .footer_wrap  h2 { margin-top:  40px;}
 </style>
 
 <script type="text/javascript">
@@ -234,7 +65,6 @@
 		fnModifyMemberInfo();
 		fnLeave();	// 회원탈퇴
 		fnCurrentPwCheck(); // 탈퇴시 비밀번호 확인
-		fnProfileBtn();		
 	}); 
  	 	
     // 아이디
@@ -251,19 +81,12 @@
  /* ************************************************************************************ */
 
 
-	// fnProfileBtn();
-	function fnProfileBtn() {
-		$('#header_profile_box').click(function (){
-			$('#header_profile_menu').toggleClass('header_profile_see');
-		});
-	};
-
 /* ------------------------------------------------------------ fnFindMemberInfo() ------------------------------------------------------------ */
 	// 회원 조회 함수
 	function fnFindMemberInfo(){
 	 
 		$.ajax({
-			 url: '/nearby/member/memberInfo', // url에 param이 아니라, 변수가 포함되어 넘어간다.
+			 url: '<%=request.getContextPath()%>/member/memberInfo', // url에 param이 아니라, 변수가 포함되어 넘어간다.
 			type: 'post',
 			dataType: 'json', // 받아오는 data Type
 			success: function(map){
@@ -278,7 +101,7 @@
 					        cancelButtonText: '취소'	
 					     }).then((result) =>{
 							if(result.isConfirmed) { // confirm이 false이면 return
-								location.href='/nearby/';
+								location.href='<%=request.getContextPath()%>/';
 							}
 					     })
 				} else if (map.member != null) { 
@@ -295,12 +118,12 @@
 					$('#birthday').val(year);
 					$('#month').val(month);
 					$('#day').val(day);
-					if (map.result.profile.pOrigin != null) {
+					if (map.result.profile.pOrigin != '') {
 						$('#user_img').attr('src', '/nearby/' + map.result.profile.pPath + '/' + map.result.profile.pSaved);
-						$('#header_profile_img').attr('src', '/nearby/' + map.result.profile.pPath + '/' + map.result.profile.pSaved);
+						$('#profile_img').attr('src', '/nearby/' + map.result.profile.pPath + '/' + map.result.profile.pSaved);
 					} else {
 						$('#user_img').attr('src', '${pageContext.request.contextPath}/resources/image/profile_default.png');
-						$('#header_profile_img').attr('src', '${pageContext.request.contextPath}/resources/image/profile_default.png');
+						$('#profile_img').attr('src', '${pageContext.request.contextPath}/resources/image/profile_default.png');
 					}
 					$('input:radio[name="gender"][value="'+map.result.gender+'"]').prop('checked', true); // prop는 객체에 저장 된 값이므로 true or false가 된다
 				} else {
@@ -354,13 +177,13 @@
 /* ------------------------------------------------------------ fnProfilePic() ------------------------------------------------------------ */
 	// 프로필 사진 변경
 	function fnProfilePic(){
-		$('#insert_btn').on('click', function(){
+		$('#profile_insert_btn').on('click', function(){
 			
 			let formData = new FormData();
 				let file = $('#file')[0].files[0];
 				formData.append('file', file); // 첨부를 FormData에 넣기
 				$.ajax({
-				url: '/nearby/profile/profilePic',
+				url: '<%=request.getContextPath()%>/profile/profilePic',
 				type: 'post',
 				contentType: false,
 				processData: false,
@@ -393,7 +216,7 @@
 				} // success
 			}) // End ajax
 			
-		}) // End insert_btn click event
+		}) // End profile_insert_btn click event
 	} // fnProfilePic
 
 /* ------------------------------------------------------------ fnProfilePic() ------------------------------------------------------------ */
@@ -402,10 +225,10 @@
 		$('#delete_btn').on('click', function(){
 
 			$.ajax({
-			url: '/nearby/profile/profilePicDelete',
+			url: '<%=request.getContextPath()%>/profile/profilePicDelete',
 			type: 'post',
 			dataType: 'json',
-			success: function(map){
+			success: <%=request.getContextPath()%>n(map){
 				let name = '${loginUser.name}';
 				if(map.deleteResult && map.deleteResult != null) {
 					Swal.fire({
@@ -442,7 +265,7 @@
 			}); 
 			
 			$.ajax({
-				url: '/nearby/member/modifyMember',
+				url: '<%=request.getContextPath()%>/member/modifyMember',
 				type: 'post',
 				data: member,
 				contentType: 'application/json',
@@ -500,7 +323,7 @@
 						            text: 'NearBy를 이용해주셔서 감사합니다.',
 						            timer: 300000,
 						        });
-								$('#form').attr('action', '/nearby/member/leaveMember/');
+								$('#form').attr('action', '<%=request.getContextPath()%>/member/leaveMember/');
 								$('#form').submit();
 							} else if (pw_result == false || $('#pw').val()=='') { // pw_result == false 이면 return;
 								Swal.fire({
@@ -524,7 +347,7 @@
 	    $('#password_check_btn').on('click',function(){ // TODO ajax로 select 결과 받아서 처리하기해야함.
 
 			$.ajax({
-				url : '/nearby/member/checkPassword',
+				url : '<%=request.getContextPath()%>/member/checkPassword',
 				type : 'post',
 				data : 'pw=' + $('#pw').val(),
 				dataType: 'json',               // 받아올 데이터 타입
@@ -610,7 +433,7 @@
 	// 홈으로 가기
 	function fnHomeLink() {
 		$('#home_link').on('click', function(){
-			location.href='/nearby/board/updateProfilePicture';
+			location.href='<%=request.getContextPath()%>/board/updateProfilePicture';
 		}) // End home_btn click event
 	} // End fnHomeBtn
 
@@ -646,174 +469,135 @@
 </script>
 </head>
 <body>
- 	<header class="header_wrap">
-	    <div class="header_left_box">
-			  <a href="/nearby/board/boardList"><img id="header_logo" src="${pageContext.request.contextPath}/resources/image/logo_color.png" width="200px"></a>
-		</div>
-	     <div class="header_mid_box">
-			<ul class="btn_box">
-				<li id="home_btn" ><a class="boxes" href="/nearby/board/boardList"><i id="home_icon" class="fas fa-home"></i></a></li>
-				<li id="follow_btn"><a class="boxes" href="/nearby/follow/followList"><i id="follow_icon" class="far fa-address-book"></i></a></li>
-				<li id="myhome_btn"><a class="boxes" href="/nearby/board/myHome"><i id="myhome_icon" class="fas fa-user-alt"></i></a></li>
-				<li id="header_insert_btn" ><a class="boxes" href="/nearby/board/insertPage"><i id="insert_icon" class="far fa-plus-square"></i></a></li>
-			</ul>
-		</div>
-	     <div class="header_right_box">
-			<form class="main_search" action="/nearby/board/searchBoardList">
-				<div class="search_box pointer">
-					<input type=text id="query" name="query">
-					<button id="search_icon">
-						<i class="fas fa-search"></i>
-					</button>
-				</div>
-			</form>
-			<div id="header_profile_box">
-	   	   	 	<c:if test="${empty loginUser.profile.pSaved}">
-						<img id="header_profile_img" src="${pageContext.request.contextPath}/resources/image/profile_default.png" class="pointer defaultImg">
-				</c:if>
-				<c:if test="${not empty loginUser.profile.pSaved}">
-						<img id="header_profile_img" src="/nearby/${loginUser.profile.pPath}/${loginUser.profile.pSaved}" class="pointer">
-				</c:if>
-            </div>
-		    <div id="header_profile_menu" class="header_profile_no">
-				<ul>
-					<li>
-						<a id="profile_menu_list1" href="#">${loginUser.id}</a>
-						<p>${loginUser.name}님<p>
-						<p>${loginUser.email}</p>	
-					</li>
-	   	   			<li><a id="profile_menu_list2" href="/nearby/member/mypage">계정 관리</a></li>
-	   	   			<li><a id="profile_menu_list2" href="/nearby/member/changePasswordPage">비밀번호 변경</a></li>
-	   	   			<li><a id="profile_menu_list3" href="/nearby/member/logout">로그아웃</a></li>
-				</ul>
-		    </div>
-		</div>
-     
-     </header>
+
+   		<header class="header">
+			<jsp:include page="/WEB-INF/views/layout/header.jsp" flush="true" />
+		</header>
  <!-- 레이아웃 header 삽입하기 -->
-    <div class="profile_container"> <!-- 1 -->
-	<div class="hidden_box"></div> <!-- hidden BOX -->
-    	<c:if test="${loginUser.state == 0}">
-	    	<!-- 회원탈퇴 -->
-	    	<div class="leave_user_wrap">
-	    		<input type="button" id="show_leave_btn_box" class="btn pointer" value="회원탈퇴하기" onclick="fnShowLeaveFormArea()">
-	    			<!-- 탈퇴시, 비밀번호 인증 -->
-                <div class="current_pw_check_box">
-                	<div id="close_leave_btn_area">
-	               		<i id="close_leave_area_icon" class="fas fa-times pointer" onclick="fnCloseBtn()"></i>   
-                	</div>
-                    <label for="pw">현재 비밀번호</label>
-               		
-               		
-                    <div id="current_pw_box">
-	                    <span class="space">
-	                  	  <input type="text" id="pw" name="pw">
-	                    </span>
-	                    <span>
-		                    <input type="button" value="확인하기" id="password_check_btn" class="pointer">
-	                    </span>
-                    </div>
-		    		<input type="button" id="leave_btn" class="btn pointer" value="회원탈퇴하기">
-                </div>
-	    	</div>
-	    	
-	    	<p id='user_name_area'></p>
-	    	<div id="profile_area">
-				<div id="profile_result">
-					<div id="p_img" style="width:100%;height:100%;" data-msg="이미지변경">
-						<c:if test="${empty loginUser.profile.pSaved}">
-							<img id="user_img" src="${pageContext.request.contextPath}/resources/image/profile_default.png" onclick="fnShowBtnBox()" class="pointer defaultImg">
-						</c:if>
-						<c:if test="${not empty loginUser.profile.pSaved}">
-							<img id="user_img" src="/nearby/${loginUser.profile.pPath}/${loginUser.profile.pSaved}" onclick="fnShowBtnBox()" class="pointer">
-						</c:if>
+ 	<main> 	
+	    <div class="profile_container"> <!-- 1 -->
+		<div class="hidden_box"></div> <!-- hidden BOX -->
+	    	<c:if test="${loginUser.state == 0}">
+		    	<!-- 회원탈퇴 -->
+		    	<div class="leave_user_wrap">
+		    		<input type="button" id="show_leave_btn_box" class="btn pointer" value="회원탈퇴하기" onclick="fnShowLeaveFormArea()">
+		    			<!-- 탈퇴시, 비밀번호 인증 -->
+	                <div class="current_pw_check_box">
+	                	<div id="close_leave_btn_area">
+		               		<i id="close_leave_area_icon" class="fas fa-times pointer" onclick="fnCloseBtn()"></i>   
+	                	</div>
+	                    <label for="pw">현재 비밀번호</label>
+	               		
+	               		
+	                    <div id="current_pw_box">
+		                    <span class="space">
+		                  	  <input type="text" id="pw" name="pw">
+		                    </span>
+		                    <span>
+			                    <input type="button" value="확인하기" id="password_check_btn" class="pointer">
+		                    </span>
+	                    </div>
+			    		<input type="button" id="leave_btn" class="btn pointer" value="회원탈퇴하기">
+	                </div>
+		    	</div>
+		    	
+		    	<p id='user_name_area'></p>
+		    	<div id="profile_area">
+					<div id="profile_result">
+						<div id="p_img" style="width:100%;height:100%;" data-msg="이미지변경">
+					
+							<c:if test="${empty loginUser.profile.pSaved}">
+								<img id="user_img" src="${pageContext.request.contextPath}/resources/image/profile_default.png" onclick="fnShowBtnBox()" class="pointer defaultImg">
+							</c:if>
+							<c:if test="${not empty loginUser.profile.pSaved}">
+								<img id="user_img" src="/nearby/${loginUser.profile.pPath}/${loginUser.profile.pSaved}" onclick="fnShowBtnBox()" class="pointer">
+							</c:if>
+						 
+						</div>
 					</div>
-				</div>
-				<div class="content_box">
-					<textarea rows="5" cols="35" placeholder="자신을 맘껏 표현해보세요" id="content" name="content"></textarea>
-				</div>
-				<!-- 첨부박스 -->
-				<div class="file_box">
-					<div id="close_file_box_icon_area">
-						<!-- <i id="close_file_box_icon" class="fas fa-times pointer" onclick="fnShowBtnBox()"></i>    -->
-						<i id="close_file_box_icon" class="fas fa-times pointer" onclick="fnImageClose()"></i>   
+					<div class="content_box">
+						<textarea rows="5" cols="35" placeholder="자신을 맘껏 표현해보세요" id="content" name="content"></textarea>
 					</div>
-					<label id="file_label" for="file"><i class="fas fa-photo-video"></i></label>
-					<input type="file" id="file" class="pointer">
-					<ul class="delete_update_form">
-						<li><input type="button" value=' 사진변경 ' id="insert_btn"  class="pointer"></li>
-						<li><input type="button" value='사진초기화' id="delete_btn"  class="pointer"></li>
-					</ul>
-				</div>
-	    	</div>
-	 
-	        <div class="join_form">
-	        	<form id="form" method="post">
-					<input type="hidden" value="${loginUser.mNo}" id="mNo" name="mNo">
-	        	</form>
-               <!-- 이름 -->
-               <div class="input_box">
-                   <label for="name">이름</label>
-                   <span class="space">
-                    <input type="text" id="name" name="name">
-                   </span>
-                   <span id="name_check"></span>
-               </div>
+					<!-- 첨부박스 -->
+					<div class="file_box">
+						<div id="close_file_box_icon_area">
+							<!-- <i id="close_file_box_icon" class="fas fa-times pointer" onclick="fnShowBtnBox()"></i>    -->
+							<i id="close_file_box_icon" class="fas fa-times pointer" onclick="fnImageClose()"></i>   
+						</div>
+						<label id="file_label" for="file"><i class="fas fa-photo-video"></i></label>
+						<input type="file" id="file" class="pointer">
+						<ul class="delete_update_form">
+							<li><input type="button" value=' 사진변경 ' id="profile_insert_btn"  class="pointer"></li>
+							<li><input type="button" value='사진초기화' id="delete_btn"  class="pointer"></li>
+						</ul>
+					</div>
+		    	</div>
+		 
+		        <div class="join_form">
+		        	<form id="form" method="post">
+						<input type="hidden" value="${loginUser.mNo}" id="mNo" name="mNo">
+		        	</form>
+	               <!-- 이름 -->
+	               <div class="input_box">
+	                   <label for="name">이름</label>
+	                   <span class="space">
+	                    <input type="text" id="name" name="name">
+	                   </span>
+	                   <span id="name_check"></span>
+	               </div>
+		
+	               <!-- 번호 -->
+	               <div class="tel_box">
+	                   <label for="phone">핸드폰 번호</label>
+	                   <span class="space">
+	                    <input type="text" id="phone" name="phone" placeholder=" - 표시 없이 입력해주세요">
+	                   </span>
+	                   <span id="phone_check"></span>
+	               </div>
+		               
+	               <!-- 생년월일 -->
+	               <div class="birth_box">
+	                   
+	                   <!-- 년도 -->
+	                   <label for="birthday">생년월일</label>
+	                   <select id="birthday" name="year"></select>
 	
-               <!-- 번호 -->
-               <div class="tel_box">
-                   <label for="phone">핸드폰 번호</label>
-                   <span class="space">
-                    <input type="text" id="phone" name="phone" placeholder=" - 표시 없이 입력해주세요">
-                   </span>
-                   <span id="phone_check"></span>
-               </div>
-	               
-               <!-- 생년월일 -->
-               <div class="birth_box">
-                   
-                   <!-- 년도 -->
-                   <label for="birthday">생년월일</label>
-                   <select id="birthday" name="year"></select>
-
-                   <!-- 월 -->
-                   <select id="month" name="month">
-                       <option>월</option>
-                   </select>
-
-                   <!-- 일 -->
-                   <select id="day" name="day">
-                       <option>일</option>
-                   </select>
-               </div>
+	                   <!-- 월 -->
+	                   <select id="month" name="month">
+	                       <option>월</option>
+	                   </select>
 	
-               <!-- 성별 -->
-               <div class="gender_box">
-                   <p id="gender_box">성별</p>
-                   <!-- 선택 안 함 -->
-                   <input type="radio" name="gender" value="n" id="n" class="btns" checked>
-                   <label id="n"  for="n">선택안함</label>
-
-                   <!-- 남성 -->
-                   <input type="radio" name="gender" value="m" id="male" class="btns">
-                   <label id="m"  for="male">남성</label>
-                   
-                   <!-- 여성 -->
-                   <input type="radio" name="gender" value="f" id="female">
-                   <label id="f" for="female">여성</label>
-               </div>
+	                   <!-- 일 -->
+	                   <select id="day" name="day">
+	                       <option>일</option>
+	                   </select>
+	               </div>
+		
+	               <!-- 성별 -->
+	               <div class="gender_box">
+	                   <p id="gender_box">성별</p>
+	                   <!-- 선택 안 함 -->
+	                   <input type="radio" name="gender" value="n" id="n" class="btns" checked>
+	                   <label id="n"  for="n">선택안함</label>
 	
-               <div class="btn_wrap">
-                   <input type="button" id="modify_btn" class="btn btn-primary pointer" value="수정완료">                
-               </div>                
-	        </div>
-    	</c:if>
-    </div> <!-- End profile_container -->
-
-      <footer class="footer_wrap">
-           <h2>About NearBy</h2><br>
-           <p>로고     히스토리     개인정보처리방침     도움말      제휴      광고      문의/피드백      채용</p>
-           <p>© NearBy Corp. All rights reserved.</p>
+	                   <!-- 남성 -->
+	                   <input type="radio" name="gender" value="m" id="male" class="btns">
+	                   <label id="m"  for="male">남성</label>
+	                   
+	                   <!-- 여성 -->
+	                   <input type="radio" name="gender" value="f" id="female">
+	                   <label id="f" for="female">여성</label>
+	               </div>
+		
+	               <div class="btn_wrap">
+	                   <input type="button" id="modify_btn" class="btn btn-primary pointer" value="수정완료">                
+	               </div>                
+		        </div>
+	    	</c:if>
+	    </div> <!-- End profile_container -->
+	</main>
+ 	<footer>
+         <jsp:include page="/WEB-INF/views/layout/footer.jsp" flush="true" />
     </footer>
 
 </body>

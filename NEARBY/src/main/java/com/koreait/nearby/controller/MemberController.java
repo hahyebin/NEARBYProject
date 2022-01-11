@@ -32,6 +32,12 @@ public class MemberController {
 		this.service = service;
 	}
 	
+	// 회원가입 전 동의
+	@GetMapping("agreement")
+	public String agreement() {
+		return "member/agreement";
+	}
+
 	
     // 회원가입하러 가기
 	@GetMapping("memberJoin")

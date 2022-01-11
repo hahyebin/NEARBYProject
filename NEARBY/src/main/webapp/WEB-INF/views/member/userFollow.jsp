@@ -6,7 +6,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>NearBy</title>
+<link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/resources/image/titleImg3.png">
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/header.css">
@@ -45,12 +46,12 @@
 	
 	//fnCheckFollow();
 	function fnCheckFollow() {
-		let pId = '${user[0].profile.id}';
+		let pId = '${userId}';
 		let follow = JSON.stringify({
 	  	  profile : {id : pId} 
 		  	});
 		$.ajax({
-			url: '/nearby/follow/checkFollow',
+			url: '<%=request.getContextPath()%>/follow/checkFollow',
 			type: 'post',
 			data: follow,
 	  	  	contentType: 'application/json',
@@ -82,7 +83,7 @@
 	
 	// fnMoveUserHome();
 	function fnMoveUserHome(id) {
-		location.href='/nearby/board/selectUserHome?id=' + id; 
+		location.href='<%=request.getContextPath()%>/board/selectUserHome?id=' + id; 
 	}
 	function fnCheckLogin(){
 		let loginInfo = '${loginUser.id}';
@@ -99,7 +100,7 @@
 		        cancelButtonText: '취소'	
 		     }).then((result) => {
 				if(result.isConfirmed) { // confirm이 false이면 return
-					location.href='/nearby/';
+					location.href='<%=request.getContextPath()%>/';
 				}
 		     })
 		}
@@ -130,10 +131,10 @@
         <div class="user_box">
             <div class="user_img_box">
            		<c:if test="${userProfile.pSaved == null}">
-					<img id="user_img" class="pointer" onclick="location.href='/nearby/board/selectUserHome?id=${userProfile.id}'"  src="${pageContext.request.contextPath}/resources/image/profile_default.png">
+					<img id="user_img" class="pointer" onclick="location.href='<%=request.getContextPath()%>/board/selectUserHome?id=${userProfile.id}'"  src="${pageContext.request.contextPath}/resources/image/profile_default.png">
             	</c:if>
             	<c:if test="${userProfile.pSaved != null}">
-            		<img id="user_img" class="pointer" onclick="location.href='/nearby/board/selectUserHome?id=${userProfile.id}'" src="/nearby/${userProfile.pPath}/${userProfile.pSaved}">           				
+            		<img id="user_img" class="pointer" onclick="location.href='<%=request.getContextPath()%>/board/selectUserHome?id=${userProfile.id}'" src="/nearby/${userProfile.pPath}/${userProfile.pSaved}">           				
             	</c:if>
             </div>
             

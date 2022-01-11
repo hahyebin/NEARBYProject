@@ -25,6 +25,7 @@ import com.koreait.nearby.domain.Board;
 import com.koreait.nearby.domain.Follow;
 import com.koreait.nearby.domain.Likes;
 import com.koreait.nearby.domain.Member;
+import com.koreait.nearby.domain.Profile;
 import com.koreait.nearby.repository.BoardRepository;
 import com.koreait.nearby.repository.FollowRepository;
 import com.koreait.nearby.repository.LikesRepository;
@@ -389,9 +390,7 @@ public class BoardServiceImpl implements BoardService {
 			//System.out.println("like 테이블 삭제  : " +likeCancelTBLUpdate );
 			  if( likeCancelTBLUpdate == 1 ) { // 성공하면 보드 다시 세팅 -1로
 				  oneBoard = boardRepository.boardLikesCount(oneBoard);
-			//	  System.out.println("board 취소 한 결과   " + oneBoard.getLikes());
 				  Likes like = likesRepository.likeSelectByNO(likes);  //  각 보드의 좋아요 누른 테이블 리스트 반환
-			//	  System.out.println("dd" + like);
 				  oneBoard.setLikes(oneBoard.getLikes());
 				  oneBoard.setbNo(bNo);
 				  oneBoard.setLike(like);
@@ -472,18 +471,34 @@ public class BoardServiceImpl implements BoardService {
 	}
 	
 	
-	// 검색하기
-	@Override
-	public List<Board> searchBoardList(HttpServletRequest request) {
-		BoardRepository boardRepository = sqlSession.getMapper(BoardRepository.class);
-		String query = request.getParameter("query");
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("query", query);
+	// 통합 검색하기
+		@Override
+		public List<Board> searchBoardList(HttpServletRequest request) {
+			BoardRepository boardRepository = sqlSession.getMapper(BoardRepository.class);
+			String query = request.getParameter("query");
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("query", query);
+			
+			List<Board> searchResult = boardRepository.searchListBoard(map);
+			return searchResult;
+		}
 		
-		List<Board> searchResult = boardRepository.searchListBoard(map);
-
-		return searchResult;
-	}
+		
+		// ID 만 검색 및 프로필 정보 받아오기
+		@Override
+		public List<Profile> searchProfileList(HttpServletRequest request) {
+			
+			BoardRepository boardRepository = sqlSession.getMapper(BoardRepository.class);
+			
+			String query = request.getParameter("query");
+			
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("query", query);
+			
+			List<Profile> searchResult = boardRepository.searchProfileList(map);
+			
+			return searchResult;
+		}
 
 
 	/* myHome 이동 및 유저의 게시물 개수 구하기 */
@@ -531,8 +546,8 @@ public class BoardServiceImpl implements BoardService {
 		String userId = id;
 		System.out.println("parameter 저장 id : " + userId);
 		List<Board> user = boardRepository.selectUserHome(userId);
-		
-		System.out.println("DB 다녀온 list 결과 : " + user);
+				
+		System.out.println("@@@@@@@ DB 다녀온 list 결과 : " + user);
 		return user;
 	}
 	
@@ -558,6 +573,17 @@ public class BoardServiceImpl implements BoardService {
 		
 		return list;
 	}
+	
+	
+	
+	/* 해당 유저의 게시물 구하기 */
+	@Override
+	public int selectUserHomeBoardsCount(String id) {
+		BoardRepository boardRepository = sqlSession.getMapper(BoardRepository.class);
+		int userBoardCount = boardRepository.selectUserBoardsCount(id);
+		return userBoardCount;
+	}
+
 	
 	
 }

@@ -6,7 +6,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>NearBy</title>
+<link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/resources/image/titleImg3.png">
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/header.css">
@@ -48,7 +49,7 @@
 	  	  profile : {id : pId} 
 		  	});
 		$.ajax({
-			url: '/nearby/follow/checkFollow',
+			url: '<%=request.getContextPath()%>/follow/checkFollow',
 			type: 'post',
 			data: follow,
 	  	  	contentType: 'application/json',
@@ -79,7 +80,7 @@
 	}
 	// fnMoveUserHome();
 	function fnMoveUserHome(id) {
-		location.href='/nearby/board/selectUserHome?id='+ id; 
+		location.href='<%=request.getContextPath()%>/board/selectUserHome?id='+ id; 
 	}
 	/* ----------------------------------------- fnCheckLogin() --------------------------------  */
  	function fnCheckLogin(){
@@ -97,7 +98,7 @@
 		        cancelButtonText: '취소'	
 		     }).then((result) => {
 				if(result.isConfirmed) { // confirm이 false이면 return
-					location.href='/nearby/';
+					location.href='<%=request.getContextPath()%>/';
 				}
 		     })
 		}
@@ -131,7 +132,7 @@
             		<img id="user_img" src="${pageContext.request.contextPath}/resources/image/profile_default.png" class="pointer defaultImg">
             	</c:if>
             	<c:if test="${not empty loginUser.profile.pSaved}">
-            		<img id="user_img" src="/nearby/${loginUser.profile.pPath}/${loginUser.profile.pSaved}" class="pointer">         	
+            		<img id="user_img" src="<%=request.getContextPath()%>/${loginUser.profile.pPath}/${loginUser.profile.pSaved}" class="pointer">         	
             	</c:if>
             </div>
             
@@ -156,10 +157,10 @@
          
       <div class="follow_container">
          	<div class="select_box">
-         		<div id="left_select_box" class="checked">
+         		<div id="left_select_box" class="checked pointer">
          			<p id="follower_text" class="checked1">팔로워(${fn:length(followedList)})</p>
          		</div>
-         		<div id="right_select_box" class="unchecked">
+         		<div id="right_select_box" class="unchecked pointer">
          			<p id="following_text" class="unchecked1">팔로잉(${fn:length(followingList)})</p>
           		</div>
            	</div>
@@ -177,9 +178,9 @@
 									<img id="user_img" src="${pageContext.request.contextPath}/resources/image/profile_default.png" class="defaultImg pointer" onclick="fnMoveUserHome('${followedList.followingId}')">
 								</c:if>
 								<c:if test="${not empty followedList.profile.pSaved}">
-									<img id="user_img" src="${pageContext.request.contextPath}/${followedList.profile.pPath}/${followedList.profile.pSaved}" onclick="fnMoveUserHome('${followedList.followingId}')">
+									<img id="user_img" src="${pageContext.request.contextPath}/${followedList.profile.pPath}/${followedList.profile.pSaved}"  class="pointer" onclick="fnMoveUserHome('${followedList.followingId}')">
 								</c:if>
-								<div class="profile_next_id" onclick="fnMoveUserHome('${followedList.followingId}')">${followedList.followingId}</div>
+								<div class="profile_next_id pointer" onclick="fnMoveUserHome('${followedList.followingId}')">${followedList.followingId}</div>
 								<div class="profile_next_content">${followedList.profile.pContent}</div>		
 							</div>	
 						</c:forEach>
@@ -195,12 +196,12 @@
 						<c:forEach items="${followingList}"  var="followingList">
 							<div class="each_follow_box">
 								<c:if test="${empty followingList.profile.pSaved}">
-									<img id="user_img" src="${pageContext.request.contextPath}/resources/image/profile_default.png" class="defaultImg"  onclick="fnMoveUserHome('${followingList.followedId}')">
+									<img id="user_img" src="${pageContext.request.contextPath}/resources/image/profile_default.png" class="defaultImg pointer"  onclick="fnMoveUserHome('${followingList.followedId}')">
 								</c:if>
 								<c:if test="${not empty followingList.profile.pSaved}">
-									<img id="user_img" src="${pageContext.request.contextPath}/${followingList.profile.pPath}/${followingList.profile.pSaved}"  onclick="fnMoveUserHome('${followingList.followedId}')">
+									<img id="user_img" src="${pageContext.request.contextPath}/${followingList.profile.pPath}/${followingList.profile.pSaved}" class="pointer" onclick="fnMoveUserHome('${followingList.followedId}')">
 								</c:if>
-								<div class="profile_next_id"  onclick="fnMoveUserHome('${followingList.followedId}')">${followingList.followedId}</div><br>	
+								<div class="profile_next_id pointer"  onclick="fnMoveUserHome('${followingList.followedId}')">${followingList.followedId}</div>
 								<div class="profile_next_content">${followingList.profile.pContent}</div>
 							</div>	
 						</c:forEach>
@@ -210,12 +211,12 @@
   	  </div>
   	  
   	  
+  	<div class="virtual_space">
   	
+  	</div>
 	
 	</section>
-<footer>
-	<br><br><br><br><br><br><br>
-</footer>
+
 	
 
 </body>

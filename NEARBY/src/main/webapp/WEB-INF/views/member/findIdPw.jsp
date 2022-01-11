@@ -4,7 +4,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>아이디/비밀번호 찾기</title>
+<title>NearBy - 아이디/비밀번호 찾기</title>
+<link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/resources/image/titleImg3.png">
 <!-- sweetCDN -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
@@ -38,27 +39,17 @@
    	margin-top: 10px;
    }
 /* footer */
-  .footer_wrap {
-   margin-top: 100px;
-   padding-bottom: 40px;
-   text-align: center;
-   color: #6e6e6e;
-   }
- .footer_wrap  h2 { margin-top:  40px;}
+	footer {
+		margin-top : 200px;
+	}
 </style>
 </head>
 <body>
  
  	  <header class="header_wrap">
-           <a href="/nearby/"><img id="header_logo" src="${pageContext.request.contextPath}/resources/image/logo_color.png" width="200px"></a>
+           <a href="<%=request.getContextPath()%>/"><img id="header_logo" src="${pageContext.request.contextPath}/resources/image/logo_color.png" width="200px"></a>
       </header>
- 
- 
- 
-    <<!-- h1 class="title">
-       <a href="/nearby/">NearBy</a>
-    </h1> -->
-    
+
     
     <div class="container" style="margin-top: 200px;">
         <!-- 아이디 찾기 -->
@@ -145,11 +136,9 @@
         </div>
     </div>
     
-     <footer class="footer_wrap">
-           <h2>About NearBy</h2><br>
-           <p>로고     히스토리     개인정보처리방침     도움말      제휴      광고      문의/피드백      채용</p>
-           <p>© NearBy Corp. All rights reserved.</p>
-     </footer>
+	<footer>
+         <jsp:include page="/WEB-INF/views/layout/footer.jsp" flush="true" />
+    </footer>
     
     
 </body>
