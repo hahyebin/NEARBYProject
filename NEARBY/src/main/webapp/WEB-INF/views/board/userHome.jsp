@@ -76,17 +76,22 @@ function fnCheckFollow() {
   	  	dataType: 'json',
 	    success: function(map) {
 	    	  console.log(map);
+	    	  if( pId == '${loginUser.id}'){
+	    		  $('#profile_setup').css('display', 'none');
+	    	  } else {
+	    		  
 	    	  if(map.result == 1) { 
 		    	  console.log('팔로잉중');
 		    	  $('#profile_setup').val('팔로잉').attr('onclick', 'fnUnfollowing()');
 		    	 
 	    	  	
 	    	  
-	    	  } else if (map.result == 0) {
+	    	  } else if (map.result == 0 ) {
 	    	 	  console.log('팔로우하기');		  
 	    	 	  $('#profile_setup').val('팔로우').attr('onclick', 'fnFollowing()');
 	    	 	  
 	    	 	  
+	    	  }
 	    	  }
 
 	    	 
@@ -385,12 +390,14 @@ function fnSendBno(){
                 <div class="follower_box">
                     <input id="my_border" type="button" value="게시물">
                     <label for="my_border">${userBoardCount}</label>
-					
+				<c:if test="${loginUser.id != userId}">	
+		
                     <input id="my_follower" type="button" value="팔로워" onclick="location.href='<%=request.getContextPath()%>/follow/userFollow?id='+ '${userId}'">
                     <label for="my_follower" onclick="location.href='<%=request.getContextPath()%>/follow/userFollow?id='+ '${userId}'">${f:length(followedList)}</label>
 
                     <input id="my_following" type="button" value="팔로잉" onclick="location.href='<%=request.getContextPath()%>/follow/userFollow?id='+ '${userId}'">
                     <label for="my_following" onclick="location.href='<%=request.getContextPath()%>/follow/userFollow?id='+ '${userId}'">${f:length(followingList)}</label>
+               	</c:if>
                	
                 </div>
 

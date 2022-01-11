@@ -13,6 +13,9 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/join.css">
 <script type="text/javascript">
 $(document).ready(function(){
+	console.log(location.toString(), location.href);
+	console.log(location.protocol, location.host, location.port, location.pathname, location.search, location.hash)
+
 	fnIdCheck();
 	fnPwCheck();
 	fnPw2Check();
@@ -23,11 +26,11 @@ $(document).ready(function(){
 	fnAllCheck();
    
 });
-
-	function getContextPath(){
-		var hostIndex = location.href.indexOf(location.host) + location.host.length;
-		return location.href.substring( hostIndex, location.href.indexOf('/', hostIndex + 1 ));
-	}
+var path = getContextPath();
+function getContextPath(){
+	var hostIndex = location.href.indexOf(location.host) + location.host.length;
+	return location.href.substring( hostIndex, location.href.indexOf('/', hostIndex + 1 ));
+}
 
 	// 아이디 정규식
 	let regId = /^[a-zA-Z0-9_-]{4,12}$/;
@@ -53,6 +56,7 @@ $(document).ready(function(){
 	/* 아이디 */
 	function fnIdCheck() {
 		console.log('idCheck');
+		alert(path);
 	    // 1차 정규식 체크
 	    $('#id').on('keyup blur', function(){
 	    	if($('#id').val() == ''){
@@ -74,7 +78,7 @@ $(document).ready(function(){
 	        }
 	        // 중복 체크
 	        $.ajax({
-	            url: "/nearby/member/idCheck",
+	            url: "/member/idCheck",
 	            type: 'post',
 	            data: 'id=' + $(this).val(),
 	            dataType: 'json',
@@ -454,7 +458,7 @@ $(document).ready(function(){
 </script>
 </head>
 <body>
-<c:set var="path" value="${pageContext.request.contextPath}"/>
+
 
     <div class="container">
     
@@ -465,6 +469,7 @@ $(document).ready(function(){
         <div class="join_form">
     
             <form action="<%=request.getContextPath()%>/member/insertMember" method="post" id="join_form">
+
                 <!-- 아이디 --> 
                 <div class="input_box">
                     <label for="id">아이디</label>

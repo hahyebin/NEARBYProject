@@ -288,12 +288,13 @@ function fnSendBno(){
                 <div class="follower_box">
                     <input id="my_border" type="button" value="게시물">
                     <label for="my_border">${userBoardCount}</label>
-
+				<c:if test="${loginUser.id != userId}">	
                     <input id="my_follower" type="button" value="팔로워" onclick="location.href='<%=request.getContextPath()%>/follow/followList'">
                     <label for="my_follower" onclick="location.href='<%=request.getContextPath()%>/follow/followList'">${f:length(followedList)}</label>
 
                     <input id="my_following" type="button" value="팔로잉" onclick="location.href='<%=request.getContextPath()%>/follow/followList'">
                     <label for="my_following" onclick="location.href='<%=request.getContextPath()%>/follow/followList'">${f:length(followingList)}</label>
+   				</c:if>
                 </div>
 
                 <div class="content_box">
