@@ -132,7 +132,6 @@ new Chart(document.getElementById("barchart1"), {
       responsive: false     
     }
 });
-console.log($('#seoul').val())
 new Chart(document.getElementById("barchart2"), {
     type: 'bar',
     data: {
@@ -165,7 +164,6 @@ new Chart(document.getElementById("barchart2"), {
  let men = $('#men').val()
  let women = $('#women').val()
  let noGender = $('#noGender').val()
- console.log(men + noGender + women)
  
 var ctx = $('#donutchart').get(0).getContext('2d');
 var donutdata =

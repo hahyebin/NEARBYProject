@@ -59,12 +59,9 @@ function fnMemberDelete(i){
 										  $('#mNoReInsert'+i).addClass('member_delete');
 										  $('#mNo'+i).removeAttr('onclick');
 										  location.href="<%=request.getContextPath()%>/admin/findMember";
-									 } else {
-										 alert('삭제실패');
-									 }
+									 } 
 									}, 
 									error: function(xhr){
-										alert('삭제서버 실패');
 										console.log(xhr.responseText);
 									}
 								})

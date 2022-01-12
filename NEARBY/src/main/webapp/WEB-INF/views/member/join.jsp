@@ -13,8 +13,6 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/join.css">
 <script type="text/javascript">
 $(document).ready(function(){
-	console.log(location.toString(), location.href);
-	console.log(location.protocol, location.host, location.port, location.pathname, location.search, location.hash)
 
 	fnIdCheck();
 	fnPwCheck();
@@ -26,11 +24,6 @@ $(document).ready(function(){
 	fnAllCheck();
    
 });
-var path = getContextPath();
-function getContextPath(){
-	var hostIndex = location.href.indexOf(location.host) + location.host.length;
-	return location.href.substring( hostIndex, location.href.indexOf('/', hostIndex + 1 ));
-}
 
 	// 아이디 정규식
 	let regId = /^[a-zA-Z0-9_-]{4,12}$/;
@@ -51,12 +44,10 @@ function getContextPath(){
 	let authCodePass = false;
 	let birthday_result = false;
 	let phone_result = false;
-
+    
 
 	/* 아이디 */
 	function fnIdCheck() {
-		console.log('idCheck');
-		alert(path);
 	    // 1차 정규식 체크
 	    $('#id').on('keyup blur', function(){
 	    	if($('#id').val() == ''){
@@ -78,18 +69,17 @@ function getContextPath(){
 	        }
 	        // 중복 체크
 	        $.ajax({
-	            url: "/member/idCheck",
+	            url: '/member/idCheck',
 	            type: 'post',
 	            data: 'id=' + $(this).val(),
 	            dataType: 'json',
 	            success: function(map){
-	            	console.log('성공고옥');
-	                if(map.result == null){
+	                if(map.result == null ){
 						$('.idCheckTrue').css('display', 'block');
 						$('.idCheckFalse').css('display', 'none');
 						$('#id_check_msg').text('');
 	                    id_result = true;
-	                }else{
+	                }else {
 						$('.idCheckTrue').css('display', 'none');
 						$('.idCheckFalse').css('display', 'block');
 	                    $('#id_check_msg').text('사용 중인 아이디 입니다.')
@@ -101,7 +91,6 @@ function getContextPath(){
 	            },
 	            error: function(xhr){
 	            	console.log(xhr.responseText);
-	            	console.log('서버오류');
 					$('.idCheckTrue').css('display', 'none');
 					$('.idCheckFalse').css('display', 'block');
 	                $('#id_check_msg').text('사용할 수 없는 아이디 입니다.')
@@ -110,7 +99,6 @@ function getContextPath(){
 	                id_result = false;
 	            }
 	        }); // AJAX
-	        
 	    });
 
 	} // end fnIdCheck
@@ -241,6 +229,9 @@ function getContextPath(){
 							});
 							email_result = false;
 						}
+					},
+					error : function(xhr){
+						console.log(xhr.responseText);
 					}
 	    		});
 	    	});
@@ -263,6 +254,7 @@ function getContextPath(){
 					data: 'email=' + $('#email').val(),
 					dataType: 'json',
 					success: function(map){
+						console.log(map.authCode);
 						Swal.fire({
 							icon: 'success',
 							title: '인증코드 발송 되었습니다.',
@@ -270,7 +262,9 @@ function getContextPath(){
 						});
 						fnVerifyAuthCode(map.authCode);
 					},
-					error: function(){
+					error: function(xhr){
+						console.log(xhr.responseText);
+		            	console.log('서버오류');
 						Swal.fire({
 							icon: 'error',
 							title: '인증코드 발송 실패.',
@@ -460,6 +454,7 @@ function getContextPath(){
 <body>
 
 
+
     <div class="container">
     
         <div class="head">
@@ -468,8 +463,8 @@ function getContextPath(){
  
         <div class="join_form">
     
-            <form action="<%=request.getContextPath()%>/member/insertMember" method="post" id="join_form">
-
+            <form action="/member/insertMember" method="post" id="join_form">
+                
                 <!-- 아이디 --> 
                 <div class="input_box">
                     <label for="id">아이디</label>
@@ -481,7 +476,7 @@ function getContextPath(){
                 <!-- 비밀번호 -->
                 <div class="input_box">
                     <label for="pw">비밀번호</label>
-                        <input type="text" id="pw" name="pw">
+                        <input type="password" id="pw" name="pw">
                     	<span class="icon"><i class="fas fa-check pwCheckTrue"></i><i class="fas fa-times pwCheckFalse"></i></span>
                     <span id="pw_check_msg"></span>
                 </div>
@@ -489,7 +484,7 @@ function getContextPath(){
                 <!-- 비밀번호 확인 -->
                 <div class="input_box">
                     <label for="pw2">비밀번호 재확인</label>
-                        <input type="text" id="pw2" >
+                        <input type="password" id="pw2" >
                     	<span class="icon"><i class="fas fa-check pw2CheckTrue"></i><i class="fas fa-times pw2CheckFalse"></i></span>
                     <span id="pw2_check_msg"></span>
                 </div>

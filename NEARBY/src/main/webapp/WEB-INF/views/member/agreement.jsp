@@ -70,14 +70,27 @@
 			font-size: 25px;
 		} */
 		
-		.box {	/* 설명서 박스에 넣어서 스크롤 y축 추가한다 */
-			border: 1px solid black;	/* 박스 */
-			margin: 10px;
-			width: 500px;
-			padding: 10px;
-	  		height: 120px;
-	  		overflow-y: scroll /* y 축만 스크롤하면 되지만 */
-		}
+		.box {   /* 설명서 박스에 넣어서 스크롤 y축 추가한다 */
+         border: 1px solid black;   /* 박스 */
+         margin: 10px;
+         width: 500px;
+         padding: 10px;
+         height: 120px;
+         overflow: auto; /* y 축만 스크롤하면 되지만 */
+         border-color: #fe4b60;
+      }
+      
+      .box::-webkit-scrollbar {   /* 스크롤바 전체 */
+      	width: 10px;
+      }
+      .box::-webkit-scrollbar-thumb {   /* 스크롤 막대 속성 */
+	      background-color: #fe4b60;
+	      border-radius: 5px;
+      }
+      .box::-webkit-scrollbar-track {   /* 스크롤 막대 외부 속성 */
+	      background-color: #FFE6E6;
+	      border-radius: 5px;
+      }
 		
 		.accordion {
 			margin-top: 30px;
@@ -173,19 +186,6 @@
 			$('#accordion input[type="checkbox"]').click(function(e) {
 				e.stopPropagation();
 			}); 
-			/* 필수 선택 안하면 경고창 */
-			/*
-			$('#form').on('submit', function(event){
-				if ($('#check1').is(':checked')) {
-					alert('이용동의 약관에 동의하지 않았습니다.');
-					event.preventDefault();
-					return false;
-				} else if ($('#check2').is(':checked')) { // check2를 선택하지 않은 경우
-					alert('개인정보 수집 및 이용에 대한 안내를 동의하지 않았습니다.');
-					event.preventDefault();
-					return false;
-				}
-				return true;*/
 			 $('#form').on('submit', function(event){
 				if ($('#check1').is(':checked')) {  // check1을 선택하지 않은 경우
 					
@@ -492,7 +492,7 @@
 						
 						<input type="submit" value="동의" id="agreement" >
 						
-						<input type="reset" value="비동의" id="disagree">
+						<input type="reset" value="비동의" id="disagree" onclick="location.href='<%=request.getContextPath()%>/'">
 						
 					
 					</div>

@@ -57,22 +57,8 @@
 	  	  	contentType: 'application/json',
 	  	  	dataType: 'json',
 		    success: function(map) {
-		    	  console.log(map);
-		    	  if(map.result == 1) { 
-			    	  console.log('팔로잉중');
-			    	 
-			    	 
-		    	  	
-		    	  
-		    	  } else if (map.result == 0) {
-		    	 	  console.log('팔로우하기');		  
-		    	 	 
-		    	 	  
-		    	 	  
-		    	  }
-		    	 
-		    	  
-		    	  
+		    	 // map.result == 1  '팔로잉중'
+				//  map.result == 0  '팔로우중 아님'	
 		      },
 		     error: function(xhr) {
 		    	  console.log(xhr.responseText);
@@ -87,7 +73,6 @@
 	}
 	function fnCheckLogin(){
 		let loginInfo = '${loginUser.id}';
-		console.log('logincheck ???? : ' + loginInfo);
 		if (loginInfo == '') {
 			
 		 Swal.fire({
@@ -134,7 +119,7 @@
 					<img id="user_img" class="pointer" onclick="location.href='<%=request.getContextPath()%>/board/selectUserHome?id=${userProfile.id}'"  src="${pageContext.request.contextPath}/resources/image/profile_default.png">
             	</c:if>
             	<c:if test="${userProfile.pSaved != null}">
-            		<img id="user_img" class="pointer" onclick="location.href='<%=request.getContextPath()%>/board/selectUserHome?id=${userProfile.id}'" src="/nearby/${userProfile.pPath}/${userProfile.pSaved}">           				
+            		<img id="user_img" class="pointer" onclick="location.href='<%=request.getContextPath()%>/board/selectUserHome?id=${userProfile.id}'" src="/${userProfile.pPath}/${userProfile.pSaved}">           				
             	</c:if>
             </div>
             

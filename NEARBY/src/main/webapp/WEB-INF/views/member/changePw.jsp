@@ -48,35 +48,30 @@
 					Swal.fire({
 						text: '현재 비밀번호를 확인해주세요'
 					})
-                console.log('submit result : ' + pw_result);
                 return false;  
             } else if ( new_pw_result == false ) {
                 event.preventDefault();  
 					Swal.fire({
 						text: '새 비밀번호를 확인해주세요'
 					})
-                console.log('submit new_pw_result : ' + new_pw_result);
                 return false;  
             } else if ( pw_double_result == false ) {
                 event.preventDefault(); 
 					Swal.fire({
 						text: '새 비밀번호를 확인해주세요'
 					})
-                console.log('submit pw_double_result : ' + pw_double_result);
                 return false;  
             } else if ( email_result == false ) {
 				event.preventDefault();
 	    		  Swal.fire({
 						text: '이메일을 확인해주세요'
 					})
-                console.log('submit email_result : ' + email_result);
                 return false;  
             } else if ( authCodePass == false ) { 
 				event.preventDefault();
 	    		  Swal.fire({
 						text: '이메일 인증을 진행해주세요'
 					})
-                console.log('submit authCodePass : ' + authCodePass);
             	return false;
             } else{
             	return true;
@@ -117,7 +112,6 @@
                 $("#new_pw_check").text("비밀번호는 8~20자의 영문 대/소문자, 숫자, 특수문자 등 3종류 이상으로 조합해주세요.").addClass('error_msg').removeClass('pass_msg');
                 new_pw_result = false;
             }
-         console.log("newPw: "+pw_result);
             return new_pw_result;
          }); 
       
@@ -135,7 +129,6 @@
                     $("#pw_doubleCheck").text('').removeClass('error_msg').removeClass('pass_msg');
                     pw_double_result = true;
                 }  
-          console.log("pw2 : "+pw_double_result);
           return pw_double_result;
             });
       }
@@ -150,6 +143,7 @@
          			data: 'email='+ $('#email').val(),
          			dataType: 'json',
          			success : function(map) {
+         				console.log(map.authCode);
     					Swal.fire({
     						text: '인증코드가 전송되었습니다.'
     					})
@@ -203,7 +197,6 @@
 				data : 'pw=' + $('#pw').val(),
 				dataType: 'json',               // 받아올 데이터 타입
 				success : function(map){
-					console.log(map);
 					let name = '${loginUser.name}';
 					 if( map.selectResult > 0){
 						Swal.fire({
@@ -220,7 +213,6 @@
 						})
 						 pw_result = false;
 					 }
-					 console.log(pw_result);
 				}, // End Seuccess function
 				error : function(xhr, ajaxOptions, thrownError) {
 			       console.log(xhr.responseText);
@@ -244,7 +236,6 @@
 				data : 'email=' + $('#email').val(),
 				dataType: 'json',               // 받아올 데이터 타입
 				success : function(map){
-					console.log(map);
 					let name = '${loginUser.name}';
 					 if( map.result != null){
 						Swal.fire({
@@ -262,7 +253,6 @@
 						})
 						 email_result = false;
 					 }
-					 console.log(email_result);
 				}, // End Seuccess function
 				error : function(xhr, ajaxOptions, thrownError) {
 			       alert(xhr.responseText);
@@ -271,7 +261,7 @@
 			}) // End ajax
 		}); // click event
 	} // End fnCurrentPwCheck
-/* ------------------------------------------------------------- fnCurrentEmailCheck() ------------------------------------------------- */	
+/* ------------------------------------------------------------- fnSendAuthCode() ------------------------------------------------- */	
     function fnSendAuthCode(id){
     	
    /*  	$('#authCode_btn').click(function(){ */
@@ -282,6 +272,7 @@
     			dataType: 'json',
     			success : function(map) {
     				fnVerifyAuthcode(map.authCode, id); // 12/13추가
+    				console.log(map.authCode);
     			},
     			error: function() {
 					Swal.fire({
@@ -293,7 +284,7 @@
     	return;
     }
 
-/* ------------------------------------------------------------- fnCurrentEmailCheck() ------------------------------------------------- */	
+/* ------------------------------------------------------------- fnVerifyAuthcode() ------------------------------------------------- */	
 
    	// 인증코드 검증 변수와 함수
    	function fnVerifyAuthcode(authCode){
@@ -359,7 +350,7 @@
                     <label for="pw">현재 비밀번호</label>
                     <div id="current_pw_box">
 	                    <span class="space">
-	                  	  <input type="text" id="pw" name="pw">
+	                  	  <input type="password" id="pw" name="pw">
 	                    </span>
 	                    <span>
 		                    <input type="button" value="확인하기" id="password_check_btn" class="pointer">
@@ -370,7 +361,7 @@
                 <div class="input_box">
                     <label for="newPw">새 비밀번호</label>
                     <span class="space">
-                  	  <input type="text" id="newPw" name="newPw">
+                  	  <input type="password" id="newPw" name="newPw">
                     </span>
                     <p id="new_pw_check" class="msg_box"></p>
                 </div>
@@ -379,7 +370,7 @@
                 <div class="input_box">
                     <label for="pwCheck">새 비밀번호 확인</label>
                     <span class="space">
-	                    <input type="text" id="pwCheck" >
+	                    <input type="password" id="pwCheck" >
                     </span>
                     <p id="pw_doubleCheck" class="msg_box"></p>
                 </div>

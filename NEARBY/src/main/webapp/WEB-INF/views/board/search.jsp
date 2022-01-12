@@ -53,17 +53,13 @@
 			      data: "bNo=" + bNo,
 			      dataType: 'json',
  			      success: function(map) {
-			    //	  console.log('성공했을때');
-			    //	  console.log(map.count);
 			    	    if( map.count == 1 ){
 			    	    	// 색 있는 하트
-			   // 	    	 console.log("색 채우기")
 			    	    	 	$("#like"+bNo).addClass('like');
 			    	    	    
 			    	    	 
 			    	    } else if (map.count == 0) {
 			    	    	// 빈 하트
-			   // 	    	 console.log("색이 없기")
 			    	    	$("#like"+bNo).removeClass('like');
 			    	    }
 			    	  
@@ -88,11 +84,7 @@ function fnLike(i){
 						data: "bNo="+i, 
 						dataType: 'json',
 		 				success: function(board){
-		 					console.log(board);
-		 					console.log("좋아요 누른 카운트"+ board.likes);
   			  			    $( '#like_count'+bNo ).text(board.likes);
-  		  			        location.href = "<%=request.getContextPath()%>/board/boardList";
-		 					
 		 				},
 		 				error : function(xhr, error){
 		 					console.log(xhr.status);
@@ -102,7 +94,6 @@ function fnLike(i){
 		            return
 		   }
  			
-	 	//	  console.log("likehasClass = " + $("#"+i).children('i').hasClass('like') )
   
   
 	    if(  $("#"+i).find('i').hasClass('like') ) {
@@ -115,7 +106,6 @@ function fnLike(i){
 	 				dataType: 'json',
 	  				success: function(board){
 	  				   $( '#like_count'+ bNo ).text(board.likes);
-	  			   location.href = "<%=request.getContextPath()%>/board/boardList";
 	  				},
 	  				error : function(xhr, error){
 	  					console.log(xhr.status);
@@ -162,11 +152,11 @@ function fnLike(i){
 				 } else {
 				    
 					$.each(map.replyList, function(i, reply){
-					    if ( reply.profile.pSaved != null ) { 
+					    if ( reply.profile.pSaved != '' ) { 
 							let pSaved = reply.profile.pSaved;
 							let pPath = reply.profile.pPath;
-							$(replyTable).append( $('<tr>').html( $('<td rowspan="2" class="reply_user_image_area"><img class="reply_user_img" src="/nearby/'+pPath+'/'+pSaved+'"></td>') ) );
-					      } else if ( reply.profile.pPath == null ) { 
+							$(replyTable).append( $('<tr>').html( $('<td rowspan="2" class="reply_user_image_area"><img class="reply_user_img" src="/'+pPath+'/'+pSaved+'"></td>') ) );
+					      } else if ( reply.profile.pPath == '' ) { 
 							$(replyTable).append( $('<tr>').html( $('<td rowspan="2" class="reply_user_image_area"><img class="reply_user_img" src="${pageContext.request.contextPath}/resources/image/profile_default.png"></td>') ) );
 					      } // End if 프사 부분 
 					
@@ -276,7 +266,7 @@ function fnLike(i){
                 <c:forEach items="${profileList}" var="profileList">
                     <c:if test="${not empty profileList.pSaved}" >
                         <div class="profile_each_container">
-                            <img id="user_img" src="/nearby/${profileList.pPath}/${profileList.pSaved}" onclick="fnMoveUserHome('${profileList.id}')" class="pointer">
+                            <img id="user_img" src="/${profileList.pPath}/${profileList.pSaved}" onclick="fnMoveUserHome('${profileList.id}')" class="pointer">
                             <p>${profileList.id}</p>
                         </div>
 
@@ -304,7 +294,7 @@ function fnLike(i){
 				<img id="user_img" src="${pageContext.request.contextPath}/resources/image/profile_default.png" onclick="fnMoveUserHome('${board.profile.id}')"  class="pointer defaultImg">
 			</c:if>
 		    <c:if test="${board.profile.id == board.id and not empty board.profile.pSaved}" >
-		    		<img id="user_img" src="/nearby/${board.profile.pPath}/${board.profile.pSaved}"  class="pointer" onclick="fnMoveUserHome('${board.profile.id}')" >
+		    		<img id="user_img" src="/${board.profile.pPath}/${board.profile.pSaved}"  class="pointer" onclick="fnMoveUserHome('${board.profile.id}')" >
 		    </c:if>
 		    	</div>
 		    	<input type="hidden" id="bNo" value="${board.bNo}">
@@ -339,13 +329,13 @@ function fnLike(i){
 		    	  <!------------------ 이미지 및 영상 관련 ----------------------------------------->
   					   <c:set value="${board.saved}" var="video"></c:set>
 		  				 <c:if test="${not f:contains(video, 'video')}">
-		  						 <div class="imgSize">  <img alt="${board.origin}" src="/nearby/${board.path}/${board.saved}" id="image">  </div>
+		  						 <div class="imgSize">  <img alt="${board.origin}" src="/${board.path}/${board.saved}" id="image">  </div>
 		  				  </c:if>
 		  				
 		  				<c:if test ="${f:contains(video, 'video')}">
 		  				   <div class="imgSize">
 			  				    <video autoplay controls loop muted poster="video"  id="video">
-			  						<source src="/nearby/${board.path}/${board.saved}"  type="video/mp4" >
+			  						<source src="/${board.path}/${board.saved}"  type="video/mp4" >
 			  					</video>
 		  					</div>
 		  				</c:if>

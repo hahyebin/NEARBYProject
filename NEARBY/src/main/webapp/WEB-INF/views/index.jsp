@@ -441,7 +441,7 @@
          </div>
       </main>
       <!---------------------------------------- 로그인 폼(숨김)---------------------------------------> 
-             <form id="login_form" method="post" class="no" action="<%=request.getContextPath()%>/member/login">
+             <form id="login_form" method="post" class="no" action="/member/login">
                <div>
                   <i id="close_login_btn" class="fas fa-times"></i>   
                </div>
@@ -457,7 +457,7 @@
                <div class="input_wrap">
                   <p class="nanum_square">비밀번호<p>
                   <div class="input_box">
-                     <input type="text" name="pw" id="pw">
+                     <input type="password" name="pw" id="pw">
                   </div>
                   
                </div>     
@@ -466,7 +466,6 @@
                		
                		<label for="checkRememberId" class="idSavedCheck" onclick="fnIdCheck()"><i class="far fa-check-circle"></i> 아이디 저장</label>
                	</div>
-               
                       
                   <button class="nanum_square" id="login_submit">로그인</button>
                         <div id="move_area">

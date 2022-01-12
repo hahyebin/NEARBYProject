@@ -235,7 +235,7 @@
 		    var sub = address.jibunAddress.split(' ');
 		    var nearbyAddress = sub[0]+" "+sub[1]+" "+sub[2];
 		    for(var i=0; i<3; i++){
-		    	console.log(sub[i]);
+		    //	console.log(sub[i]);
 		    	var addressSum = "";
 		    	
 		    	if( typeof sub[i] == "undefined" || sub[i] == null || sub[i] == ""  ){
@@ -287,15 +287,12 @@
 		    var htmlAddresses = [],
 		      item = response.v2.addresses[0],
 		      point = new naver.maps.Point(item.x, item.y);
-		    //console.log(item);	  // item 객체에 지번, 도로명, 위도, 경도 필드존재함
 		    document.insertBoard_Form.location.value = item.jibunAddress;
-		 //   console.log(item.jibunAddress);
-		   // var sub = item.jibunAddress.split(' ');
 	
 		    var sub = item.jibunAddress.split(' ');
 		    var nearbyAddress = sub[0]+" "+sub[1]+" "+sub[2];
 		    for(var i=0; i<3; i++){
-		    	console.log(sub[i]);
+		    //	console.log(sub[i]);
 		    	var addressSum = "";
 		    	// undefined가 나오는 부분은 ""로 처리함
 		    	if( typeof sub[i] == "undefined" || sub[i] == null || sub[i] == ""  ){
@@ -389,13 +386,13 @@
 	</header>
 	
 	<div class="insert_wrap">
-	<form id="insertBoard_Form" action="<%=request.getContextPath()%>/board/insertBoard" method="post" enctype="multipart/form-data" name="insertBoard_Form">
+	<form id="insertBoard_Form" action="/board/insertBoard" method="post" enctype="multipart/form-data" name="insertBoard_Form">
 		<div class="profileImg"  id="p_img">
 			<c:if test="${empty loginUser.profile.pSaved}">
 				<img id="user_img" src="${pageContext.request.contextPath}/resources/image/profile_default.png"  class="pointer defaultImg">
 			</c:if>
 			<c:if test="${not empty loginUser.profile.pSaved}">
-	    		<img id="user_img" src="/nearby/${loginUser.profile.pPath}/${loginUser.profile.pSaved}"  class="pointer">
+	    		<img id="user_img" src="/${loginUser.profile.pPath}/${loginUser.profile.pSaved}"  class="pointer">
 	    	</c:if>
 	    </div>
 		<div class="id_wrap">

@@ -75,28 +75,11 @@ function fnCheckFollow() {
   	  	contentType: 'application/json',
   	  	dataType: 'json',
 	    success: function(map) {
-	    	  console.log(map);
-	    	  if( pId == '${loginUser.id}'){
-	    		  $('#profile_setup').css('display', 'none');
-	    	  } else {
-	    		  
 	    	  if(map.result == 1) { 
-		    	  console.log('팔로잉중');
 		    	  $('#profile_setup').val('팔로잉').attr('onclick', 'fnUnfollowing()');
-		    	 
-	    	  	
-	    	  
-	    	  } else if (map.result == 0 ) {
-	    	 	  console.log('팔로우하기');		  
+	    	  } else if (map.result == 0) {
 	    	 	  $('#profile_setup').val('팔로우').attr('onclick', 'fnFollowing()');
-	    	 	  
-	    	 	  
 	    	  }
-	    	  }
-
-	    	 
-	    	  
-	    	  
 	      },
 	     error: function(xhr) {
 	    	  console.log(xhr.responseText);
@@ -108,9 +91,7 @@ function fnCheckFollow() {
 
 //fnFollowing();
 function  fnFollowing() {
-	console.log('Following() 실행');
 	let id = '${userId}';
-	console.log(id);
 	$.ajax({
 	      url: '<%=request.getContextPath()%>/follow/following',
 	      type: 'post',
@@ -120,12 +101,8 @@ function  fnFollowing() {
 	      contentType: 'application/json',
 	      dataType: 'json',
 	      success: function(map) {
-	    	  console.log(map);
 	    	  if(map.result == 1) { 
-	    	  console.log('성공');
 	    	  location.href='<%=request.getContextPath()%>/board/selectUserHome?id=' +id;
-	    	  } else {
-	    	  console.log('실패');		  
 	    	  }
 	    	  
 	      },
@@ -137,9 +114,7 @@ function  fnFollowing() {
 
 //fnUnfollowing();
 function  fnUnfollowing() {
-	console.log('unfollowing() 실행');
 	let id = '${userId}';
-	console.log(id);
 	$.ajax({
 	      url: '<%=request.getContextPath()%>/follow/unfollowing',
 	      type: 'post',
@@ -149,13 +124,9 @@ function  fnUnfollowing() {
 	      contentType: 'application/json',
 	      dataType: 'json',
 	      success: function(map) {
-	    	  console.log(map);
 	    	  if(map.result == 1) { 
-	    	  console.log('성공');
 	    	  location.href='<%=request.getContextPath()%>/board/selectUserHome?id=' +id;
-	    	  } else {
-	    	  console.log('실패');		  
-	    	  }
+	    	  } 
 	    	  
 	      },
 	      error: function(xhr) {
@@ -203,10 +174,7 @@ function fnSendBno(){
 					data: "bNo="+i, 
 					dataType: 'json',
 	 				success: function(board){
-	 					console.log(board);
-	 					console.log("좋아요 누른 카운트"+ board.likes);
 			  			   $( '#like_count'+bNo ).text(board.likes);
-			  			   location.href="<%=request.getContextPath()%>/board/myHome";  
 	 				},
 	 				error : function(xhr, error){
 	 					console.log(xhr.status);
@@ -226,8 +194,6 @@ function fnSendBno(){
  				dataType: 'json',
   				success: function(board){
   				   $( '#like_count'+ bNo ).text(board.likes);
-  			   	 location.href="<%=request.getContextPath()%>/board/myHome";
-  				   
   				},
   				error : function(xhr, error){
   					console.log(xhr.status);
@@ -274,11 +240,11 @@ function fnSendBno(){
 				 } else {
 				    
 					$.each(map.replyList, function(i, reply){
-					    if ( reply.profile.pSaved != null ) { 
+					    if ( reply.profile.pSaved != '' ) { 
 							let pSaved = reply.profile.pSaved;
 							let pPath = reply.profile.pPath;
-							$(replyTable).append( $('<tr>').html( $('<td rowspan="2" class="reply_user_image_area"><img class="reply_user_img" src="/nearby/'+pPath+'/'+pSaved+'"></td>') ) );
-					      } else if ( reply.profile.pPath == null ) { 
+							$(replyTable).append( $('<tr>').html( $('<td rowspan="2" class="reply_user_image_area"><img class="reply_user_img" src="/'+pPath+'/'+pSaved+'"></td>') ) );
+					      } else if ( reply.profile.pPath == '' ) { 
 							$(replyTable).append( $('<tr>').html( $('<td rowspan="2" class="reply_user_image_area"><img class="reply_user_img" src="${pageContext.request.contextPath}/resources/image/profile_default.png"></td>') ) );
 					      } // End if 프사 부분 
 					
@@ -335,7 +301,6 @@ function fnSendBno(){
 	 
 	/* ----------------------------------------- fnCheckLogin() --------------------------------  */
  	function fnCheckLogin(){
-		console.log('logincheck');
 		let loginInfo = '${loginUser.id}';
 		if (loginInfo == '') {
 			
@@ -380,7 +345,7 @@ function fnSendBno(){
             		<img id="user_img" src="${pageContext.request.contextPath}/resources/image/profile_default.png">
             	</c:if>
             	<c:if test="${not empty userProfile[0].pSaved}">
-            		<img id="user_img" src="/nearby/${userProfile[0].pPath}/${userProfile[0].pSaved}">            	
+            		<img id="user_img" src="/${userProfile[0].pPath}/${userProfile[0].pSaved}">            	
             	</c:if>
             </div>
 
@@ -390,14 +355,12 @@ function fnSendBno(){
                 <div class="follower_box">
                     <input id="my_border" type="button" value="게시물">
                     <label for="my_border">${userBoardCount}</label>
-				<c:if test="${loginUser.id != userId}">	
-		
+					
                     <input id="my_follower" type="button" value="팔로워" onclick="location.href='<%=request.getContextPath()%>/follow/userFollow?id='+ '${userId}'">
                     <label for="my_follower" onclick="location.href='<%=request.getContextPath()%>/follow/userFollow?id='+ '${userId}'">${f:length(followedList)}</label>
 
                     <input id="my_following" type="button" value="팔로잉" onclick="location.href='<%=request.getContextPath()%>/follow/userFollow?id='+ '${userId}'">
                     <label for="my_following" onclick="location.href='<%=request.getContextPath()%>/follow/userFollow?id='+ '${userId}'">${f:length(followingList)}</label>
-               	</c:if>
                	
                 </div>
 
@@ -439,7 +402,7 @@ function fnSendBno(){
 			                    	<img id="user_img" src="${pageContext.request.contextPath}/resources/image/profile_default.png">
 			                    </c:if>
 		    					<c:if test="${not empty board.profile.pSaved}">
-			                    	<img id="user_img" id="user_img" src="/nearby/${board.profile.pPath}/${board.profile.pSaved}">    					
+			                    	<img id="user_img" id="user_img" src="/${board.profile.pPath}/${board.profile.pSaved}">    					
 		    					</c:if>
 		                        <input type="hidden" id="bNo" value="${board.bNo}">
 		                        <input type="hidden" id="origin" value="${board.origin}">
@@ -494,7 +457,7 @@ function fnSendBno(){
 		                        <!-- video가 아닌 것을 가져와라 ! -->
 		                        <c:if test="${not f:contains(video, 'video')}">
 		                            <div class="imgSize">
-		                                <img alt="${board.origin}" src="/nearby/${board.path}/${board.saved}" id="image">
+		                                <img alt="${board.origin}" src="/${board.path}/${board.saved}" id="image">
 		                            </div>
 		                        </c:if>
 		
@@ -502,7 +465,7 @@ function fnSendBno(){
 		                        <c:if test="${f:contains(video, 'video')}">
 		                            <div class="imgSize">
 		                                <video autoplay controls loop muted id="video">
-		                                    <source src="/nearby/${board.path}/${board.saved}" type="video/mp4">
+		                                    <source src="/${board.path}/${board.saved}" type="video/mp4">
 		                                </video>
 		                            </div>
 		                        </c:if>

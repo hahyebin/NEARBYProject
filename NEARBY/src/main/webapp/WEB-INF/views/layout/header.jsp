@@ -91,7 +91,7 @@
 					<img id="profile_img" src="${pageContext.request.contextPath}/resources/image/profile_default.png" class="pointer defaultImg">
 			</c:if>
 			<c:if test="${not empty loginUser.profile.pSaved}">
-					<img id="profile_img" src="/nearby/${loginUser.profile.pPath}/${loginUser.profile.pSaved}" class="pointer">
+					<img id="profile_img" src="/${loginUser.profile.pPath}/${loginUser.profile.pSaved}" class="pointer">
 			</c:if>
           </div>
 		<div id="profile_menu" class="profile_no">

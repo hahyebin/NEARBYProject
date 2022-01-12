@@ -55,22 +55,8 @@
 	  	  	contentType: 'application/json',
 	  	  	dataType: 'json',
 		    success: function(map) {
-		    	  console.log(map);
-		    	  if(map.result == 1) { 
-			    	  console.log('팔로잉중');
-			    	 
-			    	 
-		    	  	
-		    	  
-		    	  } else if (map.result == 0) {
-		    	 	  console.log('팔로우하기');		  
-		    	 	 
-		    	 	  
-		    	 	  
-		    	  }
-		    	 
-		    	  
-		    	  
+		    	 // map.result == 1  '팔로잉중'
+				//  map.result == 0  '팔로우중 아님'		  
 		      },
 		     error: function(xhr) {
 		    	  console.log(xhr.responseText);

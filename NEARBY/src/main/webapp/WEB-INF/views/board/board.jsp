@@ -53,7 +53,7 @@
 		$.each($('.output_reply_table'), function(i, replyTable) {	
  		let bNo = $(replyTable).parent().prev().val();
  		$.ajax({
- 			      url: '<%=request.getContextPath()%>/board/boardBnoList',
+ 			      url: '/board/boardBnoList',
 			      type: 'get',
 			      data: "bNo=" + bNo,
 			      dataType: 'json',
@@ -79,7 +79,7 @@
 	          if( $("#"+i).find('i').hasClass('like') == false )  {
 	            	$("#"+i).find('i').addClass('like');
 		            $.ajax({
-		 				url : '<%=request.getContextPath()%>/board/likes',
+		 				url : '/board/likes',
 		 				type: 'post',
 						data: "bNo="+i, 
 						dataType: 'json',
@@ -103,7 +103,7 @@
 	    	$("#"+i).find('i').removeClass('like');
 	    	
 	 		$.ajax({
-	  				url : '<%=request.getContextPath()%>/board/likesCancel',
+	  				url : '/board/likesCancel',
 	  				type: 'post',
 	  				data: "bNo="+i, 
 	 				dataType: 'json',
@@ -129,7 +129,7 @@
 			let bNo = $(replyTable).parent().prev().val();
 			var page = 1;
 			$.ajax({
-				      url: '<%=request.getContextPath()%>/reply/replyList',
+				      url: '/reply/replyList',
 				      type: 'get',
 				      data: "bNo=" + bNo + "&page=" + page,
 				      dataType: 'json',
@@ -154,11 +154,11 @@
 				 } else {
 				    
 					$.each(map.replyList, function(i, reply){
-					    if ( reply.profile.pSaved != null ) { 
+					    if ( reply.profile.pSaved != '' ) { 
 							let pSaved = reply.profile.pSaved;
 							let pPath = reply.profile.pPath;
-							$(replyTable).append( $('<tr>').html( $('<td rowspan="2" class="reply_user_image_area"><img class="reply_user_img" src="/nearby/'+pPath+'/'+pSaved+'"></td>') ) );
-					      } else if ( reply.profile.pPath == null ) { 
+							$(replyTable).append( $('<tr>').html( $('<td rowspan="2" class="reply_user_image_area"><img class="reply_user_img" src="/'+pPath+'/'+pSaved+'"></td>') ) );
+					      } else if ( reply.profile.pPath == '' ) { 
 							$(replyTable).append( $('<tr>').html( $('<td rowspan="2" class="reply_user_image_area"><img class="reply_user_img" src="${pageContext.request.contextPath}/resources/image/profile_default.png"></td>') ) );
 					      } // End if 프사 부분 
 					
@@ -267,7 +267,7 @@
 					<img id="user_img" src="${pageContext.request.contextPath}/resources/image/profile_default.png" onclick="fnShowBtnBox()" class="pointer defaultImg">
 				</c:if>
 			    <c:if test="${board.profile.id == board.id and not empty board.profile.pSaved}" >
-			    		<img id="user_img" src="/nearby/${board.profile.pPath}/${board.profile.pSaved}"  class="pointer">
+			    		<img id="user_img" src="/${board.profile.pPath}/${board.profile.pSaved}"  class="pointer">
 			    </c:if>
 			    	</div>
 			    	<input type="hidden" id="origin" value="${board.origin}">
@@ -312,12 +312,12 @@
 			    	  <!------------------ 이미지 및 영상 관련 ----------------------------------------->
   					  <c:set value="${board.saved}" var="video"></c:set>
 		  			  <c:if test="${not f:contains(video, 'video')}">
-		  				 <div class="imgSize">  <img alt="${board.origin}" src="/nearby/${board.path}/${board.saved}" id="image">  </div>
+		  				 <div class="imgSize">  <img alt="${board.origin}" src="/${board.path}/${board.saved}" id="image">  </div>
 		  			  </c:if>
 	  				  <c:if test ="${f:contains(video, 'video')}">
 		  				   <div class="imgSize">
 		  				     <video autoplay controls loop muted poster="video"  id="video">
-		  						<source src="/nearby/${board.path}/${board.saved}"  type="video/mp4" >
+		  						<source src="/${board.path}/${board.saved}"  type="video/mp4" >
 		  					 </video>
 		  				   </div>
 	  				   </c:if>
