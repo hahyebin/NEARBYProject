@@ -27,12 +27,13 @@
 #### 💡 [에러처리](https://github.com/hahyebin/NEARBYProject/tree/master/NEARBY/src/main/webapp/WEB-INF/views/error)
 <img width="1029" alt="스크린샷 2022-01-14 13 54 44" src="https://user-images.githubusercontent.com/87511783/149453450-33241226-f27b-40b9-9d79-6b6d45642205.png">
 
-
-        
-### ✔️ 사이트 : http://nearbyinc.cafe24.com/
     
 ### ✔️ 추가하고 싶은 서비스 
 - [ ] 게시글 리스트에 무한스크롤
 - [ ] 이용자에 따른 광고 삽입
 - [ ] 웹 소켓을 활용한 채팅, 알림 서비스 
 - [ ] 신고 서비스
+    
+          
+### ✔️ 사이트 : http://nearbyinc.cafe24.com/
+    
