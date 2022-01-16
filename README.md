@@ -1,8 +1,10 @@
 # [NEARBY]( http://nearbyinc.cafe24.com/)
 ### SNS 웹 서비스
+##### ( 사용자아이디:  kiki  사용자비밀번호: aaaa1111!    관리자아이디 : admin   관리자비밀번호: aaaa1111! )
 ### ✔️ 기간 : 2021.12.20~2022.01.13
      
-### ✔️ 서비스: 내 일상을 업로드하고, NearBy 유저들의 일상을 구경하는 SNS 웹 서비스       
+### ✔️ 서비스: 내 일상을 업로드하고, NearBy 유저들의 일상을 구경하는 SNS 웹 서비스   
+ 
     
 ### ✔️ 개발 언어 및 환경 :
 <img alt="Html" src ="https://img.shields.io/badge/HTML5-E34F26.svg?&style=for-the-badge&logo=HTML5&logoColor=white"/> <img alt="Css" src ="https://img.shields.io/badge/CSS3-1572B6.svg?&style=for-the-badge&logo=CSS3&logoColor=white"/> <img alt="JavaScript" src ="https://img.shields.io/badge/JavaScriipt-F7DF1E.svg?&style=for-the-badge&logo=JavaScript&logoColor=black"/> <img src="https://img.shields.io/badge/jquery-0769AD?style=for-the-badge&logo=jquery&logoColor=white"> <img src="https://img.shields.io/badge/oracle-F80000?style=for-the-badge&logo=oracle&logoColor=white">  <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> <img src="https://img.shields.io/badge/JAVA-007396?style=for-the-badge&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=Spring&logoColor=white"> <img src="https://img.shields.io/badge/fontawesome-339AF0?style=for-the-badge&logo=fontawesome&logoColor=white"> <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/apache tomcat-F8DC75?style=for-the-badge&logo=apachetomcat&logoColor=white">   
